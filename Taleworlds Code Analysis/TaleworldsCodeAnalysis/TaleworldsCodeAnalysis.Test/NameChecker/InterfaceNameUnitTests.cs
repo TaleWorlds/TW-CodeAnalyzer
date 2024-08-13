@@ -27,9 +27,12 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         public async Task InterfaceWarningTest()
         {
             var test = @"
-            public interface {|#0:iTest|} : IBase {};
+            public interface IBase
+            {
+            }
+            public interface {|#0:iTest|} : IBase {}
             internal interface {|#1:Test|} : IBase {}
-            public interface {|#2:_test|} : iBase;
+            public interface {|#2:_test|} : IBase{}
             ";
 
             var expected1 = VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(0).WithArguments("iTest");
