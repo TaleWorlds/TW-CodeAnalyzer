@@ -32,73 +32,49 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         }
 
         [TestMethod]
-        public async Task PropertyPrivateWarningTest()
+        public async Task PropertyPrivateInternalWarningTest()
         {
             var test = @"
             public class Test
             {   
-                private int {|#0:Value|} {get => _value;}
-                private int {|#1:value|} {get => _value;}
-                private int {|#2:value_|} {get => _value;}
+                private int {|#0:ValuePriv|} {get => _value;}
+                private int {|#1:valuePriv|} {get => _value;}
+                private int {|#2:value_Priv|} {get => _value;}
+                internal int {|#3:ValueInt|} {get => _value;}
+                internal int {|#4:valueInt|} {get => _value;}
 
                 private int _value;
             }";
 
-            var expected1 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("Value","Private","_uscoreCase");
-            var expected2 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("value", "Private", "_uscoreCase");
-            var expected3 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("value_", "Private", "_uscoreCase");
-            await VerifyCS.VerifyAnalyzerAsync(test,expected1,expected2,expected3);
+            var expected1 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("ValuePriv", "Private","_uscoreCase");
+            var expected2 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePriv", "Private", "_uscoreCase");
+            var expected3 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("value_Priv", "Private", "_uscoreCase");
+            var expected4 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("ValueInt", "Internal", "_uscoreCase");
+            var expected5 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(4).WithArguments("valueInt", "Internal", "_uscoreCase");
+            await VerifyCS.VerifyAnalyzerAsync(test,expected1,expected2,expected3,expected4,expected5);
         }
 
         [TestMethod]
-        public async Task PropertyPublicWarning()
+        public async Task PropertyPublicProtWarning()
         {
             var test = @"
             public class Test
             {   
-                public int {|#0:_valueProp|} {get => _value;}
-                public int {|#1:value|} {get => _value;}
+                public int {|#0:_valuePub|} {get => _value;}
+                public int {|#1:valuePub|} {get => _value;}
+                protected int {|#2:_valueProp|} {get => _value;}
+                protected int {|#3:valueProp|} {get => _value;}
 
                 private int _value;
             }";
-            var expected1 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valueProp", "Public", "PascalCase");
-            var expected2 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("value", "Public", "PascalCase");
+            var expected1 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valuePub", "Public", "PascalCase");
+            var expected2 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePub", "Public", "PascalCase");
+            var expected3 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("_valueProp", "Protected", "PascalCase");
+            var expected4 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("valueProp", "Protected", "PascalCase");
 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
+            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2,expected3,expected4);
         }
 
-        [TestMethod]
-        public async Task PropertyInternalWarning()
-        {
-            var test = @"
-            public class Test
-            {   
-                internal int {|#0:Value|} {get => _value;}
-                internal int {|#1:value|} {get => _value;}
-
-                private int _value;
-            }";
-            var expected1 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("Value", "Internal", "_uscoreCase");
-            var expected2 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("value", "Internal", "_uscoreCase");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2); 
-        }
-
-        [TestMethod]
-        public async Task PropertyProtectedWarning()
-        {
-            var test = @"
-            public class Test
-            {   
-                protected int {|#0:_valueProp|} {get => _value;}
-                protected int {|#1:value|} {get => _value;}
-
-                private int _value;
-            }";
-            var expected1 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valueProp", "Protected", "PascalCase");
-            var expected2 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("value", "Protected", "PascalCase");
-
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
-        }
     }
 
     
