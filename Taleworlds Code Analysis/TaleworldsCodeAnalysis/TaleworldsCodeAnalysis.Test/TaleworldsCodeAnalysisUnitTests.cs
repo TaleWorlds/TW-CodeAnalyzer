@@ -9,51 +9,70 @@ namespace TaleworldsCodeAnalysis.Test
     [TestClass]
     public class TaleworldsCodeAnalysisUnitTest
     {
-        //No diagnostics expected to show up
         [TestMethod]
-        public async Task TestMethod1()
+        public async Task FieldNoWarningTest ()
         {
-            var test = @"";
+            var test = @"
+            public class Test
+            {   
+                private int _value;
+            }";
 
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
-        //Diagnostic and CodeFix both triggered and checked for
         [TestMethod]
-        public async Task TestMethod2()
+        public async Task FieldPrivateUnderscoreWarningTest()
         {
             var test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
+            public class Test
+            {   
+                private int {|#0:value|};
+            }";
 
-    namespace ConsoleApplication1
-    {
-        class {|#0:TypeName|}
-        {   
+            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("Test"); //TODO: Add the argument here
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
-    }";
 
-            var fixtest = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
+        [TestMethod]
+        public async Task FieldPublicWarningTest()
+        {
+            var test = @"
+            public class Test
+            {   
+                public int {|#0:_value|};
+            }";
 
-    namespace ConsoleApplication1
-    {
-        class TYPENAME
-        {   
+            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("Test"); //TODO: Add the argument here
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
-    }";
 
-            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("TypeName");
-            await VerifyCS.VerifyCodeFixAsync(test, expected, fixtest);
+        [TestMethod]
+        public async Task FieldInternalWarningTest()
+        {
+            var test = @"
+            public class Test
+            {   
+                internal int {|#0:_value|};
+            }";
+
+            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("Test"); //TODO: Add the argument here
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
+
+        [TestMethod]
+        public async Task FieldProtectedWarningTest()
+        {
+            var test = @"
+            public class Test
+            {   
+                protected int {|#0:_value|};
+            }";
+
+            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("Test"); //TODO: Add the argument here
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+
     }
 }
