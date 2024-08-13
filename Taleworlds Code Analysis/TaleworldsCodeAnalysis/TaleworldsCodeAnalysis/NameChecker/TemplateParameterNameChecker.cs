@@ -1,4 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -26,16 +28,17 @@ namespace TaleworldsCodeAnalysis.NameChecker
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
-            context.RegisterSyntaxNodeAction(_analyzeMethod, );
+            context.RegisterSyntaxNodeAction(_analyzeMethod, SyntaxKind.TypeParameter);
         }
 
-        private void _analyzeMethod(SymbolAnalysisContext context)
+        private void _analyzeMethod(SyntaxNodeAnalysisContext context)
         {
-            var parameter = (ITypeParameterSymbol)context.Symbol;
+            var parameter = (TypeParameterSyntax)context.Node;
+            var parameterName = parameter.Identifier.Text;
 
-            if (parameter.Name.StartsWith("P") && !NameCheckerLibrary.IsPascalCase(parameter.Name.Substring(1)))
+            if (parameterName.StartsWith("P") && !NameCheckerLibrary.IsPascalCase(parameterName.Substring(1)))
             {
-                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.Locations[0], parameter.Name));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.GetLocation(), parameterName));
             }
             
         }

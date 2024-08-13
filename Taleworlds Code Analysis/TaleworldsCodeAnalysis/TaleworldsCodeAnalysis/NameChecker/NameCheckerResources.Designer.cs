@@ -61,6 +61,15 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Class {0} cannot be &quot;Protected&quot; by TW conventions..
+        /// </summary>
+        internal static string ClassModifierCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("ClassModifierCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All class names should use TW conventions..
         /// </summary>
         internal static string ClassNameCheckerDescription {
