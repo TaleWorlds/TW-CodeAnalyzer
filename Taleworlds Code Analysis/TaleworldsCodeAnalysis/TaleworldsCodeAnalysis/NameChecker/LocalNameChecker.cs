@@ -1,8 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
 
 namespace TaleworldsCodeAnalysis.NameChecker
@@ -26,16 +29,18 @@ namespace TaleworldsCodeAnalysis.NameChecker
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
-            context.RegisterSymbolAction(_analyzeMethod, SymbolKind.Local);  // TODO : SymbolKind.Local is not a valid symbol kind. Doesn't work.
+            context.RegisterSyntaxNodeAction(_analyzeMethod, SyntaxKind.LocalDeclarationStatement);
+             
         }
 
-        private void _analyzeMethod(SymbolAnalysisContext context)
+        private void _analyzeMethod(SyntaxNodeAnalysisContext context)
         {
-            var local = (ILocalSymbol)context.Symbol;
+            var local = (LocalDeclarationStatementSyntax) context.Node;
 
-            if (!NameCheckerLibrary.IsCamelCase(local.Name))
+
+            if (!NameCheckerLibrary.IsCamelCase(local.Declaration.Variables.Single().ToString()))
             {
-                context.ReportDiagnostic(Diagnostic.Create(_rule, local.Locations[0], local.Name));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, local.GetLocation(), local.Declaration.Variables.Single().ToString()));
             }
             
         }
