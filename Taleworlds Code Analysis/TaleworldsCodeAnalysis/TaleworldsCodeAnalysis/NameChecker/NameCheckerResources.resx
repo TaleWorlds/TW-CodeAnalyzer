@@ -171,4 +171,13 @@
   <data name="PropertyNameCheckerTitle" xml:space="preserve">
     <value>All property names should use TW conventions.</value>
   </data>
+  <data name="TemplateParameterNameCheckerDescription" xml:space="preserve">
+    <value>Template parameters should use "TPascalCase".</value>
+  </data>
+  <data name="TemplateParameterNameCheckerMessageFormat" xml:space="preserve">
+    <value>Template parameter {0} should use "TPascalCase".</value>
+  </data>
+  <data name="TemplateParameterNameCheckerTitle" xml:space="preserve">
+    <value>Template parameters should use "TPascalCase".</value>
+  </data>
 </root>

@@ -221,5 +221,32 @@ namespace TaleworldsCodeAnalysis.NameChecker {
                 return ResourceManager.GetString("PropertyNameCheckerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template parameters should use &quot;TPascalCase&quot;..
+        /// </summary>
+        internal static string TemplateParameterNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("TemplateParameterNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template parameter {0} should use &quot;TPascalCase&quot;..
+        /// </summary>
+        internal static string TemplateParameterNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("TemplateParameterNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template parameters should use &quot;TPascalCase&quot;..
+        /// </summary>
+        internal static string TemplateParameterNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("TemplateParameterNameCheckerTitle", resourceCulture);
+            }
+        }
     }
 }
