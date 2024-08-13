@@ -39,8 +39,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }"
             ;
 
-            var expected1 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("foo");
-            var expected2 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(1).WithArguments("_Foo");
+            var expected1 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("foo", "Private", "_uscoreCase");
+            var expected2 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_Foo", "Private", "_uscoreCase");
             await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
         }
 
@@ -55,8 +55,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             }";
 
-            var expected1 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("foo");
-            var expected2 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(1).WithArguments("_Foo");
+            var expected1 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("foo", "Internal", "_uscoreCase");
+            var expected2 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_Foo", "Internal", "_uscoreCase");
             await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
         }
 
@@ -71,8 +71,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             }";
 
-            var expected1 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("foo");
-            var expected2 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(1).WithArguments("_Foo");
+            var expected1 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("foo", "Public", "PascalCase");
+            var expected2 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_Foo", "Public", "PascalCase");
             await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
         }
 
@@ -82,13 +82,13 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             var test = @"
             public class Test
             {   
-                private void {|#0:foo|}(){}
-                private void {|#1:_Foo|}(){}
+                protected void {|#0:foo|}(){}
+                protected void {|#1:_Foo|}(){}
 
             }";
 
-            var expected1 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("foo");
-            var expected2 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(1).WithArguments("_Foo");
+            var expected1 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("foo", "Protected", "PascalCase");
+            var expected2 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_Foo", "Protected", "PascalCase");
             await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
         }
     }
