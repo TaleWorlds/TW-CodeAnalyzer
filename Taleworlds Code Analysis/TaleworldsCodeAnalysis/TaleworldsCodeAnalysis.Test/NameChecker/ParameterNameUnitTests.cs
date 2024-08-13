@@ -45,8 +45,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                     return ;
                 }   
             }";
-            var expected1 = VerifyCS.Diagnostic("ParameterAndLocalNameChecker").WithLocation(0).WithArguments("Value");
-            var expected2 = VerifyCS.Diagnostic("ParameterAndLocalNameChecker").WithLocation(1).WithArguments("_value");
+            var expected1 = VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(0).WithArguments("Value");
+            var expected2 = VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(1).WithArguments("_value");
             await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
         }
     }
