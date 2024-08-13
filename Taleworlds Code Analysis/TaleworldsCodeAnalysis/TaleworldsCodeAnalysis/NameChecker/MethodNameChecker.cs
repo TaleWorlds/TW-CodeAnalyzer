@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzeMethod(SymbolAnalysisContext context)
         {
             var method = (IMethodSymbol) context.Symbol;
+
+            if(method.MethodKind == MethodKind.PropertyGet || MethodKind.PropertySet == method.MethodKind )
+            {
+                return;
+            }
 
            if (method.DeclaredAccessibility == Accessibility.Private || 
                 method.DeclaredAccessibility == Accessibility.Internal)
