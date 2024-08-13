@@ -43,9 +43,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
            }
            else
            {
-                 if(NameCheckerLibrary.IsPascalCase(method.Name))
+                 if(!NameCheckerLibrary.IsPascalCase(method.Name))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, method.Locations[0], method.Name, method.DeclaredAccessibility.ToString(), "_uscoreCase"));
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, method.Locations[0], method.Name, method.DeclaredAccessibility.ToString(), "PascalCase"));
                 }
            }
         }
