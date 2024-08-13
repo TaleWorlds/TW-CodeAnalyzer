@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ClassNameCheckerDescription" xml:space="preserve">
+    <value>All class names should use TW conventions.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="ClassNameCheckerMessageFormat" xml:space="preserve">
+    <value>Class {0} with access modifier {1} should use {2}.</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="ClassNameCheckerTitle" xml:space="preserve">
+    <value>All class names should use TW  conventions.</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
   <data name="FieldNameCheckerDescription" xml:space="preserve">
     <value>All fields should be private and use "_uscoreCase".</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
@@ -139,6 +151,18 @@
   </data>
   <data name="MethodNameCheckerTitle" xml:space="preserve">
     <value>All method names should use TW conventions.</value>
+    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="PropertyNameCheckerDescription" xml:space="preserve">
+    <value>All property names sholud use TW conventions.</value>
+    <comment>An optional longer localizable description of the diagnostic.</comment>
+  </data>
+  <data name="PropertyNameCheckerMessageFormat" xml:space="preserve">
+    <value>Property {0} with access modifier {1} should use {2}.</value>
+    <comment>The format-able message the diagnostic displays.</comment>
+  </data>
+  <data name="PropertyNameCheckerTitle" xml:space="preserve">
+    <value>All property names should use TW conventions.</value>
     <comment>The title of the diagnostic.</comment>
   </data>
 </root>

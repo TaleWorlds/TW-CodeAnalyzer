@@ -61,6 +61,33 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All class names should use TW conventions..
+        /// </summary>
+        internal static string ClassNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("ClassNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class {0} with access modifier {1} should use {2}..
+        /// </summary>
+        internal static string ClassNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("ClassNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All class names should use TW  conventions..
+        /// </summary>
+        internal static string ClassNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("ClassNameCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All fields should be private and use &quot;_uscoreCase&quot;..
         /// </summary>
         internal static string FieldNameCheckerDescription {
@@ -111,6 +138,33 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         internal static string MethodNameCheckerTitle {
             get {
                 return ResourceManager.GetString("MethodNameCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All property names sholud use TW conventions..
+        /// </summary>
+        internal static string PropertyNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("PropertyNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property {0} with access modifier {1} should use {2}..
+        /// </summary>
+        internal static string PropertyNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("PropertyNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All property names should use TW conventions..
+        /// </summary>
+        internal static string PropertyNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("PropertyNameCheckerTitle", resourceCulture);
             }
         }
     }
