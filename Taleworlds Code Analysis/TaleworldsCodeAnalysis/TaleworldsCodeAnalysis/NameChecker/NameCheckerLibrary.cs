@@ -9,7 +9,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static bool IsUnderScoreCase(string name)
         {
-            string pattern = "^[_][a-z]+[a-zA-Z0-9]+$";
+            string pattern = "^[_][a-z]+[a-zA-Z0-9]*$";
             Regex regex = new Regex(pattern);
             return regex.IsMatch(name);
         }
