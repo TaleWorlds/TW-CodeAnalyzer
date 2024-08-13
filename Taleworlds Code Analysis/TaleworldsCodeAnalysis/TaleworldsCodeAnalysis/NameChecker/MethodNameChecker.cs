@@ -8,7 +8,7 @@ using System.Text;
 namespace TaleworldsCodeAnalysis.NameChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class MethodNameChecker : DiagnosticAnalyzer
+    public class MethodNameChecker : DiagnosticAnalyzer
     {
         public const string DiagnosticId = "MethodNameChecker";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.MethodNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));

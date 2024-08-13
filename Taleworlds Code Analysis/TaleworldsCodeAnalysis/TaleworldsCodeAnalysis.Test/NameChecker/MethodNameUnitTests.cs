@@ -1,77 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
-    TaleworldsCodeAnalysis.TaleworldsCodeAnalysisAnalyzer,
+    TaleworldsCodeAnalysis.NameChecker.MethodNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
 
-namespace TaleworldsCodeAnalysis.Test
+
+namespace TaleworldsCodeAnalysis.Test.NameChecker
 {
     [TestClass]
-    public class TaleworldsCodeAnalysisUnitTest
+    public class MethodNameUnitTests
     {
-        [TestMethod]
-        public async Task FieldNoWarningTest ()
-        {
-            var test = @"
-            public class Test
-            {   
-                private int _value;
-            }";
-
-            await VerifyCS.VerifyAnalyzerAsync(test);
-        }
-
-        [TestMethod]
-        public async Task FieldPrivateUnderscoreWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                private int {|#0:value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("_value"); //TODO: Add the argument here
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldPublicWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                public int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("_value"); //TODO: Add the argument here
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldInternalWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                internal int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("_value"); //TODO: Add the argument here
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldProtectedWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                protected int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("_value"); //TODO: Add the argument here
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
 
         [TestMethod]
         public async Task MethodNoWarningTest()
@@ -98,7 +36,8 @@ namespace TaleworldsCodeAnalysis.Test
                 private void {|#0:foo|}(){}
                 private void {|#1:_Foo|}(){}
 
-            }";
+            }"
+            ;
 
             var expected1 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(0).WithArguments("foo");
             var expected2 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(1).WithArguments("_Foo");
@@ -152,6 +91,5 @@ namespace TaleworldsCodeAnalysis.Test
             var expected2 = VerifyCS.Diagnostic("TaleworldsCodeAnalysis").WithLocation(1).WithArguments("_Foo");
             await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
         }
-
     }
 }
