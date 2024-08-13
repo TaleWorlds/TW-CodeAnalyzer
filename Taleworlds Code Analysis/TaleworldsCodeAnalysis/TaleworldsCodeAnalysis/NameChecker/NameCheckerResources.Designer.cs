@@ -61,6 +61,15 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Class {0} cannot be &quot;Protected&quot; by TW conventions..
+        /// </summary>
+        internal static string ClassModifierCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("ClassModifierCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All class names should use TW conventions..
         /// </summary>
         internal static string ClassNameCheckerDescription {
@@ -115,6 +124,33 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string LocalNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("LocalNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local {0} should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string LocalNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("LocalNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string LocalNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("LocalNameCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All method names should use TW conventions..
         /// </summary>
         internal static string MethodNameCheckerDescription {
@@ -142,6 +178,33 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameters should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string ParameterNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("ParameterNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter {0} should use &quot;camelCase..
+        /// </summary>
+        internal static string ParameterNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("ParameterNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string ParameterNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("ParameterNameCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All property names sholud use TW conventions..
         /// </summary>
         internal static string PropertyNameCheckerDescription {
@@ -165,6 +228,33 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         internal static string PropertyNameCheckerTitle {
             get {
                 return ResourceManager.GetString("PropertyNameCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template parameters should use &quot;TPascalCase&quot;..
+        /// </summary>
+        internal static string TemplateParameterNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("TemplateParameterNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template parameter {0} should use &quot;TPascalCase&quot;..
+        /// </summary>
+        internal static string TemplateParameterNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("TemplateParameterNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template parameters should use &quot;TPascalCase&quot;..
+        /// </summary>
+        internal static string TemplateParameterNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("TemplateParameterNameCheckerTitle", resourceCulture);
             }
         }
     }

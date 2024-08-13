@@ -117,52 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ClassModifierCheckerMessageFormat" xml:space="preserve">
+    <value>Class {0} cannot be "Protected" by TW conventions.</value>
+  </data>
   <data name="ClassNameCheckerDescription" xml:space="preserve">
     <value>All class names should use TW conventions.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="ClassNameCheckerMessageFormat" xml:space="preserve">
     <value>Class {0} with access modifier {1} should use {2}.</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="ClassNameCheckerTitle" xml:space="preserve">
     <value>All class names should use TW  conventions.</value>
-    <comment>The title of the diagnostic.</comment>
   </data>
   <data name="FieldNameCheckerDescription" xml:space="preserve">
     <value>All fields should be private and use "_uscoreCase".</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="FieldNameCheckerMessageFormat" xml:space="preserve">
     <value>Field '{0}' should be private and use "_uscoreCase".</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="FieldNameCheckerTitle" xml:space="preserve">
     <value>All fields should be private and use "_uscoreCase".</value>
-    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="LocalNameCheckerDescription" xml:space="preserve">
+    <value>Locals should use "camelCase".</value>
+  </data>
+  <data name="LocalNameCheckerMessageFormat" xml:space="preserve">
+    <value>Local {0} should use "camelCase".</value>
+  </data>
+  <data name="LocalNameCheckerTitle" xml:space="preserve">
+    <value>Locals should use "camelCase".</value>
   </data>
   <data name="MethodNameCheckerDescription" xml:space="preserve">
     <value>All method names should use TW conventions.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="MethodNameCheckerMessageFormat" xml:space="preserve">
     <value>Method {0} with access modifier {1} should use {2}.</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="MethodNameCheckerTitle" xml:space="preserve">
     <value>All method names should use TW conventions.</value>
-    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="ParameterNameCheckerDescription" xml:space="preserve">
+    <value>Parameters should use "camelCase".</value>
+  </data>
+  <data name="ParameterNameCheckerMessageFormat" xml:space="preserve">
+    <value>Parameter {0} should use "camelCase.</value>
+  </data>
+  <data name="ParameterNameCheckerTitle" xml:space="preserve">
+    <value>Parameters should use "camelCase".</value>
   </data>
   <data name="PropertyNameCheckerDescription" xml:space="preserve">
     <value>All property names sholud use TW conventions.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="PropertyNameCheckerMessageFormat" xml:space="preserve">
     <value>Property {0} with access modifier {1} should use {2}.</value>
-    <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="PropertyNameCheckerTitle" xml:space="preserve">
     <value>All property names should use TW conventions.</value>
-    <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="TemplateParameterNameCheckerDescription" xml:space="preserve">
+    <value>Template parameters should use "TPascalCase".</value>
+  </data>
+  <data name="TemplateParameterNameCheckerMessageFormat" xml:space="preserve">
+    <value>Template parameter {0} should use "TPascalCase".</value>
+  </data>
+  <data name="TemplateParameterNameCheckerTitle" xml:space="preserve">
+    <value>Template parameters should use "TPascalCase".</value>
   </data>
 </root>
