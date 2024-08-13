@@ -36,11 +36,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzeMethod(SyntaxNodeAnalysisContext context)
         {
             var local = (LocalDeclarationStatementSyntax) context.Node;
-            var localName = local.Declaration.Variables.Single().ToString();
+            var localDeclaration = local.Declaration.Variables.Single();
+            ISymbol localName = context.SemanticModel.GetDeclaredSymbol(localDeclaration, context.CancellationToken);
 
-            if (!NameCheckerLibrary.IsCamelCase(localName))
+            if (!NameCheckerLibrary.IsCamelCase(localName.Name))
             {
-                context.ReportDiagnostic(Diagnostic.Create(_rule, local.GetLocation(), localName));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, localName.Locations[0], localName));
             }
             
         }

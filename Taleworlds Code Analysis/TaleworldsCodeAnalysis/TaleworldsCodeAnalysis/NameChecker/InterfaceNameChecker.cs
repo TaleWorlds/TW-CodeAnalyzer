@@ -37,7 +37,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
             var symbolName = symbol.Name;
 
-            if(!(symbolName.StartsWith("I") && NameCheckerLibrary.IsCamelCase(symbolName.Substring(1))))
+            if(!(symbolName.StartsWith("I") && NameCheckerLibrary.IsPascalCase(symbolName.Substring(1))))
             {
                 context.ReportDiagnostic(Diagnostic.Create(_rule, symbol.Locations[0], symbolName));
             }
