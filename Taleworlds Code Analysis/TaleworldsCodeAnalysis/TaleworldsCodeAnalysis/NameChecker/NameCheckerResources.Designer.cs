@@ -115,6 +115,33 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string LocalNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("LocalNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local {0} should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string LocalNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("LocalNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string LocalNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("LocalNameCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All method names should use TW conventions..
         /// </summary>
         internal static string MethodNameCheckerDescription {
@@ -138,6 +165,33 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         internal static string MethodNameCheckerTitle {
             get {
                 return ResourceManager.GetString("MethodNameCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string ParameterNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("ParameterNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter {0} should use &quot;camelCase..
+        /// </summary>
+        internal static string ParameterNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("ParameterNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should use &quot;camelCase&quot;..
+        /// </summary>
+        internal static string ParameterNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("ParameterNameCheckerTitle", resourceCulture);
             }
         }
         

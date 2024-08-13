@@ -32,6 +32,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzeMethod(SymbolAnalysisContext context)
         {
             var classSymbol = (INamedTypeSymbol)context.Symbol;
+            // TODO : Implement protected classes to not be allowed
 
             if (classSymbol.DeclaredAccessibility == Accessibility.Private ||
                  classSymbol.DeclaredAccessibility == Accessibility.Internal)

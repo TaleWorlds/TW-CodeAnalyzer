@@ -22,5 +22,13 @@ namespace TaleworldsCodeAnalysis.NameChecker
             return regex.IsMatch(name);
         }
 
+        public static bool IsCamelCase(string name)
+        {
+            string pattern = "^[a-z](([a-z0-9]+[A-Z]?)*)$";
+            Regex regex = new Regex(pattern);
+
+            return regex.IsMatch(name);
+        }
+
     }
 }

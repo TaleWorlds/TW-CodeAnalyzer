@@ -36,6 +36,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             var field = (IFieldSymbol)context.Symbol;
 
+            // TODO : Implement different messages for non private fields.
+
             if (field.DeclaredAccessibility == Accessibility.Private)
             {
                 _checkPrivateField(field, context);
