@@ -138,6 +138,15 @@
   <data name="FieldNameCheckerTitle" xml:space="preserve">
     <value>All fields should be private and use "_uscoreCase".</value>
   </data>
+  <data name="InterfaceNameCheckerDescription" xml:space="preserve">
+    <value>Interfaces should use "IPascalCase".</value>
+  </data>
+  <data name="InterfaceNameCheckerMessageFormat" xml:space="preserve">
+    <value>Interface {0} should use "IPascalCase".</value>
+  </data>
+  <data name="InterfaceNameCheckerTitle" xml:space="preserve">
+    <value>Interfaces should use "IPascalCase".</value>
+  </data>
   <data name="LocalNameCheckerDescription" xml:space="preserve">
     <value>Locals should use "camelCase".</value>
   </data>

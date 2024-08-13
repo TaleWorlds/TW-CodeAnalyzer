@@ -124,6 +124,33 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interfaces should use &quot;IPascalCase&quot;..
+        /// </summary>
+        internal static string InterfaceNameCheckerDescription {
+            get {
+                return ResourceManager.GetString("InterfaceNameCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interface {0} should use &quot;IPascalCase&quot;..
+        /// </summary>
+        internal static string InterfaceNameCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("InterfaceNameCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interfaces should use &quot;IPascalCase&quot;..
+        /// </summary>
+        internal static string InterfaceNameCheckerTitle {
+            get {
+                return ResourceManager.GetString("InterfaceNameCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;..
         /// </summary>
         internal static string LocalNameCheckerDescription {

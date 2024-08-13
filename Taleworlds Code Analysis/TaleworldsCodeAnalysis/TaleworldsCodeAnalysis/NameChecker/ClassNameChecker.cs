@@ -32,27 +32,32 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzeMethod(SymbolAnalysisContext context)
         {
-            var classSymbol = (INamedTypeSymbol)context.Symbol;
+            var symbol = (INamedTypeSymbol)context.Symbol;
             // TODO : Implement protected classes to not be allowed
 
-            if (classSymbol.DeclaredAccessibility == Accessibility.Private ||
-                classSymbol.DeclaredAccessibility == Accessibility.Internal)
+            if (symbol.TypeKind != TypeKind.Class)
             {
-                if (!NameCheckerLibrary.IsUnderScoreCase(classSymbol.Name))
+                return;
+            }
+
+            if (symbol.DeclaredAccessibility == Accessibility.Private ||
+                symbol.DeclaredAccessibility == Accessibility.Internal)
+            {
+                if (!NameCheckerLibrary.IsUnderScoreCase(symbol.Name))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, classSymbol.Locations[0], classSymbol.Name, classSymbol.DeclaredAccessibility.ToString(), "_uscoreCase"));
+                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], symbol.Name, symbol.DeclaredAccessibility.ToString(), "_uscoreCase"));
                 }
             }
-            else if (classSymbol.DeclaredAccessibility == Accessibility.Public)
+            else if (symbol.DeclaredAccessibility == Accessibility.Public)
             {
-                if (!NameCheckerLibrary.IsPascalCase(classSymbol.Name))
+                if (!NameCheckerLibrary.IsPascalCase(symbol.Name))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, classSymbol.Locations[0], classSymbol.Name, classSymbol.DeclaredAccessibility.ToString(), "PascalCase"));
+                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], symbol.Name, symbol.DeclaredAccessibility.ToString(), "PascalCase"));
                 }
             }
             else
             {
-                context.ReportDiagnostic(Diagnostic.Create(_modifierRule, classSymbol.Locations[0], classSymbol.Name));
+                context.ReportDiagnostic(Diagnostic.Create(_modifierRule, symbol.Locations[0], symbol.Name));
             }
         }
     }
