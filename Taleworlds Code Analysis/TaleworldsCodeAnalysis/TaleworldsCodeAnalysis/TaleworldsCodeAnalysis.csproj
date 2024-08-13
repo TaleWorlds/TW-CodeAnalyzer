@@ -14,7 +14,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="NameChecker\NameCheckerResources.Designer.cs">
+      <DependentUpon>NameCheckerResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+    <EmbeddedResource Update="NameChecker\NameCheckerResources.resx">
+      <LastGenOutput>NameCheckerResources.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
   </ItemGroup>
 
