@@ -8,7 +8,7 @@ using System.Text;
 namespace TaleworldsCodeAnalysis.NameChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    internal class MethodNameChecker : DiagnosticAnalyzer
+    public class MethodNameChecker : DiagnosticAnalyzer
     {
         public const string DiagnosticId = "MethodNameChecker";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.MethodNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
@@ -43,9 +43,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
            }
            else
            {
-                 if(NameCheckerLibrary.IsPascalCase(method.Name))
+                 if(!NameCheckerLibrary.IsPascalCase(method.Name))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, method.Locations[0], method.Name, method.DeclaredAccessibility.ToString(), "_uscoreCase"));
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, method.Locations[0], method.Name, method.DeclaredAccessibility.ToString(), "PascalCase"));
                 }
            }
         }

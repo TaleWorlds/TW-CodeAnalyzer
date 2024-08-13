@@ -9,21 +9,14 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static bool IsUnderScoreCase(string name)
         {
-            if (!name.StartsWith("_", StringComparison.Ordinal))
-            {
-                return false;
-            }
-            else if (name.ToCharArray()[1] != name.ToLower().ToCharArray()[1])
-            {
-                return false;
-            }
-
-            return true;
+            string pattern = "^[_][a-zA-Z]+$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(name);
         }
 
         public static bool IsPascalCase(string name)
         {
-            string pattern = "/^[A-Z][A-Za-z]*$/";
+            string pattern = "^[A-Z](([a-z0-9]+[A-Z]?)*)$";
             Regex regex = new Regex(pattern);
 
             return regex.IsMatch(name);
