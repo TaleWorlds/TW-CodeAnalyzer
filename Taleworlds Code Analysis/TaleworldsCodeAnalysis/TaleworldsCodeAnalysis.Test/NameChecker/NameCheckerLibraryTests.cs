@@ -70,19 +70,26 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 NameCheckerLibrary.IsUnderScoreCase("_uscorecase"),
                 NameCheckerLibrary.IsUnderScoreCase("uscoreCase"),
                 NameCheckerLibrary.IsUnderScoreCase("UscoreCase"),
-                NameCheckerLibrary.IsUnderScoreCase("_uscore")
+                NameCheckerLibrary.IsUnderScoreCase("_uscore"),
+                NameCheckerLibrary.IsUnderScoreCase("_uscoreAI"),
+                NameCheckerLibrary.IsUnderScoreCase("_uscoreAITaleworlds"),
+                NameCheckerLibrary.IsUnderScoreCase("_xabASDAS")
+
             };
             var expectedResults = new bool[] {
                 true,
                 true,
                 false,
                 false,
-                true
+                true,
+                true,
+                true,
+                false
             };
 
             for (int i = 0; i < checkResults.Length; i++)
             {
-                Assert.AreEqual(checkResults[i], expectedResults[i]);
+                Assert.AreEqual(expectedResults[i], checkResults[i]);
             }
         }
     }
