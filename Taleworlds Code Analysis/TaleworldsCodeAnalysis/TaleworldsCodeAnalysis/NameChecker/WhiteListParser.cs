@@ -36,7 +36,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _readWhiteList()
         {
-            
             var document =XDocument.Parse(whiteList.ToString());
 
             var xElements=document.Descendants("Word");
