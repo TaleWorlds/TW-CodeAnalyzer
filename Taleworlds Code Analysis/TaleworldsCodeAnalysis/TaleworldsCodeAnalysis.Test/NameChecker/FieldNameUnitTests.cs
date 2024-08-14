@@ -30,7 +30,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 private int {|#0:value|};
             }";
 
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value"); //TODO: Add the argument here
+            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -43,7 +43,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 public int {|#0:_value|};
             }";
 
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); //TODO: Add the argument here
+            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -56,7 +56,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 internal int {|#0:_value|};
             }";
 
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); //TODO: Add the argument here
+            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -69,7 +69,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 protected int {|#0:_value|};
             }";
 
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); //TODO: Add the argument here
+            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 

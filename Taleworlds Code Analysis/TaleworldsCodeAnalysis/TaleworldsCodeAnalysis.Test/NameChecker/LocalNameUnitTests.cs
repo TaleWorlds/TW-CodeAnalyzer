@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.LocalNameChecker,
@@ -43,10 +45,15 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }
             ";
 
-            var expected1 = VerifyCS.Diagnostic("LocalNameChecker").WithLocation(0).WithArguments("Value");
-            var expected2 = VerifyCS.Diagnostic("LocalNameChecker").WithLocation(1).WithArguments("_value2");
+            var expectedResults = new DiagnosticResult[]
+            {
+                VerifyCS.Diagnostic("LocalNameChecker").WithLocation(0).WithArguments("Value"),
+                VerifyCS.Diagnostic("LocalNameChecker").WithLocation(1).WithArguments("_value2")
+            };
 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
+            
+
+            await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
         }
 
     }

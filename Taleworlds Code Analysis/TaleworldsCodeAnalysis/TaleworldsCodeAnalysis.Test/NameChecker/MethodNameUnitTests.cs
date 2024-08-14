@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.CodeAnalysis.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.MethodNameChecker,
@@ -41,11 +42,15 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }"
             ;
 
-            var expected1 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPriv", "Private", "_uscoreCase");
-            var expected2 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPriv", "Private", "_uscoreCase");
-            var expected3 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooInt", "Internal", "_uscoreCase");
-            var expected4 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooInt", "Internal", "_uscoreCase");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2,expected3,expected4);
+            var expectedResults = new DiagnosticResult[]
+            {
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPriv", "Private", "_uscoreCase"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPriv", "Private", "_uscoreCase"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooInt", "Internal", "_uscoreCase"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooInt", "Internal", "_uscoreCase")
+            };
+            
+            await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
         }
 
         [TestMethod]
@@ -61,11 +66,15 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 protected void {|#3:_FooPro|}(){}
             }";
 
-            var expected1 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPub", "Public", "PascalCase");
-            var expected2 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPub", "Public", "PascalCase");
-            var expected3 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooPro", "Protected", "PascalCase");
-            var expected4 = VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooPro", "Protected", "PascalCase");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2,expected3,expected4);
+            var expectedResults = new DiagnosticResult[]
+            {
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPub", "Public", "PascalCase"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPub", "Public", "PascalCase"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooPro", "Protected", "PascalCase"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooPro", "Protected", "PascalCase")
+        };
+
+            await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
         }
 
     }

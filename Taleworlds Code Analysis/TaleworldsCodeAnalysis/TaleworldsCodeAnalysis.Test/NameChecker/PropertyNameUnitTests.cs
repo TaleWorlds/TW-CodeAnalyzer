@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.CodeAnalysis.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -46,12 +47,16 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 private int _value;
             }";
 
-            var expected1 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("ValuePriv", "Private","_uscoreCase");
-            var expected2 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePriv", "Private", "_uscoreCase");
-            var expected3 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("value_Priv", "Private", "_uscoreCase");
-            var expected4 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("ValueInt", "Internal", "_uscoreCase");
-            var expected5 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(4).WithArguments("valueInt", "Internal", "_uscoreCase");
-            await VerifyCS.VerifyAnalyzerAsync(test,expected1,expected2,expected3,expected4,expected5);
+            var expectedResults = new DiagnosticResult[]
+            {
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("ValuePriv", "Private","_uscoreCase"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePriv", "Private", "_uscoreCase"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("value_Priv", "Private", "_uscoreCase"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("ValueInt", "Internal", "_uscoreCase"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(4).WithArguments("valueInt", "Internal", "_uscoreCase"),
+            };
+            
+            await VerifyCS.VerifyAnalyzerAsync(test,expectedResults);
         }
 
         [TestMethod]
@@ -67,12 +72,16 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
                 private int _value;
             }";
-            var expected1 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valuePub", "Public", "PascalCase");
-            var expected2 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePub", "Public", "PascalCase");
-            var expected3 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("_valueProp", "Protected", "PascalCase");
-            var expected4 = VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("valueProp", "Protected", "PascalCase");
+            var expectedResults = new DiagnosticResult[]
+            {
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valuePub", "Public", "PascalCase"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePub", "Public", "PascalCase"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("_valueProp", "Protected", "PascalCase"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("valueProp", "Protected", "PascalCase")
+            };
+            
 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2,expected3,expected4);
+            await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
         }
 
     }

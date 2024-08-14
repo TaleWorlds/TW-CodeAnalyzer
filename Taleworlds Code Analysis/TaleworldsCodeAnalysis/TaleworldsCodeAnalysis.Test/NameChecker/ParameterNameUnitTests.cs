@@ -1,4 +1,5 @@
 ﻿using Microsoft;
+using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -45,9 +46,13 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                     return ;
                 }   
             }";
-            var expected1 = VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(0).WithArguments("Value");
-            var expected2 = VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(1).WithArguments("_value");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
+            var expectedResults = new DiagnosticResult[]
+            {
+                VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(0).WithArguments("Value"),
+                VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(1).WithArguments("_value")
+            };
+            
+            await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
         }
     }
 

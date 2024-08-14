@@ -1,4 +1,6 @@
 ﻿using Microsoft;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -58,11 +60,16 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 }
             }
             ";
-            var expected1 = VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("TestClassPriv", "Private", "_uscoreCase");
-            var expected2 = VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPriv", "Private", "_uscoreCase");
-            var expected3 = VerifyCS.Diagnostic("ClassNameChecker").WithLocation(2).WithArguments("TestClassInt", "Internal", "_uscoreCase");
-            var expected4 = VerifyCS.Diagnostic("ClassNameChecker").WithLocation(3).WithArguments("testClassInt", "Internal", "_uscoreCase");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2,expected3,expected4);
+
+            var expectedResults = new DiagnosticResult[]
+            {
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("TestClassPriv", "Private", "_uscoreCase"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPriv", "Private", "_uscoreCase"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(2).WithArguments("TestClassInt", "Internal", "_uscoreCase"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(3).WithArguments("testClassInt", "Internal", "_uscoreCase")
+            };
+
+            await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
         }
 
         [TestMethod]
@@ -71,20 +78,30 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             var test = @"
             public class {|#0:_testClassPub|}
             {   
-                
+                protected class {|#2:TestClassPro|}
+                {   
+               
+                }
             }
 
             public class {|#1:testClassPub|}
             {   
+               protected class {|#3:testClassPro|}
+                {   
                
+                }
             }
             ";
 
-            var expected1 = VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("_testClassPub", "Public", "PascalCase");
-            var expected2 = VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPub", "Public", "PascalCase");
-            //var expected3 = VerifyCS.Diagnostic("ClassNameChecker").WithLocation(2).WithArguments("_testClassPro", "Internal", "_uscoreCase");
-            //var expected4 = VerifyCS.Diagnostic("ClassNameChecker").WithLocation(3).WithArguments("testClassPro", "Internal", "_uscoreCase");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected1, expected2);
+            var expectedResults = new DiagnosticResult[]
+            {
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("_testClassPub", "Public", "PascalCase"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPub", "Public", "PascalCase"),
+                VerifyCS.Diagnostic("ClassModifierChecker").WithLocation(2).WithArguments("TestClassPro"),
+                VerifyCS.Diagnostic("ClassModifierChecker").WithLocation(3).WithArguments("testClassPro")
+            };
+
+            await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
 
         }
 
