@@ -37,7 +37,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             var field = (IFieldSymbol)context.Symbol;
 
-            // TODO : Implement different messages for non private fields.
+            if(field.ContainingType.TypeKind==TypeKind.Enum)
+            {
+                return;
+            }
 
             if (field.DeclaredAccessibility == Accessibility.Private)
             {
