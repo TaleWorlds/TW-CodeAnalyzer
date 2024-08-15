@@ -7,8 +7,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ClassNameChecker : DiagnosticAnalyzer
     {
-        public const string NameDiagnosticId = "ClassNameChecker";
-        public const string ModifierDiagnosticId = "ClassModifierChecker";
+        public string NameDiagnosticId =>_nameDiagnosticId;
+        public string ModifierDiagnosticId=>_modifierDiagnosticId;
+
+        private const string _nameDiagnosticId = "ClassNameChecker";
+        private const string _modifierDiagnosticId = "ClassModifierChecker";
 
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
@@ -17,8 +20,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private const string _category = "Naming";
 
-        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(NameDiagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
-        private static readonly DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(ModifierDiagnosticId, _title, _modifierMessageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_nameDiagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static readonly DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(_modifierDiagnosticId, _title, _modifierMessageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_nameRule, _modifierRule);
 
@@ -33,7 +36,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzeMethod(SymbolAnalysisContext context)
         {
             var symbol = (INamedTypeSymbol)context.Symbol;
-            // TODO : Implement protected classes to not be allowed
 
             if (symbol.TypeKind != TypeKind.Class)
             {

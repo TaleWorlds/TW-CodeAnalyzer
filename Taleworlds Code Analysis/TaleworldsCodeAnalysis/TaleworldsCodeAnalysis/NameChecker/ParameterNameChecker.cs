@@ -10,13 +10,15 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ParameterNameChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "ParameterNameChecker";
+        public string DiagnosticId => _diagnosticId;
+
+        private const string _diagnosticId = "ParameterNameChecker";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.ParameterNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ParameterNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.ParameterNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private const string _category = "Naming";
 
-        private static readonly DiagnosticDescriptor _rule = new DiagnosticDescriptor(DiagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static readonly DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
 
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule);

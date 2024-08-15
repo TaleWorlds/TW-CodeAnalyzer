@@ -10,13 +10,14 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FieldNameChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "FieldNameChecker";
+        public string DiagnosticId => _diagnosticId;
+        private const string _diagnosticId = "FieldNameChecker";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private const string _category = "Naming";
 
-        private static readonly DiagnosticDescriptor _rule = new DiagnosticDescriptor(DiagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static readonly DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
 
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics

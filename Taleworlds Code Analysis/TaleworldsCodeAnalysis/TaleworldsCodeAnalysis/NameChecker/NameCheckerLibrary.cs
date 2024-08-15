@@ -27,7 +27,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         public static bool IsCamelCase(string name)
         {
             name = _removeWhiteListItems(name);
-            string pattern = "^[a-z](([a-z0-9]+[A-Z]?)*)$";
+            string pattern = "^[a-z](([a-z0-9]*[A-Z]?)*)$";
             Regex regex = new Regex(pattern);
 
             return regex.IsMatch(name);

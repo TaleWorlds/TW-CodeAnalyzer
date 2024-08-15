@@ -20,7 +20,7 @@ namespace TaleworldsCodeAnalysis
     {
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(TaleworldsCodeAnalysisAnalyzer.DiagnosticId); }
+            get { return ImmutableArray.Create(item: TaleworldsCodeAnalysisAnalyzer.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()
@@ -44,12 +44,12 @@ namespace TaleworldsCodeAnalysis
             context.RegisterCodeFix(
                 CodeAction.Create(
                     title: CodeFixResources.CodeFixTitle,
-                    createChangedSolution: c => MakeUppercaseAsync(context.Document, declaration, c),
+                    createChangedSolution: c => _makeUppercaseAsync(context.Document, declaration, c),
                     equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
                 diagnostic);
         }
 
-        private async Task<Solution> MakeUppercaseAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
+        private async Task<Solution> _makeUppercaseAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
         {
             // Compute new uppercase name.
             var identifierToken = typeDecl.Identifier;

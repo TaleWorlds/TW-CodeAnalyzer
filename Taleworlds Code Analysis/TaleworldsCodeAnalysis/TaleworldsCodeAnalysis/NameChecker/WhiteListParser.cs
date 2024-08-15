@@ -25,7 +25,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         }
 
         public IReadOnlyList<string> WhiteListWords => _whiteListedWords;
-        private static readonly LocalizableString whiteList = new LocalizableResourceString(nameof(NameCheckerResources.WhiteList), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
+        private static readonly LocalizableString _whiteList = new LocalizableResourceString(nameof(NameCheckerResources.WhiteList), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static WhiteListParser _instance;
         private IReadOnlyList<string> _whiteListedWords;
 
@@ -36,7 +36,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _readWhiteList()
         {
-            var document =XDocument.Parse(whiteList.ToString());
+            var document =XDocument.Parse(_whiteList.ToString());
 
             var xElements=document.Descendants("Word");
             
