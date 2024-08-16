@@ -16,11 +16,11 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         {
             var checkResults = new bool[]
             {
-                NameCheckerLibrary.IsCamelCase("camelCase"),
-                NameCheckerLibrary.IsCamelCase("camel"),
-                NameCheckerLibrary.IsCamelCase("ca"),
-                NameCheckerLibrary.IsCamelCase("_camelCase"),
-                NameCheckerLibrary.IsCamelCase("CamelCase"),
+                NameCheckerLibrary.IsMatchingConvention("camelCase",ConventionType.camelCase),
+                NameCheckerLibrary.IsMatchingConvention("camel", ConventionType.camelCase),
+                NameCheckerLibrary.IsMatchingConvention("ca", ConventionType.camelCase),
+                NameCheckerLibrary.IsMatchingConvention("_camelCase", ConventionType.camelCase),
+                NameCheckerLibrary.IsMatchingConvention("CamelCase", ConventionType.camelCase),
             };
             var expectedResults = new bool[] {
                 true,
@@ -41,11 +41,11 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         {
             var checkResults = new bool[]
             {
-                NameCheckerLibrary.IsPascalCase("PASCAL"),
-                NameCheckerLibrary.IsPascalCase("Pascal"),
-                NameCheckerLibrary.IsPascalCase("PascalCase"),
-                NameCheckerLibrary.IsPascalCase("PAscal"),
-                NameCheckerLibrary.IsPascalCase("_pascal")
+                NameCheckerLibrary.IsMatchingConvention("PASCAL", ConventionType.PascalCase),
+                NameCheckerLibrary.IsMatchingConvention("Pascal", ConventionType.PascalCase),
+                NameCheckerLibrary.IsMatchingConvention("PascalCase", ConventionType.PascalCase),
+                NameCheckerLibrary.IsMatchingConvention("PAscal", ConventionType.PascalCase),
+                NameCheckerLibrary.IsMatchingConvention("_pascal", ConventionType.PascalCase)
             };
             var expectedResults = new bool[] {
                 false,
@@ -66,14 +66,14 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         {
             var checkResults = new bool[]
             {
-                NameCheckerLibrary.IsUnderScoreCase("_uscorCase"),
-                NameCheckerLibrary.IsUnderScoreCase("_uscorecase"),
-                NameCheckerLibrary.IsUnderScoreCase("uscoreCase"),
-                NameCheckerLibrary.IsUnderScoreCase("UscoreCase"),
-                NameCheckerLibrary.IsUnderScoreCase("_uscore"),
-                NameCheckerLibrary.IsUnderScoreCase("_uscoreAI"),
-                NameCheckerLibrary.IsUnderScoreCase("_uscoreAITaleworlds"),
-                NameCheckerLibrary.IsUnderScoreCase("_xabASDAS")
+                NameCheckerLibrary.IsMatchingConvention("_uscorCase", ConventionType._uscoreCase),
+                NameCheckerLibrary.IsMatchingConvention("_uscorecase", ConventionType._uscoreCase),
+                NameCheckerLibrary.IsMatchingConvention("uscoreCase", ConventionType._uscoreCase),
+                NameCheckerLibrary.IsMatchingConvention("UscoreCase", ConventionType._uscoreCase),
+                NameCheckerLibrary.IsMatchingConvention("_uscore", ConventionType._uscoreCase),
+                NameCheckerLibrary.IsMatchingConvention("_uscoreAI", ConventionType._uscoreCase),
+                NameCheckerLibrary.IsMatchingConvention("_uscoreAITaleworlds", ConventionType._uscoreCase),
+                NameCheckerLibrary.IsMatchingConvention("_xabASDAS", ConventionType.camelCase)
 
             };
             var expectedResults = new bool[] {

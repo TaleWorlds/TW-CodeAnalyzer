@@ -31,6 +31,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         public IReadOnlyList<string> WhiteListWords => _whiteListedWords;
         private static WhiteListParser _instance;
         private IReadOnlyList<string> _whiteListedWords;
+        private const string testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\TaleworldsCodeAnalysis\\WhiteList.xml";
 
         public WhiteListParser()
         {
@@ -56,20 +57,32 @@ namespace TaleworldsCodeAnalysis.NameChecker
         public void SymbolWhiteListChecker(SymbolAnalysisContext context)
         {
             ImmutableArray<AdditionalText> additionalFiles = context.Options.AdditionalFiles;
-            AdditionalText whiteListFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.Path).Equals("WhiteList.xml"));
-            SourceText fileText = whiteListFile.GetText(context.CancellationToken);
-
-            WhiteListParser.Instance._readWhiteList(fileText.ToString());
+            WhiteListParser.Instance._readWhiteList(_getFileText(additionalFiles));
         }
 
         public void SyntaxWhiteListChecker(SyntaxNodeAnalysisContext context)
         {
             ImmutableArray<AdditionalText> additionalFiles = context.Options.AdditionalFiles;
-            AdditionalText whiteListFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.Path).Equals("WhiteList.xml"));
-            SourceText fileText = whiteListFile.GetText(context.CancellationToken);
-
-            WhiteListParser.Instance._readWhiteList(fileText.ToString());
+            WhiteListParser.Instance._readWhiteList(_getFileText(additionalFiles));
         }
+
+        private string _getFileText(ImmutableArray<AdditionalText> additionalFiles)
+        {
+            string fileText = "";
+            if (additionalFiles.Length != 0)
+            {
+                AdditionalText whiteListFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.Path).Equals("WhiteList.xml"));
+                SourceText fileSourceText = whiteListFile.GetText();
+                fileText = fileSourceText.ToString();
+            }
+            else
+            {
+                XDocument document = XDocument.Load(testPathXML);
+                fileText = document.ToString();
+            }
+            return fileText;
+        }
+
 
     }
 }
