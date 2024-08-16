@@ -35,6 +35,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzeMethod(SyntaxNodeAnalysisContext context)
         {
+            WhiteListParser.Instance.SyntaxWhiteListChecker(context);
+
             var parameter = (TypeParameterSyntax)context.Node;
             var parameterName = parameter.Identifier.Text;
 

@@ -19,24 +19,27 @@ namespace TaleworldsCodeAnalysis.NameChecker
         { 
             get 
             {
-                _instance = new WhiteListParser();
+                if (_instance == null)
+                {
+                    _instance = new WhiteListParser ();
+                }
+                
                 return _instance;
             } 
         }
 
         public IReadOnlyList<string> WhiteListWords => _whiteListedWords;
-        private static readonly LocalizableString _whiteList = new LocalizableResourceString(nameof(NameCheckerResources.WhiteList), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static WhiteListParser _instance;
         private IReadOnlyList<string> _whiteListedWords;
 
         public WhiteListParser()
         {
-            _readWhiteList();
+            
         }
 
-        private void _readWhiteList()
+        private void _readWhiteList(string whiteListString)
         {
-            var document =XDocument.Parse(_whiteList.ToString());
+            var document =XDocument.Parse(whiteListString);
 
             var xElements=document.Descendants("Word");
             
@@ -48,6 +51,24 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
 
             _whiteListedWords = new List<string> (words);
+        }
+
+        public void SymbolWhiteListChecker(SymbolAnalysisContext context)
+        {
+            ImmutableArray<AdditionalText> additionalFiles = context.Options.AdditionalFiles;
+            AdditionalText whiteListFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.Path).Equals("WhiteList.xml"));
+            SourceText fileText = whiteListFile.GetText(context.CancellationToken);
+
+            WhiteListParser.Instance._readWhiteList(fileText.ToString());
+        }
+
+        public void SyntaxWhiteListChecker(SyntaxNodeAnalysisContext context)
+        {
+            ImmutableArray<AdditionalText> additionalFiles = context.Options.AdditionalFiles;
+            AdditionalText whiteListFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.Path).Equals("WhiteList.xml"));
+            SourceText fileText = whiteListFile.GetText(context.CancellationToken);
+
+            WhiteListParser.Instance._readWhiteList(fileText.ToString());
         }
 
     }

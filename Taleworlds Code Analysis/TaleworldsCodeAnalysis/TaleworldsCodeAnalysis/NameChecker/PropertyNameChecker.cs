@@ -34,6 +34,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzeMethod(SymbolAnalysisContext context)
         {
             var property = (IPropertySymbol)context.Symbol;
+            WhiteListParser.Instance.SymbolWhiteListChecker(context);
 
             if (property.DeclaredAccessibility == Accessibility.Private ||
                  property.DeclaredAccessibility == Accessibility.Internal)

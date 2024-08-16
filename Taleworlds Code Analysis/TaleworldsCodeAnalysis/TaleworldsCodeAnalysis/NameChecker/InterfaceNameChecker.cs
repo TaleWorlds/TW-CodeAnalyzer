@@ -32,6 +32,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzeMethod(SymbolAnalysisContext context)
         {
+            WhiteListParser.Instance.SymbolWhiteListChecker(context);
+
             var symbol = (INamedTypeSymbol)context.Symbol;
             if (symbol.TypeKind != TypeKind.Interface)
             {

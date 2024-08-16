@@ -35,6 +35,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzeMethod(SymbolAnalysisContext context)
         {
             var method = (IMethodSymbol) context.Symbol;
+            WhiteListParser.Instance.SymbolWhiteListChecker(context);
 
             if(method.MethodKind == MethodKind.PropertyGet || MethodKind.PropertySet == method.MethodKind || MethodKind.Constructor==method.MethodKind)
             {

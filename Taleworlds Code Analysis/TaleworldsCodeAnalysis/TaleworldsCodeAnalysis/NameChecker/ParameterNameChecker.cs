@@ -33,6 +33,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzeMethod(SymbolAnalysisContext context)
         {
+            WhiteListParser.Instance.SymbolWhiteListChecker(context);
+
             var parameter = (IParameterSymbol)context.Symbol;
 
             if (!NameCheckerLibrary.IsCamelCase(parameter.Name))

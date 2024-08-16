@@ -37,6 +37,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzeMethod(SyntaxNodeAnalysisContext context)
         {
+            WhiteListParser.Instance.SyntaxWhiteListChecker(context);
+
             var local = (LocalDeclarationStatementSyntax) context.Node;
             var localDeclaration = local.Declaration.Variables.Single();
             ISymbol localName = context.SemanticModel.GetDeclaredSymbol(localDeclaration, context.CancellationToken);

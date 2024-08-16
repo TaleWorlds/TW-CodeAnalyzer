@@ -284,18 +284,5 @@ namespace TaleworldsCodeAnalysis.NameChecker {
                 return ResourceManager.GetString("TemplateParameterNameCheckerTitle", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;WhiteListRoot&gt;
-        ///  &lt;Word&gt;AI&lt;/Word&gt;
-        ///  &lt;Word&gt;TW&lt;/Word&gt;
-        ///&lt;/WhiteListRoot&gt;.
-        /// </summary>
-        internal static string WhiteList {
-            get {
-                return ResourceManager.GetString("WhiteList", resourceCulture);
-            }
-        }
     }
 }
