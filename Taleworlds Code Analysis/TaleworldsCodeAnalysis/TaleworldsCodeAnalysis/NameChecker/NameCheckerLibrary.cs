@@ -24,7 +24,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     pattern = _camelRegex;
                     break;
                 case ConventionType._uscoreCase:
-                    pattern = _camelRegex;
+                    pattern = _underScoreRegex;
                     break;
                 case ConventionType.PascalCase:
                     pattern = _pascalRegex;
