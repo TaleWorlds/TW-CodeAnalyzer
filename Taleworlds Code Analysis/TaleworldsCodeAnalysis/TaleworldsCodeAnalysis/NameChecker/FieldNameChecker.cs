@@ -59,7 +59,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _checkPrivateField(ISymbol field, SymbolAnalysisContext context)
         {
-            if (!NameCheckerLibrary.IsUnderScoreCase(field.Name))
+            if (!NameCheckerLibrary.IsMatchingConvention(field.Name, ConventionType._uscoreCase))
             {
                 _createDiagnostic(field, context);
             }

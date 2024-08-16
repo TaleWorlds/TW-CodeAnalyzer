@@ -49,14 +49,14 @@ namespace TaleworldsCodeAnalysis.NameChecker
             if (symbol.DeclaredAccessibility == Accessibility.Private ||
                 symbol.DeclaredAccessibility == Accessibility.Internal)
             {
-                if (!NameCheckerLibrary.IsUnderScoreCase(symbol.Name))
+                if (!NameCheckerLibrary.IsMatchingConvention(symbol.Name,ConventionType._uscoreCase))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], symbol.Name, symbol.DeclaredAccessibility.ToString(), "_uscoreCase"));
                 }
             }
             else if (symbol.DeclaredAccessibility == Accessibility.Public)
             {
-                if (!NameCheckerLibrary.IsPascalCase(symbol.Name))
+                if (!NameCheckerLibrary.IsMatchingConvention(symbol.Name, ConventionType.PascalCase))
                 {
                     context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], symbol.Name, symbol.DeclaredAccessibility.ToString(), "PascalCase"));
                 }

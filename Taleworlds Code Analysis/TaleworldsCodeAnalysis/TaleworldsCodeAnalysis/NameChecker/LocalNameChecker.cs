@@ -43,7 +43,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var localDeclaration = local.Declaration.Variables.Single();
             ISymbol localName = context.SemanticModel.GetDeclaredSymbol(localDeclaration, context.CancellationToken);
 
-            if (!NameCheckerLibrary.IsCamelCase(localName.Name))
+            if (!NameCheckerLibrary.IsMatchingConvention(localName.Name, ConventionType.camelCase))
             {
                 context.ReportDiagnostic(Diagnostic.Create(_rule, localName.Locations[0], localName));
             }

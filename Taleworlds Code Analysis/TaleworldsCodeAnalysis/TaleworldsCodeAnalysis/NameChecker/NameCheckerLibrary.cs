@@ -8,33 +8,31 @@ namespace TaleworldsCodeAnalysis.NameChecker
     public static class NameCheckerLibrary
     {
         private const string _pascalRegex = "^[A-Z](([a-z0-9]+[A-Z]?)*)$";
+        private const string _pascalSingleRegex = "[A-Z][a-z0-9]+";
         private const string _underScoreRegex = "^[_][a-z]*([a-z0-9]+[A-Z]?)*$";
+        private const string _underScoreBeginningSingleRegex = "^[_][a-z0-9]+";
         private const string _camelRegex = "^[a-z](([a-z0-9]*[A-Z]?)*)$";
+        private const string _camelBeginningSingleRegex = "^[a-z0-9]+";
 
-        public static bool IsUnderScoreCase(string name)
+        public static bool IsMatchingConvention(string name, ConventionType type)
         {
             name = _removeWhiteListItems(name);
-            string pattern = _underScoreRegex;
+            string pattern="";
+            switch(type)
+            {
+                case ConventionType.camelCase:
+                    pattern = _camelRegex;
+                    break;
+                case ConventionType._uscoreCase:
+                    pattern = _camelRegex;
+                    break;
+                case ConventionType.PascalCase:
+                    pattern = _pascalRegex;
+                    break;
+            }
             Regex regex = new Regex(pattern);
             return regex.IsMatch(name);
-        }
 
-        public static bool IsPascalCase(string name)
-        {
-            name = _removeWhiteListItems(name);
-            string pattern = _pascalRegex;
-            Regex regex = new Regex(pattern);
-
-            return regex.IsMatch(name);
-        }
-
-        public static bool IsCamelCase(string name)
-        {
-            name = _removeWhiteListItems(name);
-            string pattern = _camelRegex;
-            Regex regex = new Regex(pattern);
-
-            return regex.IsMatch(name);
         }
 
         private static string _removeWhiteListItems(string name)
@@ -47,12 +45,40 @@ namespace TaleworldsCodeAnalysis.NameChecker
             return name;
         }
 
-        private static IReadOnlyList<string> GetForbiddenPieces(string name)
+        private static IReadOnlyList<string> _getForbiddenPieces(string name,ConventionType type)
         {
-            string pattern = "[A-Z][a-z0-9]+";
-            Regex regex = new Regex(pattern);
-            regex.Replace(name, "0");
+            string pattern = "";
             var forbiddenWords = new List<string>();
+            Regex regex;
+            switch (type)
+            {
+                case ConventionType.camelCase:
+                    pattern = _camelBeginningSingleRegex;
+                    regex = new Regex(pattern);
+                    regex.Replace(name, "0");
+                    break;
+                case ConventionType._uscoreCase:
+                    pattern = _underScoreBeginningSingleRegex;
+                    regex = new Regex(pattern);
+                    regex.Replace(name, "0");
+                    break;
+                case ConventionType.PascalCase:
+                    pattern = "^"+_pascalSingleRegex;
+                    regex = new Regex(pattern);
+                    regex.Replace(name, "0");
+                    break;   
+            }
+
+            pattern = "^[^0][^A-Z]*";
+            regex = new Regex(pattern);
+            var match=regex.Match(name);
+            forbiddenWords.Add(match.Value);
+            regex.Replace(name, "0");
+
+            pattern = _pascalSingleRegex;
+            regex = new Regex(pattern);
+            regex.Replace(name, "0");
+            
             string currentWord="";
             foreach (var item in name)
             {
@@ -60,7 +86,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 {
                     currentWord += item;
                 }
-                else
+                else if(currentWord!="")
                 {
                     forbiddenWords.Add(currentWord);
                     currentWord = "";

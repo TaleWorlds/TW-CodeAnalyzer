@@ -37,7 +37,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var parameter = (IParameterSymbol)context.Symbol;
 
-            if (!NameCheckerLibrary.IsCamelCase(parameter.Name))
+            if (!NameCheckerLibrary.IsMatchingConvention(parameter.Name, ConventionType.camelCase))
             {
                 context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.Locations[0], parameter.Name));
             }
