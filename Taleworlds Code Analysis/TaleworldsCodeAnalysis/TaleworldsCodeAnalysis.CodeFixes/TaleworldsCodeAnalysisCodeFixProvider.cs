@@ -40,37 +40,34 @@ namespace TaleworldsCodeAnalysis
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-            // TODO: Replace the following code with your own analysis, generating a CodeAction for each fix to suggest
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            // Find the type declaration identified by the diagnostic.
-            var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();
+            var node = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().First();
 
-            // Register a code action that will invoke the fix.
             context.RegisterCodeFix(
                 CodeAction.Create(
                     title: CodeFixResources.CodeFixTitle,
-                    createChangedSolution: c => _makeUppercaseAsync(context.Document, declaration, c),
+                    createChangedSolution: c => _addToWhitelistAsync(context.Document, node, c),
                     equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
                 diagnostic);
 
         }
 
-        private async Task<Solution> _makeUppercaseAsync(Document document, TypeDeclarationSyntax typeDecl, CancellationToken cancellationToken)
+        private async Task<Solution> _addToWhitelistAsync(Document document, SyntaxNode node, CancellationToken cancellationToken)
         {
-
+            var identifier = GetIdentifier(node);
 
             var additionalFiles = document.Project.AdditionalDocuments;
             var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
-            await AddWordToWhiteListAsync(externalFile.FilePath, "Hey");
+            await AddStringToWhiteListAsync(externalFile.FilePath, identifier);
             
 
             var originalSolution = document.Project.Solution;
             return originalSolution;
         }
 
-        private async Task AddWordToWhiteListAsync(string filePath, string word)
+        private async Task AddStringToWhiteListAsync(string filePath, string word)
         {
             try
             {
@@ -96,6 +93,28 @@ namespace TaleworldsCodeAnalysis
             catch (Exception ex)
             {
                 // Handle exceptions (e.g., log them)
+            }
+        }
+
+        private string GetIdentifier(SyntaxNode node)
+        {
+            switch (node)
+            {
+                case ClassDeclarationSyntax classDecl:
+                    return classDecl.Identifier.Text;
+                case MethodDeclarationSyntax methodDecl:
+                    return methodDecl.Identifier.Text;
+                case PropertyDeclarationSyntax propertyDecl:
+                    return propertyDecl.Identifier.Text;
+                case FieldDeclarationSyntax fieldDecl:
+                    return fieldDecl.Declaration.Variables.First().Identifier.Text;
+                case VariableDeclaratorSyntax variableDecl:
+                    return variableDecl.Identifier.Text;
+                case ParameterSyntax parameterDecl:
+                    return parameterDecl.Identifier.Text;
+                // Add more cases as needed
+                default:
+                    return null;
             }
         }
     }
