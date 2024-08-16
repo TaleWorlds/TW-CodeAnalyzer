@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FieldNameChecker : DiagnosticAnalyzer
     {
-        public string DiagnosticId => _diagnosticId;
+        public static string DiagnosticId => _diagnosticId;
         private const string _diagnosticId = "FieldNameChecker";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));

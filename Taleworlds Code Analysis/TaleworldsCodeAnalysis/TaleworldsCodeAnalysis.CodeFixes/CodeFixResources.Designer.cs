@@ -61,7 +61,7 @@ namespace TaleworldsCodeAnalysis {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make uppercase.
+        ///   Looks up a localized string similar to Add to whitelist.
         /// </summary>
         internal static string CodeFixTitle {
             get {

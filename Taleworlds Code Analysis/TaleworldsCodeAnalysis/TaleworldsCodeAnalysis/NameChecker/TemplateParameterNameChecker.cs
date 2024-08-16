@@ -12,7 +12,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class TemplateParameterNameChecker : DiagnosticAnalyzer
     {
-        public string DiagnosticId => _diagnosticId;
+        public static string DiagnosticId => _diagnosticId;
 
         public const string _diagnosticId = "TemplateParameterNameChecker";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.TemplateParameterNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));

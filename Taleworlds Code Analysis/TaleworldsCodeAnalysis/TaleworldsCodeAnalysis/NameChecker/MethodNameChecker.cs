@@ -11,7 +11,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class MethodNameChecker : DiagnosticAnalyzer
     {
-        public string DiagnosticId => _diagnosticId;
+        public static string DiagnosticId => _diagnosticId;
 
         private const string _diagnosticId = "MethodNameChecker";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.MethodNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));

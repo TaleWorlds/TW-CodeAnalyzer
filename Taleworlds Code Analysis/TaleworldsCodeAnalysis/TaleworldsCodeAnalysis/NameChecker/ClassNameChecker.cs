@@ -8,8 +8,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ClassNameChecker : DiagnosticAnalyzer
     {
-        public string NameDiagnosticId =>_nameDiagnosticId;
-        public string ModifierDiagnosticId=>_modifierDiagnosticId;
+        public static string NameDiagnosticId =>_nameDiagnosticId;
+        public static string ModifierDiagnosticId=>_modifierDiagnosticId;
 
         private const string _nameDiagnosticId = "ClassNameChecker";
         private const string _modifierDiagnosticId = "ClassModifierChecker";
