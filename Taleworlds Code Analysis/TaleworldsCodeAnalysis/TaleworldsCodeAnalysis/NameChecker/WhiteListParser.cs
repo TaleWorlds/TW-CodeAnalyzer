@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace TaleworldsCodeAnalysis.NameChecker
@@ -57,14 +54,20 @@ namespace TaleworldsCodeAnalysis.NameChecker
         public void SymbolWhiteListChecker(SymbolAnalysisContext context)
         {
             ImmutableArray<AdditionalText> additionalFiles = context.Options.AdditionalFiles;
-            WhiteListParser.Instance._readWhiteList(_getFileText(additionalFiles));
+            _readWhiteList(_getFileText(additionalFiles));
         }
 
         public void SyntaxWhiteListChecker(SyntaxNodeAnalysisContext context)
         {
             ImmutableArray<AdditionalText> additionalFiles = context.Options.AdditionalFiles;
-            WhiteListParser.Instance._readWhiteList(_getFileText(additionalFiles));
+            _readWhiteList(_getFileText(additionalFiles));
         }
+
+        public void FixWhiteListChecker(string sourceText)
+        {
+            _readWhiteList(sourceText);
+        }
+
 
         private string _getFileText(ImmutableArray<AdditionalText> additionalFiles)
         {

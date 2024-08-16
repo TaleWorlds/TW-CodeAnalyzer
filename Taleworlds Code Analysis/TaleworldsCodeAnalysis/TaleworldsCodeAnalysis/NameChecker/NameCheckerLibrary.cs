@@ -47,7 +47,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         public static IReadOnlyList<string> GetForbiddenPieces(string name,ConventionType type)
         {
-            //name=_removeWhiteListItems(name);
+            name=_removeWhiteListItems(name);
             string pattern = "";
             var forbiddenWords = new List<string>();
             Regex regex;

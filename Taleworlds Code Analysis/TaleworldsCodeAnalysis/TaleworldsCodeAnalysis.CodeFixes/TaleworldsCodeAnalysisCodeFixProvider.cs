@@ -42,58 +42,69 @@ namespace TaleworldsCodeAnalysis
 
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
-
+            
             var node = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().First();
 
             context.RegisterCodeFix(
                 CodeAction.Create(
                     title: CodeFixResources.CodeFixTitle,
-                    createChangedSolution: c => _addToWhitelistAsync(context.Document, node, c),
+                    createChangedSolution: c => _addToWhitelistAsync(context.Document, node, c,diagnostic.Descriptor.CustomTags),
                     equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
                 diagnostic);
 
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, SyntaxNode node, CancellationToken cancellationToken)
+        private async Task<Solution> _addToWhitelistAsync(Document document, SyntaxNode node, CancellationToken cancellationToken,IEnumerable<string> tags)
         {
             var identifier = GetIdentifier(node);
 
             var additionalFiles = document.Project.AdditionalDocuments;
             var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
-            await AddStringToWhiteListAsync(externalFile.FilePath, identifier);
+            var doc = XDocument.Load(externalFile.FilePath);
+            
+            WhiteListParser.Instance.FixWhiteListChecker(doc.ToString());
+            //Make the following statement unique to every context.
+            IReadOnlyList<string> word = NameCheckerLibrary.GetForbiddenPieces(identifier, ConventionType.PascalCase); ;
+
+            await AddStringToWhiteListAsync(externalFile.FilePath, word);
             
 
             var originalSolution = document.Project.Solution;
             return originalSolution;
         }
 
-        private async Task AddStringToWhiteListAsync(string filePath, string word)
+        private async Task AddStringToWhiteListAsync(string filePath, IReadOnlyList<string> word)
         {
-            try
+            foreach (var item in word)
             {
-                var doc = XDocument.Load(filePath);
-                var root = doc.Element("WhiteListRoot");
-                if (root != null)
+                try
                 {
-                    // Check if the word already exists
-                    var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(word, StringComparison.OrdinalIgnoreCase));
-                    if (existingWord == null)
+                    var doc = XDocument.Load(filePath);
+                    var root = doc.Element("WhiteListRoot");
+                    if (root != null)
                     {
-                        root.Add(new XElement("Word", word));
-                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true))
+                        // Check if the word already exists
+                        var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(item, StringComparison.OrdinalIgnoreCase));
+                        if (existingWord == null)
                         {
-                            using (var writer = new StreamWriter(stream))
+                            root.Add(new XElement("Word", item));
+                            using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true))
                             {
-                                await writer.WriteAsync(doc.ToString());
+                                using (var writer = new StreamWriter(stream))
+                                {
+                                    await writer.WriteAsync(doc.ToString());
+                                }
                             }
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    // Handle exceptions (e.g., log them)
+                    Console.WriteLine(ex.ToString());
+                }
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., log them)
-            }
+            
         }
 
         private string GetIdentifier(SyntaxNode node)
