@@ -45,8 +45,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
             return name;
         }
 
-        private static IReadOnlyList<string> _getForbiddenPieces(string name,ConventionType type)
+        public static IReadOnlyList<string> GetForbiddenPieces(string name,ConventionType type)
         {
+            //name=_removeWhiteListItems(name);
             string pattern = "";
             var forbiddenWords = new List<string>();
             Regex regex;
@@ -55,29 +56,33 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 case ConventionType.camelCase:
                     pattern = _camelBeginningSingleRegex;
                     regex = new Regex(pattern);
-                    regex.Replace(name, "0");
+                    name=regex.Replace(name, "0");
                     break;
                 case ConventionType._uscoreCase:
                     pattern = _underScoreBeginningSingleRegex;
                     regex = new Regex(pattern);
-                    regex.Replace(name, "0");
+                    name=regex.Replace(name, "0");
                     break;
                 case ConventionType.PascalCase:
                     pattern = "^"+_pascalSingleRegex;
                     regex = new Regex(pattern);
-                    regex.Replace(name, "0");
+                    name = regex.Replace(name, "0");
                     break;   
             }
 
-            pattern = "^[^0][^A-Z]*";
+            pattern = "^[^0]+?(?=[^A-Z])";
             regex = new Regex(pattern);
             var match=regex.Match(name);
-            forbiddenWords.Add(match.Value);
-            regex.Replace(name, "0");
+            if (match.Success)
+            {
+                string matchString = match.Value.Substring(0,match.Value.Length-1);
+                forbiddenWords.Add(matchString);
+            }
+            name=regex.Replace(name, "0");
 
             pattern = _pascalSingleRegex;
             regex = new Regex(pattern);
-            regex.Replace(name, "0");
+            name=regex.Replace(name, "0");
             
             string currentWord="";
             foreach (var item in name)
@@ -91,6 +96,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     forbiddenWords.Add(currentWord);
                     currentWord = "";
                 }
+            }
+
+            if (currentWord != "")
+            {
+                forbiddenWords.Add(currentWord);
+                currentWord = "";
             }
 
             return forbiddenWords;
