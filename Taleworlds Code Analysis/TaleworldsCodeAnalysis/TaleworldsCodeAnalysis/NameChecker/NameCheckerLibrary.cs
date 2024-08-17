@@ -106,5 +106,24 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             return forbiddenWords;
         }
+
+        public static ConventionType stringToConventionType(string type)
+        {
+            switch (type)
+            {
+                case "camelCase":
+                    return ConventionType.camelCase;
+                case "_uscoreCase":
+                    return ConventionType._uscoreCase;
+                case "PascalCase":
+                    return ConventionType.PascalCase;
+                case "IPascalCase":
+                    return ConventionType.IPascalCase;
+                case "TPascalCase":
+                    return ConventionType.TPascalCase;
+                default:
+                    throw new Exception("Invalid convention type");
+            }
+        }
     }
 }

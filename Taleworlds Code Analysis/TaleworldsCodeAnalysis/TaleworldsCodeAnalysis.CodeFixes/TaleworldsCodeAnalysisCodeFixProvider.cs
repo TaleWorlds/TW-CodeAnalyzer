@@ -43,66 +43,67 @@ namespace TaleworldsCodeAnalysis
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             
-            var node = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().First();
+            //var node = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().First();
 
             context.RegisterCodeFix(
                 CodeAction.Create(
                     title: CodeFixResources.CodeFixTitle,
-                    createChangedSolution: c => _addToWhitelistAsync(context.Document, node, c,diagnostic.Descriptor.CustomTags),
+                    createChangedSolution: c => _addToWhitelistAsync(context.Document, c,diagnostic),
                     equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
                 diagnostic);
 
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, SyntaxNode node, CancellationToken cancellationToken,IEnumerable<string> tags)
+        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic)
         {
-            var identifier = GetIdentifier(node);
 
             var additionalFiles = document.Project.AdditionalDocuments;
             var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
-            var doc = XDocument.Load(externalFile.FilePath);
             
-            WhiteListParser.Instance.FixWhiteListChecker(doc.ToString());
-            //Make the following statement unique to every context.
-            IReadOnlyList<string> word = NameCheckerLibrary.GetForbiddenPieces(identifier, ConventionType.PascalCase); ;
 
-            await AddStringToWhiteListAsync(externalFile.FilePath, word);
-            
+            var diagnosticProperties = diagnostic.Properties;
+            var identifier = diagnosticProperties["Name"];
+
+            var doc = XDocument.Load(externalFile.FilePath);
+            WhiteListParser.Instance.FixWhiteListChecker(doc.ToString());
+
+            if (diagnosticProperties.ContainsKey("NamingConvention"))
+            {
+                var convention = diagnosticProperties["NamingConvention"];
+                var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
+                IReadOnlyList<string> word = NameCheckerLibrary.GetForbiddenPieces(identifier, conventionEnum); ;
+                await AddStringToWhiteListAsync(externalFile.FilePath, word);
+
+            }
 
             var originalSolution = document.Project.Solution;
             return originalSolution;
         }
 
-        private async Task AddStringToWhiteListAsync(string filePath, IReadOnlyList<string> word)
+        private async Task AddStringToWhiteListAsync(string filePath, IReadOnlyList<string> words)
         {
-            foreach (var item in word)
+            try
             {
-                try
+                var doc = XDocument.Load(filePath);
+                var root = doc.Element("WhiteListRoot");
+                if (root != null)
                 {
-                    var doc = XDocument.Load(filePath);
-                    var root = doc.Element("WhiteListRoot");
-                    if (root != null)
+                    foreach (var word in words)
                     {
                         // Check if the word already exists
-                        var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(item, StringComparison.OrdinalIgnoreCase));
+                        var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(word, StringComparison.OrdinalIgnoreCase));
                         if (existingWord == null)
                         {
-                            root.Add(new XElement("Word", item));
-                            using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true))
-                            {
-                                using (var writer = new StreamWriter(stream))
-                                {
-                                    await writer.WriteAsync(doc.ToString());
-                                }
-                            }
+                            root.Add(new XElement("Word", word));
                         }
                     }
+                    doc.Save(filePath);
                 }
-                catch (Exception ex)
-                {
-                    // Handle exceptions (e.g., log them)
-                    Console.WriteLine(ex.ToString());
-                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., log them)
+                Console.WriteLine(ex.ToString());
             }
             
         }

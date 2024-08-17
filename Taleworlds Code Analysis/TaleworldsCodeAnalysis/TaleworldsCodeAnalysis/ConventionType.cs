@@ -8,6 +8,10 @@ namespace TaleworldsCodeAnalysis
     {
         camelCase,
         _uscoreCase,
-        PascalCase
+        PascalCase,
+        IPascalCase,
+        TPascalCase
     }
+
+    
 }
