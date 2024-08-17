@@ -47,28 +47,26 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 return;
             }
 
+            var properties = new Dictionary<string, string>
+            {
+                { "Name", field.Name },
+            };
+
             if (field.DeclaredAccessibility == Accessibility.Private)
             {
-                _checkPrivateField(field, context);
+                if (!NameCheckerLibrary.IsMatchingConvention(field.Name, ConventionType._uscoreCase))
+                {
+                    properties["NamingConvention"] = "_uscoreCase";
+                    var diagnostic = Diagnostic.Create(_rule, field.Locations[0], properties.ToImmutableDictionary(), field.Name);
+                    context.ReportDiagnostic(diagnostic);
+                }
             }
             else
             {
-                _createDiagnostic(field, context);
+                var diagnostic = Diagnostic.Create(_rule, field.Locations[0], field.Name);
+                context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private void _checkPrivateField(ISymbol field, SymbolAnalysisContext context)
-        {
-            if (!NameCheckerLibrary.IsMatchingConvention(field.Name, ConventionType._uscoreCase))
-            {
-                _createDiagnostic(field, context);
-            }
-        }
-
-        private void _createDiagnostic(ISymbol field, SymbolAnalysisContext context)
-        {
-            var diagnostic = Diagnostic.Create(_rule, field.Locations[0], field.Name);
-            context.ReportDiagnostic(diagnostic);
-        }
     }
 }

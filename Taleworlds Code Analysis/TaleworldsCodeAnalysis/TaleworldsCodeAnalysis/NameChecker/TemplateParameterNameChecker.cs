@@ -40,9 +40,15 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var parameter = (TypeParameterSyntax)context.Node;
             var parameterName = parameter.Identifier.Text;
 
+            var properties = new Dictionary<string, string>
+            {
+                { "Name", parameterName },
+            };
+
             if (!(parameterName.StartsWith("T") && NameCheckerLibrary.IsMatchingConvention(parameterName.Substring(1), ConventionType.PascalCase)))
             {
-                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.GetLocation(), parameterName));
+                properties["NamingConvention"] = "TPascalCase";
+                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.GetLocation(), properties.ToImmutableDictionary(), parameterName));
             }
             
         }

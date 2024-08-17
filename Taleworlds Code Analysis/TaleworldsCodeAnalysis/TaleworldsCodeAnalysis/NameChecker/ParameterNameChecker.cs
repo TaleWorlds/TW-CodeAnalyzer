@@ -37,9 +37,15 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var parameter = (IParameterSymbol)context.Symbol;
 
+            var properties = new Dictionary<string, string>
+            {
+                { "Name", parameter.Name },
+            };
+
             if (!NameCheckerLibrary.IsMatchingConvention(parameter.Name, ConventionType.camelCase))
             {
-                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.Locations[0], parameter.Name));
+                properties["NamingConvention"] = "camelCase";
+                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.Locations[0], properties.ToImmutableDictionary(), parameter.Name));
             }
             
         }

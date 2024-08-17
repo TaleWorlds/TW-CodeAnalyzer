@@ -43,9 +43,15 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var localDeclaration = local.Declaration.Variables.Single();
             ISymbol localName = context.SemanticModel.GetDeclaredSymbol(localDeclaration, context.CancellationToken);
 
+            var properties = new Dictionary<string, string>
+            {
+                { "Name", localName.Name },
+            };
+
             if (!NameCheckerLibrary.IsMatchingConvention(localName.Name, ConventionType.camelCase))
             {
-                context.ReportDiagnostic(Diagnostic.Create(_rule, localName.Locations[0], localName));
+                properties["NamingConvention"] = "camelCase";
+                context.ReportDiagnostic(Diagnostic.Create(_rule, localName.Locations[0], properties.ToImmutableDictionary(), localName));
             }
             
         }

@@ -41,9 +41,15 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
             var symbolName = symbol.Name;
 
+            var properties = new Dictionary<string, string>
+            {
+                { "Name", symbolName },
+            };
+
             if(!(symbolName.StartsWith("I") && NameCheckerLibrary.IsMatchingConvention(symbolName.Substring(1),ConventionType.PascalCase)))
             {
-                context.ReportDiagnostic(Diagnostic.Create(_rule, symbol.Locations[0], symbolName));
+                properties["NamingConvention"] = "IPascalCase";
+                context.ReportDiagnostic(Diagnostic.Create(_rule, symbol.Locations[0], properties.ToImmutableDictionary(), symbolName));
             }
 
         }

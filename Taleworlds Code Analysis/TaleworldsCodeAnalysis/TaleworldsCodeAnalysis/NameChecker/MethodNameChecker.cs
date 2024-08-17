@@ -42,19 +42,26 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 return;
             }
 
+            var properties = new Dictionary<string, string>
+            {
+                { "Name", method.Name },
+            };
+
             if (method.DeclaredAccessibility == Accessibility.Private || 
                 method.DeclaredAccessibility == Accessibility.Internal)
             {
                 if (!NameCheckerLibrary.IsMatchingConvention(method.Name, ConventionType._uscoreCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, method.Locations[0], method.Name, method.DeclaredAccessibility.ToString(), "_uscoreCase"));
+                    properties["NamingConvention"] = "_uscoreCase";
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, method.Locations[0], properties.ToImmutableDictionary(), method.Name, method.DeclaredAccessibility.ToString(), "_uscoreCase"));
                 }
             }
             else
             {
-                    if(!NameCheckerLibrary.IsMatchingConvention(method.Name, ConventionType.PascalCase))
+                if(!NameCheckerLibrary.IsMatchingConvention(method.Name, ConventionType.PascalCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, method.Locations[0], method.Name, method.DeclaredAccessibility.ToString(), "PascalCase"));
+                    properties["NamingConvention"] = "PascalCase";
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, method.Locations[0], properties.ToImmutableDictionary(), method.Name, method.DeclaredAccessibility.ToString(), "PascalCase"));
                 }
             }
         }

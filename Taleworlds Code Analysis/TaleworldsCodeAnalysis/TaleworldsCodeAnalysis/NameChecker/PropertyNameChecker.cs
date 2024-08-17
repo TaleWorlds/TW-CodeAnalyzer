@@ -36,19 +36,26 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var property = (IPropertySymbol)context.Symbol;
             WhiteListParser.Instance.SymbolWhiteListChecker(context);
 
+            var properties = new Dictionary<string, string>
+            {
+                { "Name", property.Name },
+            };
+
             if (property.DeclaredAccessibility == Accessibility.Private ||
                  property.DeclaredAccessibility == Accessibility.Internal)
             {
                 if (!NameCheckerLibrary.IsMatchingConvention(property.Name, ConventionType._uscoreCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, property.Locations[0], property.Name, property.DeclaredAccessibility.ToString(), "_uscoreCase"));
+                    properties["NamingConvention"] = "_uscoreCase";
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, property.Locations[0], properties.ToImmutableDictionary(), property.Name, property.DeclaredAccessibility.ToString(), "_uscoreCase"));
                 }
             }
             else
             {
                 if (!NameCheckerLibrary.IsMatchingConvention(property.Name, ConventionType.PascalCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, property.Locations[0], property.Name, property.DeclaredAccessibility.ToString(), "PascalCase"));
+                    properties["NamingConvention"] = "PascalCase";
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, property.Locations[0], properties.ToImmutableDictionary(), property.Name, property.DeclaredAccessibility.ToString(), "PascalCase"));
                 }
             }
         }

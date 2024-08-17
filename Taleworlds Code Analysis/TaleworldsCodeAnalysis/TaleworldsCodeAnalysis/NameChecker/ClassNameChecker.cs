@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 
 namespace TaleworldsCodeAnalysis.NameChecker
@@ -46,19 +47,26 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 return;
             }
 
+            var properties = new Dictionary<string, string>
+            {
+                { "Name", symbol.Name },
+            };
+
             if (symbol.DeclaredAccessibility == Accessibility.Private ||
                 symbol.DeclaredAccessibility == Accessibility.Internal)
             {
                 if (!NameCheckerLibrary.IsMatchingConvention(symbol.Name,ConventionType._uscoreCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], symbol.Name, symbol.DeclaredAccessibility.ToString(), "_uscoreCase"));
+                    properties["NamingConvention"] = "_uscoreCase";
+                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], properties.ToImmutableDictionary(), symbol.Name, symbol.DeclaredAccessibility.ToString(), "_uscoreCase"));
                 }
             }
             else if (symbol.DeclaredAccessibility == Accessibility.Public)
             {
                 if (!NameCheckerLibrary.IsMatchingConvention(symbol.Name, ConventionType.PascalCase))
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], symbol.Name, symbol.DeclaredAccessibility.ToString(), "PascalCase"));
+                    properties["NamingConvention"] = "PascalCase";
+                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], properties.ToImmutableDictionary(), symbol.Name, symbol.DeclaredAccessibility.ToString(), "PascalCase"));
                 }
             }
             else
