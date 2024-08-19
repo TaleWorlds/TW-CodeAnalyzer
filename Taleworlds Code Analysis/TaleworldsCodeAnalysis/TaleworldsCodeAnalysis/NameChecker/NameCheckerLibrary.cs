@@ -60,6 +60,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     name=regex.Replace(name, "0");
                     break;
                 case ConventionType._uscoreCase:
+                    if (!name.StartsWith("_"))
+                    {
+                        return forbiddenWords;
+                    }
                     pattern = _underScoreBeginningSingleRegex;
                     regex = new Regex(pattern);
                     name=regex.Replace(name, "0");
@@ -81,7 +85,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             {
                 if (!forbiddenWords.Contains(currentWord))
                 {
-                    if(currentWord!="_")
+                    if(currentWord.Length>1)
                     {
                         forbiddenWords.Add(currentWord);
                     }
@@ -91,7 +95,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             foreach (var item in name)
             {
-                if(item!='0')
+                if(item!='0' && item!='_')
                 {
                     currentWord += item;
                 }
