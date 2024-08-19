@@ -33,23 +33,27 @@ namespace TaleworldsCodeAnalysis
             return WellKnownFixAllProviders.BatchFixer;
         }
 
+
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
-            
-            context.RegisterCodeFix(
-                CodeAction.Create(
-                    title: CodeFixResources.CodeFixTitle,
-                    createChangedSolution: c => _addToWhitelistAsync(context.Document, c, diagnostic),
-                    equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
-                diagnostic);
+
+            context.RegisterCodeFix(CustomCodeAction.Create(title: CodeFixResources.CodeFixTitle,
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(context.Document, c, diagnostic, isPreview), 
+                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)), diagnostic);
+
 
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic)
+        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview)
         {
+            if (isPreview)
+            {
+                return document.Project.Solution;
+            }
+
             var additionalFiles = document.Project.AdditionalDocuments;
             var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
             var diagnosticProperties = diagnostic.Properties;
