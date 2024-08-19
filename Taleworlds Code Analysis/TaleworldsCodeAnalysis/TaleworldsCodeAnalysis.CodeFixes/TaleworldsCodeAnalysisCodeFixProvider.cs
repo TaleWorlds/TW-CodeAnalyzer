@@ -39,9 +39,18 @@ namespace TaleworldsCodeAnalysis
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
+            var diagnosticProperties = diagnostic.Properties;
+            var identifier = diagnosticProperties["Name"];
+            var convention = diagnosticProperties["NamingConvention"];
+            var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
+            var document = context.Document;
+            if (_getWordsToAddToWhitelist(document,diagnostic).Count== 0)
+            {
+                return;
+            }
 
             context.RegisterCodeFix(CustomCodeAction.Create(title: CodeFixResources.CodeFixTitle,
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(context.Document, c, diagnostic, isPreview), 
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview), 
                 equivalenceKey: nameof(CodeFixResources.CodeFixTitle)), diagnostic);
 
 
@@ -53,36 +62,49 @@ namespace TaleworldsCodeAnalysis
             {
                 return document.Project.Solution;
             }
+            IReadOnlyList<string> words = _getWordsToAddToWhitelist(document, diagnostic);
+            var path = _getPathOfXml(document.Project.AdditionalDocuments);
 
+            AddStringToWhiteList(path, words);
+
+            var originalSolution = document.Project.Solution;
+            return originalSolution;
+        }
+
+        private IReadOnlyList<string> _getWordsToAddToWhitelist(Document document, Diagnostic diagnostic)
+        {
             var additionalFiles = document.Project.AdditionalDocuments;
             var diagnosticProperties = diagnostic.Properties;
             var identifier = diagnosticProperties["Name"];
-            XDocument doc=null;
-            string path="";
-            if (additionalFiles.Count() != 0)
-            {
-                var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
-                doc = XDocument.Load(externalFile.FilePath);
-                path = externalFile.FilePath;
-            }
-            else
-            {
-                path = WhiteListParser.Instance.TestPathXml;
-                doc = XDocument.Load(path);
-            }
+
+            XDocument doc = XDocument.Load(_getPathOfXml(additionalFiles));
+            
             WhiteListParser.Instance.InitializeWhiteListParser(doc.ToString());
+            IReadOnlyList<string> words = new List<string>();
 
             if (diagnosticProperties.ContainsKey("NamingConvention"))
             {
                 var convention = diagnosticProperties["NamingConvention"];
                 var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
-                IReadOnlyList<string> word = NameCheckerLibrary.GetForbiddenPieces(identifier, conventionEnum); ;
-                AddStringToWhiteList(path, word);
-
+                words = NameCheckerLibrary.GetForbiddenPieces(identifier, conventionEnum);
             }
 
-            var originalSolution = document.Project.Solution;
-            return originalSolution;
+            return words;
+        }
+
+        private string _getPathOfXml(IEnumerable<TextDocument> additionalFiles)
+        {
+            string path = "";
+            if (additionalFiles.Count() != 0)
+            {
+                var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
+                path = externalFile.FilePath;
+            }
+            else
+            {
+                path = WhiteListParser.Instance.TestPathXml;
+            }
+            return path;
         }
 
         private void AddStringToWhiteList(string filePath, IReadOnlyList<string> wordsToAdd)

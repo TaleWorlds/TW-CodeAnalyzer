@@ -63,7 +63,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private string _getFileText(ImmutableArray<AdditionalText> additionalFiles)
         {
             string fileText = "";
-            if (additionalFiles.Length != 0)
+            if (additionalFiles!=null && additionalFiles.Length != 0 )
             {
                 AdditionalText whiteListFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.Path).Equals("WhiteList.xml"));
                 SourceText fileSourceText = whiteListFile.GetText();
