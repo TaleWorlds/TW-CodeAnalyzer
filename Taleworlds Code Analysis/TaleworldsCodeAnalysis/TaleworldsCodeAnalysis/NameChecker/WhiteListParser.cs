@@ -23,10 +23,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
             } 
         }
 
+        public string TestPathXml => _testPathXML;
+
         public IReadOnlyList<string> WhiteListWords => _whiteListedWords;
         private static WhiteListParser _instance;
         private IReadOnlyList<string> _whiteListedWords;
-        private const string testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\TaleworldsCodeAnalysis\\WhiteList.xml";
+        private const string _testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\TaleworldsCodeAnalysis\\WhiteList.xml";
 
         private WhiteListParser(){}
 
@@ -69,7 +71,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
             else
             {
-                XDocument document = XDocument.Load(testPathXML);
+                XDocument document = XDocument.Load(_testPathXML);
                 fileText = document.ToString();
             }
             return fileText;

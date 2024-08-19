@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TaleworldsCodeAnalysis.NameChecker;
 
 namespace TaleworldsCodeAnalysis.Test.NameChecker
@@ -29,7 +30,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsABTaleWorldsAI", ConventionType.PascalCase)[0] == "AB");
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsABTaleWorldsAC", ConventionType.PascalCase)[1] ==  "AC");
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("my_variable_name", ConventionType.camelCase)[0]=="_variable_name");
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("ootable", ConventionType.PascalCase)[0] == "ootable");
+            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("ootable", ConventionType.PascalCase).Count()==0);
         }
     }
 }

@@ -81,7 +81,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
             {
                 if (!forbiddenWords.Contains(currentWord))
                 {
-                    forbiddenWords.Add(currentWord);
+                    if(currentWord!="_")
+                    {
+                        forbiddenWords.Add(currentWord);
+                    }
                     currentWord = "";
                 }
             }

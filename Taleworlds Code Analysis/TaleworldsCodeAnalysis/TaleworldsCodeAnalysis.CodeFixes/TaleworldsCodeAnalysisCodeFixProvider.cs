@@ -55,10 +55,21 @@ namespace TaleworldsCodeAnalysis
             }
 
             var additionalFiles = document.Project.AdditionalDocuments;
-            var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
             var diagnosticProperties = diagnostic.Properties;
             var identifier = diagnosticProperties["Name"];
-            var doc = XDocument.Load(externalFile.FilePath);
+            XDocument doc=null;
+            string path="";
+            if (additionalFiles.Count() != 0)
+            {
+                var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
+                doc = XDocument.Load(externalFile.FilePath);
+                path = externalFile.FilePath;
+            }
+            else
+            {
+                path = WhiteListParser.Instance.TestPathXml;
+                doc = XDocument.Load(path);
+            }
             WhiteListParser.Instance.InitializeWhiteListParser(doc.ToString());
 
             if (diagnosticProperties.ContainsKey("NamingConvention"))
@@ -66,7 +77,7 @@ namespace TaleworldsCodeAnalysis
                 var convention = diagnosticProperties["NamingConvention"];
                 var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
                 IReadOnlyList<string> word = NameCheckerLibrary.GetForbiddenPieces(identifier, conventionEnum); ;
-                AddStringToWhiteList(externalFile.FilePath, word);
+                AddStringToWhiteList(path, word);
 
             }
 
