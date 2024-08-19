@@ -11,7 +11,5 @@ namespace TaleworldsCodeAnalysis
         PascalCase,
         IPascalCase,
         TPascalCase
-    }
-
-    
+    }   
 }
