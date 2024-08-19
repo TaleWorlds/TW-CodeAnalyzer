@@ -33,6 +33,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("my_variable_name", ConventionType.camelCase)[0]=="_variable_name");
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("ootable", ConventionType.PascalCase).Count()==0);
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count()==0);
+            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count() == 0);
+            
         }
     }
 }

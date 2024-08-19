@@ -11,7 +11,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private const string _pascalSingleRegex = "[A-Z][a-z0-9]+";
         private const string _underScoreRegex = "^[_][a-z]*([a-z0-9]+[A-Z]?)*$";
         private const string _underScoreBeginningSingleRegex = "^[_][a-z0-9]+";
-        private const string _camelRegex = "^[a-z](([a-z0-9]*[A-Z]?)*)$";
+        private const string _camelRegex = "^[a-z](([a-z0-9]+[A-Z]?)*)$";
         private const string _camelBeginningSingleRegex = "^[a-z0-9]+";
 
         public static bool IsMatchingConvention(string name, ConventionType type)

@@ -21,11 +21,13 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 NameCheckerLibrary.IsMatchingConvention("ca", ConventionType.camelCase),
                 NameCheckerLibrary.IsMatchingConvention("_camelCase", ConventionType.camelCase),
                 NameCheckerLibrary.IsMatchingConvention("CamelCase", ConventionType.camelCase),
+                NameCheckerLibrary.IsMatchingConvention("camASHAHASD", ConventionType.camelCase),
             };
             var expectedResults = new bool[] {
                 true,
                 true,
                 true,
+                false,
                 false,
                 false
             };
