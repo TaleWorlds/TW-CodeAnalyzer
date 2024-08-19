@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
@@ -55,20 +53,17 @@ namespace TaleworldsCodeAnalysis.NameChecker
             {
                 case ConventionType.camelCase:
                     pattern = _camelBeginningSingleRegex;
-                    regex = new Regex(pattern);
-                    name=regex.Replace(name, "0");
                     break;
                 case ConventionType._uscoreCase:
                     pattern = _underScoreBeginningSingleRegex;
-                    regex = new Regex(pattern);
-                    name=regex.Replace(name, "0");
                     break;
                 case ConventionType.PascalCase:
                     pattern = "^"+_pascalSingleRegex;
-                    regex = new Regex(pattern);
-                    name = regex.Replace(name, "0");
                     break;   
             }
+
+            regex = new Regex(pattern);
+            name = regex.Replace(name, "0");
 
             pattern = "^[^0]+?(?=[^A-Z])";
             regex = new Regex(pattern);
@@ -105,25 +100,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
 
             return forbiddenWords;
-        }
-
-        public static ConventionType stringToConventionType(string type)
-        {
-            switch (type)
-            {
-                case "camelCase":
-                    return ConventionType.camelCase;
-                case "_uscoreCase":
-                    return ConventionType._uscoreCase;
-                case "PascalCase":
-                    return ConventionType.PascalCase;
-                case "IPascalCase":
-                    return ConventionType.IPascalCase;
-                case "TPascalCase":
-                    return ConventionType.TPascalCase;
-                default:
-                    throw new Exception("Invalid convention type");
-            }
         }
     }
 }

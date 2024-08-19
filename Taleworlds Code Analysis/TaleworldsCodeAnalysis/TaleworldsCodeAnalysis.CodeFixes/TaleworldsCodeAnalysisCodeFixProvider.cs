@@ -1,10 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
-using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -39,16 +36,13 @@ namespace TaleworldsCodeAnalysis
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             
-            //var node = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().First();
-
             context.RegisterCodeFix(
                 CodeAction.Create(
                     title: CodeFixResources.CodeFixTitle,
-                    createChangedSolution: c => _addToWhitelistAsync(context.Document, c,diagnostic),
+                    createChangedSolution: c => _addToWhitelistAsync(context.Document, c, diagnostic),
                     equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
                 diagnostic);
 
@@ -56,23 +50,19 @@ namespace TaleworldsCodeAnalysis
 
         private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic)
         {
-
             var additionalFiles = document.Project.AdditionalDocuments;
             var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
-            
-
             var diagnosticProperties = diagnostic.Properties;
             var identifier = diagnosticProperties["Name"];
-
             var doc = XDocument.Load(externalFile.FilePath);
-            WhiteListParser.Instance.FixWhiteListChecker(doc.ToString());
+            WhiteListParser.Instance.InitializeWhiteListParser(doc.ToString());
 
             if (diagnosticProperties.ContainsKey("NamingConvention"))
             {
                 var convention = diagnosticProperties["NamingConvention"];
                 var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
                 IReadOnlyList<string> word = NameCheckerLibrary.GetForbiddenPieces(identifier, conventionEnum); ;
-                await AddStringToWhiteListAsync(externalFile.FilePath, word);
+                AddStringToWhiteList(externalFile.FilePath, word);
 
             }
 
@@ -80,7 +70,7 @@ namespace TaleworldsCodeAnalysis
             return originalSolution;
         }
 
-        private async Task AddStringToWhiteListAsync(string filePath, IReadOnlyList<string> words)
+        private void AddStringToWhiteList(string filePath, IReadOnlyList<string> wordsToAdd)
         {
             try
             {
@@ -88,9 +78,8 @@ namespace TaleworldsCodeAnalysis
                 var root = doc.Element("WhiteListRoot");
                 if (root != null)
                 {
-                    foreach (var word in words)
+                    foreach (var word in wordsToAdd)
                     {
-                        // Check if the word already exists
                         var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(word, StringComparison.OrdinalIgnoreCase));
                         if (existingWord == null)
                         {
@@ -102,32 +91,10 @@ namespace TaleworldsCodeAnalysis
             }
             catch (Exception ex)
             {
-                // Handle exceptions (e.g., log them)
                 Console.WriteLine(ex.ToString());
             }
             
         }
 
-        private string GetIdentifier(SyntaxNode node)
-        {
-            switch (node)
-            {
-                case ClassDeclarationSyntax classDecl:
-                    return classDecl.Identifier.Text;
-                case MethodDeclarationSyntax methodDecl:
-                    return methodDecl.Identifier.Text;
-                case PropertyDeclarationSyntax propertyDecl:
-                    return propertyDecl.Identifier.Text;
-                case FieldDeclarationSyntax fieldDecl:
-                    return fieldDecl.Declaration.Variables.First().Identifier.Text;
-                case VariableDeclaratorSyntax variableDecl:
-                    return variableDecl.Identifier.Text;
-                case ParameterSyntax parameterDecl:
-                    return parameterDecl.Identifier.Text;
-                // Add more cases as needed
-                default:
-                    return null;
-            }
-        }
     }
 }

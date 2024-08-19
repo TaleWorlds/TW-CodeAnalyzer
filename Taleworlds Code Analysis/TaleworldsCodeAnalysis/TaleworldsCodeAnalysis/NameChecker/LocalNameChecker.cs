@@ -2,11 +2,9 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -30,14 +28,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
-            context.RegisterSyntaxNodeAction(_analyzeMethod, SyntaxKind.LocalDeclarationStatement);
-             
+            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.LocalDeclarationStatement);
         }
 
-        private void _analyzeMethod(SyntaxNodeAnalysisContext context)
+        private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            WhiteListParser.Instance.SyntaxWhiteListChecker(context);
+            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
 
             var local = (LocalDeclarationStatementSyntax) context.Node;
             var localDeclaration = local.Declaration.Variables.Single();

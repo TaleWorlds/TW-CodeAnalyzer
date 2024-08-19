@@ -1,7 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -18,7 +16,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             {
                 if (_instance == null)
                 {
-                    _instance = new WhiteListParser ();
+                    _instance = new WhiteListParser();
                 }
                 
                 return _instance;
@@ -30,10 +28,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private IReadOnlyList<string> _whiteListedWords;
         private const string testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\TaleworldsCodeAnalysis\\WhiteList.xml";
 
-        public WhiteListParser()
-        {
-            
-        }
+        private WhiteListParser(){}
 
         private void _readWhiteList(string whiteListString)
         {
@@ -51,19 +46,13 @@ namespace TaleworldsCodeAnalysis.NameChecker
             _whiteListedWords = new List<string> (words);
         }
 
-        public void SymbolWhiteListChecker(SymbolAnalysisContext context)
+        public void UpdateWhiteList(ImmutableArray<AdditionalText> additionalFiles)
         {
-            ImmutableArray<AdditionalText> additionalFiles = context.Options.AdditionalFiles;
             _readWhiteList(_getFileText(additionalFiles));
         }
 
-        public void SyntaxWhiteListChecker(SyntaxNodeAnalysisContext context)
-        {
-            ImmutableArray<AdditionalText> additionalFiles = context.Options.AdditionalFiles;
-            _readWhiteList(_getFileText(additionalFiles));
-        }
 
-        public void FixWhiteListChecker(string sourceText)
+        public void InitializeWhiteListParser(string sourceText)
         {
             _readWhiteList(sourceText);
         }
@@ -85,7 +74,5 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
             return fileText;
         }
-
-
     }
 }

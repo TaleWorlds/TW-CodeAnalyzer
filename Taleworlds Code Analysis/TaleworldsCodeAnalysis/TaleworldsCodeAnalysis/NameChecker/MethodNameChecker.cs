@@ -1,10 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -28,14 +25,14 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-
-            context.RegisterSymbolAction(_analyzeMethod, SymbolKind.Method);
+            context.RegisterSymbolAction(_analyzer, SymbolKind.Method);
         }
 
-        private void _analyzeMethod(SymbolAnalysisContext context)
+        private void _analyzer(SymbolAnalysisContext context)
         {
             var method = (IMethodSymbol) context.Symbol;
-            WhiteListParser.Instance.SymbolWhiteListChecker(context);
+
+            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
 
             if(method.MethodKind == MethodKind.PropertyGet || MethodKind.PropertySet == method.MethodKind || MethodKind.Constructor==method.MethodKind)
             {
