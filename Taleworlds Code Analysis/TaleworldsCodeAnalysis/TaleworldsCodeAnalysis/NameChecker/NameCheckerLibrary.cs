@@ -47,6 +47,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         public static IReadOnlyList<string> GetForbiddenPieces(string name,ConventionType type)
         {
+            string originalName = name;
             name=_removeWhiteListItems(name);
             string pattern = "";
             var forbiddenWords = new List<string>();
@@ -75,6 +76,16 @@ namespace TaleworldsCodeAnalysis.NameChecker
             name=regex.Replace(name, "0");
             
             string currentWord="";
+
+            void AddWord(string word)
+            {
+                if (!forbiddenWords.Contains(currentWord))
+                {
+                    forbiddenWords.Add(currentWord);
+                    currentWord = "";
+                }
+            }
+
             foreach (var item in name)
             {
                 if(item!='0')
@@ -83,17 +94,19 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 }
                 else if(currentWord!="")
                 {
-                    forbiddenWords.Add(currentWord);
-                    currentWord = "";
+                    AddWord(currentWord);
                 }
             }
 
             if (currentWord != "")
             {
-                forbiddenWords.Add(currentWord);
-                currentWord = "";
+                AddWord(currentWord);
             }
 
+            if(forbiddenWords.Contains(originalName))
+            {
+                forbiddenWords.Remove(originalName);
+            }
             return forbiddenWords;
         }
 
