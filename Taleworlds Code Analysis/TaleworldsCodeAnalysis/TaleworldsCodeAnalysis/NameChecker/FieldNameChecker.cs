@@ -57,7 +57,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
             else
             {
-                var diagnostic = Diagnostic.Create(_rule, field.Locations[0], field.Name);
+                var diagnostic = Diagnostic.Create(_rule, field.Locations[0], properties.ToImmutableDictionary(), field.Name);
                 context.ReportDiagnostic(diagnostic);
             }
         }

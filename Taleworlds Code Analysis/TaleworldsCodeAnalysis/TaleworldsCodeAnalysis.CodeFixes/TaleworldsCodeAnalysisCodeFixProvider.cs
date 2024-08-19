@@ -40,9 +40,7 @@ namespace TaleworldsCodeAnalysis
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
             var diagnosticProperties = diagnostic.Properties;
-            var identifier = diagnosticProperties["Name"];
-            var convention = diagnosticProperties["NamingConvention"];
-            var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
+
             var document = context.Document;
             if (_getWordsToAddToWhitelist(document,diagnostic).Count== 0)
             {
