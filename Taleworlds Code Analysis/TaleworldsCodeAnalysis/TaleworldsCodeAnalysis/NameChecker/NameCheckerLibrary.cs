@@ -70,16 +70,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     break;   
             }
 
-            pattern = "^[^0]+?(?=[^A-Z])";
-            regex = new Regex(pattern);
-            var match=regex.Match(name);
-            if (match.Success)
-            {
-                string matchString = match.Value.Substring(0,match.Value.Length-1);
-                forbiddenWords.Add(matchString);
-            }
-            name=regex.Replace(name, "0");
-
             pattern = _pascalSingleRegex;
             regex = new Regex(pattern);
             name=regex.Replace(name, "0");

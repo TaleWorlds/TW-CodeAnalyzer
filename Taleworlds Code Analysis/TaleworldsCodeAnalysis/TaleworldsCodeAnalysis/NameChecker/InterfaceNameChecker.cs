@@ -43,7 +43,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", symbolName },
+                { "Name", symbolName.StartsWith("I") ? symbolName.Substring(1) : symbolName },
             };
 
             if(!(symbolName.StartsWith("I") && NameCheckerLibrary.IsMatchingConvention(symbolName.Substring(1),ConventionType.PascalCase)))
