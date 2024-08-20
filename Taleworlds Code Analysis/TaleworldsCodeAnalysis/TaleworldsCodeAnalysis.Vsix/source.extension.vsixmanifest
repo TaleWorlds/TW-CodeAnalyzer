@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="TaleworldsCodeAnalysis.377d9dc1-7dd1-4088-bb6b-70436e5e9320" Version="1.0" Language="en-US" Publisher="berkay.karakaya"/>
+    <Identity Id="TaleworldsCodeAnalysis.377d9dc1-7dd1-4088-bb6b-70436e5e9320" Version="1.0" Language="en-US" Publisher="berkay.karakaya, arinc.demir"/>
     <DisplayName>TaleworldsCodeAnalysis</DisplayName>
-    <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
+    <Description xml:space="preserve">This is a code analysis tool that enforces TW best practices.</Description>
   </Metadata>
   
   <Dependencies>
