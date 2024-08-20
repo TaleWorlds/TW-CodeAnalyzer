@@ -129,11 +129,20 @@
   <data name="ClassNameCheckerTitle" xml:space="preserve">
     <value>All class names should use TW  conventions.</value>
   </data>
+  <data name="FieldAccessibilityCheckerDescription" xml:space="preserve">
+    <value>All fields should be private.</value>
+  </data>
+  <data name="FieldAccessibilityCheckerMessageFormat" xml:space="preserve">
+    <value>Field '{0}' should be private.</value>
+  </data>
+  <data name="FieldAccessibilityCheckerTitle" xml:space="preserve">
+    <value>All fields should be private.</value>
+  </data>
   <data name="FieldNameCheckerDescription" xml:space="preserve">
-    <value>All fields should be private and use "_uscoreCase".</value>
+    <value>All private fields should use "_uscoreCase".</value>
   </data>
   <data name="FieldNameCheckerMessageFormat" xml:space="preserve">
-    <value>Field '{0}' should be private and use "_uscoreCase".</value>
+    <value>Field '{0}' should use "_uscoreCase".</value>
   </data>
   <data name="FieldNameCheckerTitle" xml:space="preserve">
     <value>All fields should be private and use "_uscoreCase".</value>

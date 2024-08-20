@@ -97,7 +97,34 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All fields should be private and use &quot;_uscoreCase&quot;..
+        ///   Looks up a localized string similar to All fields should be private..
+        /// </summary>
+        internal static string FieldAccessibilityCheckerDescription {
+            get {
+                return ResourceManager.GetString("FieldAccessibilityCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field &apos;{0}&apos; should be private..
+        /// </summary>
+        internal static string FieldAccessibilityCheckerMessageFormat {
+            get {
+                return ResourceManager.GetString("FieldAccessibilityCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All fields should be private..
+        /// </summary>
+        internal static string FieldAccessibilityCheckerTitle {
+            get {
+                return ResourceManager.GetString("FieldAccessibilityCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All private fields should use &quot;_uscoreCase&quot;..
         /// </summary>
         internal static string FieldNameCheckerDescription {
             get {
@@ -106,7 +133,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field &apos;{0}&apos; should be private and use &quot;_uscoreCase&quot;..
+        ///   Looks up a localized string similar to Field &apos;{0}&apos; should use &quot;_uscoreCase&quot;..
         /// </summary>
         internal static string FieldNameCheckerMessageFormat {
             get {
