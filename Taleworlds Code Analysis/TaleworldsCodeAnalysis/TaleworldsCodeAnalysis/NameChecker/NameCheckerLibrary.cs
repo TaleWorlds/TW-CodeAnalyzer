@@ -141,9 +141,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         }
 
-        private static bool _isItOkeyWithNewWhiteWords(string name,IReadOnlyList<string> forbiddenWords, ConventionType conventionType)
+        private static bool _isItOkeyWithNewWhiteWords(string name,IReadOnlyList<string> newWords, ConventionType conventionType)
         {
-            IReadOnlyList<string> newWordList= forbiddenWords.Concat(WhiteListParser.Instance.WhiteListWords).ToList();
+            IReadOnlyList<string> newWordList= newWords.Concat(WhiteListParser.Instance.WhiteListWords).ToList();
             return IsMatchingConvention(_removeWords(name, newWordList, conventionType), conventionType); ;
         }
 
