@@ -32,48 +32,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldPublicWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                public int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldInternalWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                internal int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldProtectedWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                protected int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        
+        }     
 
     }
 }

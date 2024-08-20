@@ -17,20 +17,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_nameDiagnosticId, _nameTitle, _nameMessageFormat, _namingCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _nameDescription);
 
-        public static string AccesabilityDiagnosticId => _accessibilityDiagnosticId;
-        private const string _accessibilityDiagnosticId = "FieldAccessibilityChecker";
-        private static readonly LocalizableString _accessibilityTitle = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private static readonly LocalizableString _accessibilityMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private static readonly LocalizableString _accessibilityDescription = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private const string _accessibilityCategory = "Accessibility";
-
-        private static readonly DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_nameDiagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _accessibilityDescription);
-
 
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
-            get { return ImmutableArray.Create(_nameRule, _accessibilityRule); }
+            get { return ImmutableArray.Create(_nameRule); }
         }
 
         public override void Initialize(AnalysisContext context)
@@ -64,11 +55,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     var diagnostic = Diagnostic.Create(_nameRule, field.Locations[0], properties.ToImmutableDictionary(), field.Name);
                     context.ReportDiagnostic(diagnostic);
                 }
-            }
-            else
-            {
-                var diagnostic = Diagnostic.Create(_accessibilityRule, field.Locations[0], properties.ToImmutableDictionary(), field.Name);
-                context.ReportDiagnostic(diagnostic);
             }
         }
 
