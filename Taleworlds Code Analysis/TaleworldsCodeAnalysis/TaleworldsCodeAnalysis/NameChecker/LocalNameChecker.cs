@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -44,7 +45,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 { "Name", localName.Name },
             };
 
-            if (!NameCheckerLibrary.IsMatchingConvention(localName.Name, ConventionType.camelCase))
+            if (!CamelCaseBehaviour.Instance.IsMatching(localName.Name))
             {
                 properties["NamingConvention"] = "camelCase";
                 context.ReportDiagnostic(Diagnostic.Create(_rule, localName.Locations[0], properties.ToImmutableDictionary(), localName));
