@@ -24,18 +24,18 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         public void ForbiddenPiecesTest()
         {
             WhiteListParser.Instance.UpdateWhiteList(new System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.AdditionalText>());
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorlds", ConventionType.PascalCase).Count == 0);
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("AITaleworlds", ConventionType.PascalCase).Count==0);
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("ABTaleWorlds", ConventionType.PascalCase)[0] == "AB");
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsABTaleWorlds", ConventionType.PascalCase)[0] == "AB");
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsAB", ConventionType.PascalCase)[0] == "AB");
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsABTaleWorldsAI", ConventionType.PascalCase)[0] == "AB");
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsABTaleWorldsAC", ConventionType.PascalCase)[1] ==  "AC");
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("my_variable_name", ConventionType.camelCase).Count==0);
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("ootable", ConventionType.PascalCase).Count==0);
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count==0);
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count == 0);
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("IPCClass", ConventionType.IPascalCase).Count() == 1);
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("TaleWorlds", ConventionType.PascalCase).Count == 0);
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("AITaleworlds", ConventionType.PascalCase).Count==0);
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("ABTaleWorlds", ConventionType.PascalCase)[0] == "AB");
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("TaleWorldsABTaleWorlds", ConventionType.PascalCase)[0] == "AB");
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("TaleWorldsAB", ConventionType.PascalCase)[0] == "AB");
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("TaleWorldsABTaleWorldsAI", ConventionType.PascalCase)[0] == "AB");
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("TaleWorldsABTaleWorldsAC", ConventionType.PascalCase)[1] ==  "AC");
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("my_variable_name", ConventionType.camelCase).Count==0);
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("ootable", ConventionType.PascalCase).Count==0);
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("MyAITW", ConventionType.PascalCase).Count==0);
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("MyAITW", ConventionType.PascalCase).Count == 0);
+            Assert.IsTrue(NameCheckerLibrary.GetNewWhiteListItemsToFix("IPCClass", ConventionType.IPascalCase).Count() == 1);
         }
     }
 }

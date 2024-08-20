@@ -92,7 +92,7 @@ namespace TaleworldsCodeAnalysis
             {
                 var convention = diagnosticProperties["NamingConvention"];
                 var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
-                words = NameCheckerLibrary.GetForbiddenPieces(identifier, conventionEnum);
+                words = NameCheckerLibrary.GetNewWhiteListItemsToFix(identifier, conventionEnum);
             }
 
             return words;

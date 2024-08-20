@@ -56,7 +56,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             return name;
         }
 
-        public static IReadOnlyList<string> GetForbiddenPieces(string name,ConventionType type)
+        public static IReadOnlyList<string> GetNewWhiteListItemsToFix(string name,ConventionType type)
         {
             string originalName = name;
             name=_removeWhiteListItems(name,type);
@@ -132,7 +132,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 forbiddenWords.Remove(originalName);
             }
 
-            if(_isItOkeyWithoutForbiddenWords(originalName,forbiddenWords,type))
+            if(_isItOkeyWithNewWhiteWords(originalName,forbiddenWords,type))
             {
                 return forbiddenWords;
             }
@@ -141,7 +141,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         }
 
-        private static bool _isItOkeyWithoutForbiddenWords(string name,IReadOnlyList<string> forbiddenWords, ConventionType conventionType)
+        private static bool _isItOkeyWithNewWhiteWords(string name,IReadOnlyList<string> forbiddenWords, ConventionType conventionType)
         {
             IReadOnlyList<string> newWordList= forbiddenWords.Concat(WhiteListParser.Instance.WhiteListWords).ToList();
             return IsMatchingConvention(_removeWords(name, newWordList, conventionType), conventionType); ;
