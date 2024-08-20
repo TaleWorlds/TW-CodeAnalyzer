@@ -42,13 +42,21 @@ namespace TaleworldsCodeAnalysis
             var diagnosticProperties = diagnostic.Properties;
 
             var document = context.Document;
-            if (_getWordsToAddToWhitelist(document,diagnostic).Count== 0)
+            var listOfWords = _getWordsToAddToWhitelist(document, diagnostic);
+            if (listOfWords.Count== 0)
             {
                 return;
             }
 
-            context.RegisterCodeFix(CustomCodeAction.Create(title: CodeFixResources.CodeFixTitle,
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview), 
+            string words="";
+            foreach (var item in listOfWords)
+            {
+                words += "'"+item + "',";
+            }
+            words=words.TrimEnd(',');
+
+            context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + words + " to whitelist.",
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview),
                 equivalenceKey: nameof(CodeFixResources.CodeFixTitle)), diagnostic);
 
 

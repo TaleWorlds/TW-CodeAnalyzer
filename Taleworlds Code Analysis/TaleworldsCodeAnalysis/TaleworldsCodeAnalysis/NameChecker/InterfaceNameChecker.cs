@@ -40,10 +40,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", symbolName.StartsWith("I") ? symbolName.Substring(1) : symbolName },
+                { "Name", symbolName },
             };
 
-            if(!(symbolName.StartsWith("I") && NameCheckerLibrary.IsMatchingConvention(symbolName.Substring(1),ConventionType.PascalCase)))
+            if(!(symbolName.StartsWith("I") && NameCheckerLibrary.IsMatchingConvention(symbolName,ConventionType.IPascalCase)))
             {
                 properties["NamingConvention"] = "IPascalCase";
                 context.ReportDiagnostic(Diagnostic.Create(_rule, symbol.Locations[0], properties.ToImmutableDictionary(), symbolName));

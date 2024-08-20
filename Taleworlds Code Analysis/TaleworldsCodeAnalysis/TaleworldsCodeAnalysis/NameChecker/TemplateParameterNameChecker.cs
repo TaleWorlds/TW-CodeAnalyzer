@@ -39,10 +39,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", parameterName.StartsWith("T") ? parameterName.Substring(1) : parameterName },
+                { "Name", parameterName },
             };
 
-            if (!(parameterName.StartsWith("T") && NameCheckerLibrary.IsMatchingConvention(parameterName.Substring(1), ConventionType.PascalCase)))
+            if (!(parameterName.StartsWith("T") && NameCheckerLibrary.IsMatchingConvention(parameterName, ConventionType.TPascalCase)))
             {
                 properties["NamingConvention"] = "TPascalCase";
                 context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.GetLocation(), properties.ToImmutableDictionary(), parameterName));

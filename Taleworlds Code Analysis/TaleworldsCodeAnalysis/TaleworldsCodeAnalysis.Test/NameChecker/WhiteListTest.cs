@@ -14,6 +14,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         [TestMethod]
         public void WhiteListTestCases()
         {
+            WhiteListParser.Instance.UpdateWhiteList(new System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.AdditionalText>());
             Assert.IsTrue(WhiteListParser.Instance.WhiteListWords.Contains("ASAP"));
             Assert.IsTrue(WhiteListParser.Instance.WhiteListWords.Contains("TW"));
             Assert.IsTrue(WhiteListParser.Instance.WhiteListWords.Contains("AI"));
@@ -30,11 +31,12 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsAB", ConventionType.PascalCase)[0] == "AB");
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsABTaleWorldsAI", ConventionType.PascalCase)[0] == "AB");
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("TaleWorldsABTaleWorldsAC", ConventionType.PascalCase)[1] ==  "AC");
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("my_variable_name", ConventionType.camelCase)[0]=="_variable_name");
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("ootable", ConventionType.PascalCase).Count()==0);
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count()==0);
-            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count() == 0);
+            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("my_variable_name", ConventionType.camelCase).Count==0);
+            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("ootable", ConventionType.PascalCase).Count==0);
+            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count==0);
+            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count == 0);
             
+            Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("IPCClass", ConventionType.IPascalCase).Count() == 1);
         }
     }
 }
