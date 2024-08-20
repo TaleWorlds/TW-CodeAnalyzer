@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -48,34 +49,32 @@ namespace TaleworldsCodeAnalysis.NameChecker
             return _removeWords(name, WhiteListParser.Instance.WhiteListWords, conventionType);
         }
 
+        private static string _returnAfterReplace(string name, string patternParameter)
+        {
+            Regex regex = new Regex(patternParameter);
+            name = regex.Replace(name, "0");
+            return name;
+        }
+
         public static IReadOnlyList<string> GetForbiddenPieces(string name,ConventionType type)
         {
             string originalName = name;
             name=_removeWhiteListItems(name,type);
-            string pattern = "";
             var forbiddenWords = new List<string>();
-            Regex regex;
             switch (type)
             {
                 case ConventionType.camelCase:
-                    pattern = _camelBeginningSingleRegex;
-                    regex = new Regex(pattern);
-                    name = regex.Replace(name, "0");
+                    name=_returnAfterReplace(name,_camelBeginningSingleRegex);
                     break;
                 case ConventionType._uscoreCase:
                     if (!name.StartsWith("_"))
                     {
                         return forbiddenWords;
                     }
-                    pattern = _underScoreBeginningSingleRegex;
-                    regex = new Regex(pattern);
-                    name = regex.Replace(name, "0");
-
+                    name=_returnAfterReplace(name, _underScoreBeginningSingleRegex);
                     break;
                 case ConventionType.PascalCase:
-                    pattern = "^"+_pascalSingleRegex;
-                    regex = new Regex(pattern);
-                    name = regex.Replace(name, "0");
+                    name=_returnAfterReplace(name,"^" + _pascalSingleRegex);
                     break;
                 case ConventionType.IPascalCase:
                     if (!name.StartsWith("I"))
@@ -83,9 +82,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                         return forbiddenWords;
                     }
                     name = name.Substring(1);
-                    pattern = "^"+_pascalSingleRegex;
-                    regex = new Regex(pattern);
-                    name = regex.Replace(name,"0");
+                    name = _returnAfterReplace(name, "^" + _pascalSingleRegex);
                     break;
                 case ConventionType.TPascalCase:
                     if (!name.StartsWith("T"))
@@ -93,15 +90,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
                         return forbiddenWords;
                     }
                     name =name.Substring(1);
-                    pattern = "^"+_pascalSingleRegex;
-                    regex = new Regex(pattern);
-                    name = regex.Replace(name, "0");
+                    name = _returnAfterReplace(name, "^" + _pascalSingleRegex);
                     break;
             }
 
-            pattern = _pascalSingleRegex;
-            regex = new Regex(pattern);
-            name=regex.Replace(name, "0");
+            name = _returnAfterReplace(name, _pascalSingleRegex);
             
             string currentWord="";
 

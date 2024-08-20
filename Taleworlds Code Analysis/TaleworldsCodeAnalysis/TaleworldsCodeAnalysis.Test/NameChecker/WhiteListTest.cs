@@ -35,7 +35,6 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("ootable", ConventionType.PascalCase).Count==0);
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count==0);
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("MyAITW", ConventionType.PascalCase).Count == 0);
-            
             Assert.IsTrue(NameCheckerLibrary.GetForbiddenPieces("IPCClass", ConventionType.IPascalCase).Count() == 1);
         }
     }

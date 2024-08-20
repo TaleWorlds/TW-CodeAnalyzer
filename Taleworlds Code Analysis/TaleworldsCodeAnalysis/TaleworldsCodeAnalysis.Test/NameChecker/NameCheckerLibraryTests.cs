@@ -75,7 +75,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 NameCheckerLibrary.IsMatchingConvention("_uscore", ConventionType._uscoreCase),
                 NameCheckerLibrary.IsMatchingConvention("_uscoreAI", ConventionType._uscoreCase),
                 NameCheckerLibrary.IsMatchingConvention("_uscoreAITaleworlds", ConventionType._uscoreCase),
-                NameCheckerLibrary.IsMatchingConvention("_xabASDAS", ConventionType.camelCase)
+                NameCheckerLibrary.IsMatchingConvention("_xabASDAS", ConventionType._uscoreCase),
+                NameCheckerLibrary.IsMatchingConvention("_AI", ConventionType._uscoreCase)
 
             };
             var expectedResults = new bool[] {
@@ -86,7 +87,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 true,
                 true,
                 true,
-                false
+                false,
+                true
             };
 
             for (int i = 0; i < checkResults.Length; i++)
