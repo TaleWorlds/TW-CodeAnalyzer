@@ -49,30 +49,27 @@ namespace TaleworldsCodeAnalysis
                 return;
             }
 
-            string words="";
             foreach (var item in listOfWords)
             {
-                words += "'"+item + "',";
+                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to whitelist.",
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item),
+                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item), diagnostic);
             }
-            words=words.TrimEnd(',');
-
-            context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + words + " to whitelist.",
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview),
-                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)), diagnostic);
+            
 
 
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview)
+        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word)
         {
             if (isPreview)
             {
                 return document.Project.Solution;
             }
-            IReadOnlyList<string> words = _getWordsToAddToWhitelist(document, diagnostic);
+            //IReadOnlyList<string> words = _getWordsToAddToWhitelist(document, diagnostic);
             var path = _getPathOfXml(document.Project.AdditionalDocuments);
 
-            AddStringToWhiteList(path, words);
+            AddStringToWhiteList(path, word);
 
             var originalSolution = document.Project.Solution;
             return originalSolution;
@@ -134,7 +131,7 @@ namespace TaleworldsCodeAnalysis
             return path;
         }
 
-        private void AddStringToWhiteList(string filePath, IReadOnlyList<string> wordsToAdd)
+        private void AddStringToWhiteList(string filePath, string wordToAdd)
         {
             try
             {
@@ -142,13 +139,10 @@ namespace TaleworldsCodeAnalysis
                 var root = doc.Element("WhiteListRoot");
                 if (root != null)
                 {
-                    foreach (var word in wordsToAdd)
+                    var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(wordToAdd, StringComparison.OrdinalIgnoreCase));
+                    if (existingWord == null)
                     {
-                        var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(word, StringComparison.OrdinalIgnoreCase));
-                        if (existingWord == null)
-                        {
-                            root.Add(new XElement("Word", word));
-                        }
+                        root.Add(new XElement("Word", wordToAdd));
                     }
                     doc.Save(filePath);
                 }
