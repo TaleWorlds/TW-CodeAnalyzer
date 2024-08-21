@@ -151,7 +151,7 @@
     <value>Locals should use "camelCase".</value>
   </data>
   <data name="LocalNameCheckerMessageFormat" xml:space="preserve">
-    <value>Local {0} should use "camelCase".</value>
+    <value>Local {0} should be renamed as {1}.</value>
   </data>
   <data name="LocalNameCheckerTitle" xml:space="preserve">
     <value>Locals should use "camelCase".</value>

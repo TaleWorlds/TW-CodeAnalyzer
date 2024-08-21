@@ -23,6 +23,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             Assert.IsTrue(CamelCaseBehaviour.Instance.FixThis("TaleWorlds")=="taleWorlds");
             Assert.IsTrue(CamelCaseBehaviour.Instance.FixThis("TALEWorlds") == "taleWorlds");
             Assert.IsTrue(CamelCaseBehaviour.Instance.FixThis("TaleTWorlds") == "taleTWorlds");
+            Console.WriteLine(CamelCaseBehaviour.Instance.FixThis("AITWClass"));
         }
 
         [TestMethod]
@@ -36,7 +37,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         public void CamelWhiteList()
         {
             Console.WriteLine(CamelCaseBehaviour.Instance.FindWhiteListCandidates("taleworldsAPI")[0]);
-                ;
+            Console.WriteLine(CamelCaseBehaviour.Instance.FindWhiteListCandidates("AITWClass")[0]);
         }
 
     }

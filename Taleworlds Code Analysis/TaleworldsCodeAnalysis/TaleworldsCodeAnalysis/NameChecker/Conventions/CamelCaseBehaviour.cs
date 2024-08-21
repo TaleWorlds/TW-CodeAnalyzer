@@ -17,7 +17,6 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
                 }
                 return _instance;
             }
-
         }
 
         private static CamelCaseBehaviour _instance;
@@ -27,37 +26,35 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
         {
             Regex regex = new Regex("[^A-Za-z0-9]");
             name=regex.Replace(name, "");
+            
+            var whiteIgnoredName=NameCheckerLibrary.GetWhiteListedIgnoreVersion(name);
+
             string newWord = "";
-            newWord += name[0].ToString().ToLower();
-
-            bool upperCaseFound = _isUpperCase(name[0]);
-            string ignorePattern = "";
-            foreach (var item in WhiteListParser.Instance.WhiteListWords)
+            if (whiteIgnoredName[0] == name[0])
             {
-                ignorePattern += "" + item + "+|";
+                newWord += name[0].ToString().ToLower();
             }
-            ignorePattern=ignorePattern.TrimEnd('|');
-            regex = new Regex(ignorePattern);
-            var matchCollection=regex.Matches(name);
-            var whiteIgnoredName = name;
-            foreach (Match match in matchCollection)
+            else
             {
-                for (int i = 0; i < match.Length; i++)
-                {
-                    whiteIgnoredName = whiteIgnoredName.Substring(0,match.Index)+new string('#',match.Length)+whiteIgnoredName.Substring(match.Index+match.Length);
-                }
+                newWord += name[0];
             }
+            bool upperCaseFound = NameCheckerLibrary.IsUpperCase(name[0]);
 
+            return FixExceptFirstCharacter(name,whiteIgnoredName,upperCaseFound,newWord);
+        }
+
+        public string FixExceptFirstCharacter(string name,string whiteIgnoredName,bool upperCaseFound, string newWord)
+        {
             for (int i = 1; i < name.Length; i++)
             {
-                if (whiteIgnoredName[i]=='#')
+                if (whiteIgnoredName[i] == '#')
                 {
                     newWord += name[i];
                     continue;
                 }
                 if (upperCaseFound)
                 {
-                    if(i<name.Length-1 && !_isUpperCase(name[i+1]))
+                    if (i < name.Length - 1 && !NameCheckerLibrary.IsUpperCase(name[i + 1]))
                     {
                         newWord += name[i];
                     }
@@ -65,81 +62,36 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
                     {
                         newWord += char.ToLower(name[i]);
                     }
-                    
                 }
                 else
                 {
                     newWord += name[i];
                 }
 
-                upperCaseFound = _isUpperCase(name[i]);
+                upperCaseFound = NameCheckerLibrary.IsUpperCase(name[i]);
             }
-
             return newWord;
         }
 
         public override IReadOnlyList<string> FindWhiteListCandidates(string name)
         {
-            List<string> candidates = new List<string>();
+            
 
             string currentCandidate="";
             bool upperFound = false;
-            if (_isUpperCase(name[0]))
+            if (NameCheckerLibrary.IsUpperCase(name[0]))
             {
                 currentCandidate += name[0];
                 upperFound = true;
             }
-            for (int i = 1; i < name.Length; i++)
-            {
-                if (upperFound && _isUpperCase(name[i]))
-                {
-                    currentCandidate += name[i];
-                }
-                else
-                {
-                    if(currentCandidate.Length>1)
-                    {
-                        currentCandidate = currentCandidate.Substring(0, currentCandidate.Length - 1);
-                        _addCandidate(currentCandidate);
-                        
-                    }
-                    currentCandidate = name[i].ToString(); 
-                }
-                upperFound = _isUpperCase(name[i]);
-            }
-
-            void _addCandidate(string candidate)
-            {
-                if (!candidates.Contains(candidate))
-                {
-                    candidates.Add(candidate);
-                }
-            }
-
-            if (currentCandidate.Length > 1)
-            {
-                currentCandidate = currentCandidate.Substring(0, currentCandidate.Length);
-                _addCandidate(currentCandidate);
-            }
-
-            foreach (string word in WhiteListParser.Instance.WhiteListWords)
-            {
-                candidates.Remove(word);
-            }
-
-            return candidates;
-        }
-
-        private bool _isUpperCase(char c)
-        {
-            return c == char.ToUpper(c);
+            return NameCheckerLibrary.OneUpperCaseAllowedCandidates(name,currentCandidate,upperFound);
         }
 
         public override string FixListedItems(string name,IReadOnlyList<string> list)
         {
-            foreach (var whiteListedItem in WhiteListParser.Instance.WhiteListWords)
+            foreach (var item in list)
             {
-                Regex regex = new Regex(whiteListedItem);
+                Regex regex = new Regex(item);
                 var matches=regex.Matches(name);
                 foreach (Match match in matches)
                 {

@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TaleworldsCodeAnalysis.NameChecker;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis
 {
@@ -92,10 +93,22 @@ namespace TaleworldsCodeAnalysis
             {
                 var convention = diagnosticProperties["NamingConvention"];
                 var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
-                words = NameCheckerLibrary.GetNewWhiteListItemsToFix(identifier, conventionEnum);
+                words = _getNewWhiteListItemsToFix(identifier, conventionEnum);
             }
 
             return words;
+        }
+
+        private IReadOnlyList<string> _getNewWhiteListItemsToFix(string identifier, ConventionType conventionEnum)
+        {
+            switch(conventionEnum)
+            {
+                case ConventionType.camelCase:
+                    return CamelCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                default:
+                    return NameCheckerLibrary.GetNewWhiteListItemsToFix(identifier, conventionEnum);
+
+            }
         }
 
         private string _getPathOfXml(IEnumerable<TextDocument> additionalFiles)

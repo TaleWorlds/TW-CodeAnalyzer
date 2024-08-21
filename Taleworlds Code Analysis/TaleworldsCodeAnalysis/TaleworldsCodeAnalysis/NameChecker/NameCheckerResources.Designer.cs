@@ -160,7 +160,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local {0} should use &quot;camelCase&quot;..
+        ///   Looks up a localized string similar to Local {0} should be renamed as {1}..
         /// </summary>
         internal static string LocalNameCheckerMessageFormat {
             get {

@@ -47,8 +47,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("LocalNameChecker").WithLocation(0).WithArguments("Value"),
-                VerifyCS.Diagnostic("LocalNameChecker").WithLocation(1).WithArguments("_value2")
+                VerifyCS.Diagnostic("LocalNameChecker").WithLocation(0).WithArguments("Value","value"),
+                VerifyCS.Diagnostic("LocalNameChecker").WithLocation(1).WithArguments("_value2","value2")
             };
 
             

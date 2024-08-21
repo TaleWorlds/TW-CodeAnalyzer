@@ -48,7 +48,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             if (!CamelCaseBehaviour.Instance.IsMatching(localName.Name))
             {
                 properties["NamingConvention"] = "camelCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, localName.Locations[0], properties.ToImmutableDictionary(), localName));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, localName.Locations[0], properties.ToImmutableDictionary(), localName,CamelCaseBehaviour.Instance.FixThis(localName.Name)));
             }
             
         }
