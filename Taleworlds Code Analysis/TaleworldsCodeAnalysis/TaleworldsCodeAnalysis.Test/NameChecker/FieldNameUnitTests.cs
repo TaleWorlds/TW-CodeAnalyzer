@@ -30,7 +30,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 private int {|#0:value|};
             }";
 
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value"); 
+            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value","_value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }     
 

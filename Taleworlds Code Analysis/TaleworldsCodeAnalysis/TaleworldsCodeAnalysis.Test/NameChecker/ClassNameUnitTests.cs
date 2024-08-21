@@ -63,10 +63,10 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("TestClassPriv", "Private", "_uscoreCase"),
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPriv", "Private", "_uscoreCase"),
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(2).WithArguments("TestClassInt", "Internal", "_uscoreCase"),
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(3).WithArguments("testClassInt", "Internal", "_uscoreCase")
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("TestClassPriv","_testClassPriv"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPriv", "_testClassPriv"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(2).WithArguments("TestClassInt", "_testClassInt"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(3).WithArguments("testClassInt", "_testClassInt")
             };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
@@ -95,8 +95,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("_testClassPub", "Public", "PascalCase"),
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPub", "Public", "PascalCase"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("_testClassPub","TestClassPub"),
+                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPub","TestClassPub"),
                 VerifyCS.Diagnostic("ClassModifierChecker").WithLocation(2).WithArguments("TestClassPro"),
                 VerifyCS.Diagnostic("ClassModifierChecker").WithLocation(3).WithArguments("testClassPro")
             };

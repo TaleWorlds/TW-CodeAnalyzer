@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -42,10 +43,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 { "Name", parameterName },
             };
 
-            if (!(parameterName.StartsWith("T") && NameCheckerLibrary.IsMatchingConvention(parameterName, ConventionType.TPascalCase)))
+            if (!TPascalCaseBehaviour.Instance.IsMatching(parameterName))
             {
                 properties["NamingConvention"] = "TPascalCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.GetLocation(), properties.ToImmutableDictionary(), parameterName));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.GetLocation(), properties.ToImmutableDictionary(), parameterName,
+                    TPascalCaseBehaviour.Instance.FixThis(parameterName)));
             }
             
         }

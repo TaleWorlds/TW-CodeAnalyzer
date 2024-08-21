@@ -79,7 +79,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class {0} with access modifier {1} should use {2}..
+        ///   Looks up a localized string similar to Class {0} should be renamed as {1}..
         /// </summary>
         internal static string ClassNameCheckerMessageFormat {
             get {
@@ -133,7 +133,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field &apos;{0}&apos; should use &quot;_uscoreCase&quot;..
+        ///   Looks up a localized string similar to Field {0} should be renamed as {1}..
         /// </summary>
         internal static string FieldNameCheckerMessageFormat {
             get {
@@ -160,7 +160,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interface {0} should use &quot;IPascalCase&quot;..
+        ///   Looks up a localized string similar to Interface {0} be renamed as {1}..
         /// </summary>
         internal static string InterfaceNameCheckerMessageFormat {
             get {
@@ -214,7 +214,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method {0} with access modifier {1} should use {2}..
+        ///   Looks up a localized string similar to Method {0} with access modifier {1} should be renamed as {2}..
         /// </summary>
         internal static string MethodNameCheckerMessageFormat {
             get {
@@ -241,7 +241,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter {0} should use &quot;camelCase..
+        ///   Looks up a localized string similar to Parameter {0} should be renamed as {1}..
         /// </summary>
         internal static string ParameterNameCheckerMessageFormat {
             get {
@@ -268,7 +268,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property {0} with access modifier {1} should use {2}..
+        ///   Looks up a localized string similar to Property {0} should be renamed as {1}..
         /// </summary>
         internal static string PropertyNameCheckerMessageFormat {
             get {
@@ -295,7 +295,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Template parameter {0} should use &quot;TPascalCase&quot;..
+        ///   Looks up a localized string similar to Template parameter {0} should be renamed as {1}..
         /// </summary>
         internal static string TemplateParameterNameCheckerMessageFormat {
             get {

@@ -48,8 +48,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }";
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(0).WithArguments("Value"),
-                VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(1).WithArguments("_value")
+                VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(0).WithArguments("Value","value"),
+                VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(1).WithArguments("_value","value")
             };
             
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);

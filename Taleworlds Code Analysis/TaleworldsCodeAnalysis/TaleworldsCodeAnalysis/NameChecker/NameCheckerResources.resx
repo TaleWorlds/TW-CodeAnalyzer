@@ -124,7 +124,7 @@
     <value>All class names should use TW conventions.</value>
   </data>
   <data name="ClassNameCheckerMessageFormat" xml:space="preserve">
-    <value>Class {0} with access modifier {1} should use {2}.</value>
+    <value>Class {0} should be renamed as {1}.</value>
   </data>
   <data name="ClassNameCheckerTitle" xml:space="preserve">
     <value>All class names should use TW  conventions.</value>
@@ -142,7 +142,7 @@
     <value>All private fields should use "_uscoreCase".</value>
   </data>
   <data name="FieldNameCheckerMessageFormat" xml:space="preserve">
-    <value>Field '{0}' should use "_uscoreCase".</value>
+    <value>Field {0} should be renamed as {1}.</value>
   </data>
   <data name="FieldNameCheckerTitle" xml:space="preserve">
     <value>All fields should be private and use "_uscoreCase".</value>
@@ -151,7 +151,7 @@
     <value>Interfaces should use "IPascalCase".</value>
   </data>
   <data name="InterfaceNameCheckerMessageFormat" xml:space="preserve">
-    <value>Interface {0} should use "IPascalCase".</value>
+    <value>Interface {0} be renamed as {1}.</value>
   </data>
   <data name="InterfaceNameCheckerTitle" xml:space="preserve">
     <value>Interfaces should use "IPascalCase".</value>
@@ -169,7 +169,7 @@
     <value>All method names should use TW conventions.</value>
   </data>
   <data name="MethodNameCheckerMessageFormat" xml:space="preserve">
-    <value>Method {0} with access modifier {1} should use {2}.</value>
+    <value>Method {0} with access modifier {1} should be renamed as {2}.</value>
   </data>
   <data name="MethodNameCheckerTitle" xml:space="preserve">
     <value>All method names should use TW conventions.</value>
@@ -178,7 +178,7 @@
     <value>Parameters should use "camelCase".</value>
   </data>
   <data name="ParameterNameCheckerMessageFormat" xml:space="preserve">
-    <value>Parameter {0} should use "camelCase.</value>
+    <value>Parameter {0} should be renamed as {1}.</value>
   </data>
   <data name="ParameterNameCheckerTitle" xml:space="preserve">
     <value>Parameters should use "camelCase".</value>
@@ -187,7 +187,7 @@
     <value>All property names sholud use TW conventions.</value>
   </data>
   <data name="PropertyNameCheckerMessageFormat" xml:space="preserve">
-    <value>Property {0} with access modifier {1} should use {2}.</value>
+    <value>Property {0} should be renamed as {1}.</value>
   </data>
   <data name="PropertyNameCheckerTitle" xml:space="preserve">
     <value>All property names should use TW conventions.</value>
@@ -196,7 +196,7 @@
     <value>Template parameters should use "TPascalCase".</value>
   </data>
   <data name="TemplateParameterNameCheckerMessageFormat" xml:space="preserve">
-    <value>Template parameter {0} should use "TPascalCase".</value>
+    <value>Template parameter {0} should be renamed as {1}.</value>
   </data>
   <data name="TemplateParameterNameCheckerTitle" xml:space="preserve">
     <value>Template parameters should use "TPascalCase".</value>

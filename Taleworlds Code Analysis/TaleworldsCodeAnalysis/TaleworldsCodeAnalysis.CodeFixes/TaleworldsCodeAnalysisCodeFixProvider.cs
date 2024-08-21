@@ -105,8 +105,16 @@ namespace TaleworldsCodeAnalysis
             {
                 case ConventionType.camelCase:
                     return CamelCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                case ConventionType._uscoreCase:
+                    return UnderScoreCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                case ConventionType.PascalCase:
+                    return PascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                case ConventionType.IPascalCase:
+                    return IPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                case ConventionType.TPascalCase:
+                    return TPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 default:
-                    return NameCheckerLibrary.GetNewWhiteListItemsToFix(identifier, conventionEnum);
+                    return new List<string>();
 
             }
         }

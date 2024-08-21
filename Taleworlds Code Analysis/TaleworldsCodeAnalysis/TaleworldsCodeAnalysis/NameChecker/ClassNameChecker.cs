@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -52,18 +53,20 @@ namespace TaleworldsCodeAnalysis.NameChecker
             if (symbol.DeclaredAccessibility == Accessibility.Private ||
                 symbol.DeclaredAccessibility == Accessibility.Internal)
             {
-                if (!NameCheckerLibrary.IsMatchingConvention(symbol.Name,ConventionType._uscoreCase))
+                if (!UnderScoreCaseBehaviour.Instance.IsMatching(symbol.Name))
                 {
                     properties["NamingConvention"] = "_uscoreCase";
-                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], properties.ToImmutableDictionary(), symbol.Name, symbol.DeclaredAccessibility.ToString(), "_uscoreCase"));
+                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], properties.ToImmutableDictionary(), symbol.Name,
+                        UnderScoreCaseBehaviour.Instance.FixThis(symbol.Name)));
                 }
             }
             else if (symbol.DeclaredAccessibility == Accessibility.Public)
             {
-                if (!NameCheckerLibrary.IsMatchingConvention(symbol.Name, ConventionType.PascalCase))
+                if (!PascalCaseBehaviour.Instance.IsMatching(symbol.Name))
                 {
                     properties["NamingConvention"] = "PascalCase";
-                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], properties.ToImmutableDictionary(), symbol.Name, symbol.DeclaredAccessibility.ToString(), "PascalCase"));
+                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], properties.ToImmutableDictionary(), symbol.Name,
+                        PascalCaseBehaviour.Instance.FixThis(symbol.Name)));
                 }
             }
             else

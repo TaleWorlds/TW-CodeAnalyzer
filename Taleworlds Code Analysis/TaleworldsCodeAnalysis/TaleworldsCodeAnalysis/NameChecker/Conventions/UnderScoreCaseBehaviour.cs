@@ -58,9 +58,5 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
            return candidates;
             
         }
-        private bool _isUpperCase(char c)
-        {
-            return c == char.ToUpper(c);
-        }
     }
 }

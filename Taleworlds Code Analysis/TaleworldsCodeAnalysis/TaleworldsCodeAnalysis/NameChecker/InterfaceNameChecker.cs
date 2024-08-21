@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -43,10 +44,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 { "Name", symbolName },
             };
 
-            if(!(symbolName.StartsWith("I") && NameCheckerLibrary.IsMatchingConvention(symbolName,ConventionType.IPascalCase)))
+            if(!IPascalCaseBehaviour.Instance.IsMatching(symbolName))
             {
                 properties["NamingConvention"] = "IPascalCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, symbol.Locations[0], properties.ToImmutableDictionary(), symbolName));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, symbol.Locations[0], properties.ToImmutableDictionary(), symbolName,
+                    IPascalCaseBehaviour.Instance.FixThis(symbolName)));
             }
 
         }

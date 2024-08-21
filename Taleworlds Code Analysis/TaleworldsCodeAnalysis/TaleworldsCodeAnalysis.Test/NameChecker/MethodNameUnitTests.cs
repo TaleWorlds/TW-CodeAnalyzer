@@ -44,10 +44,10 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPriv", "Private", "_uscoreCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPriv", "Private", "_uscoreCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooInt", "Internal", "_uscoreCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooInt", "Internal", "_uscoreCase")
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPriv","_fooPriv"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPriv","_fooPriv"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooInt","_fooInt"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooInt","_fooInt")
             };
             
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
@@ -68,10 +68,10 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPub", "Public", "PascalCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPub", "Public", "PascalCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooPro", "Protected", "PascalCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooPro", "Protected", "PascalCase")
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPub","FooPub"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPub","FooPub"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooPro", "FooPro"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooPro", "FooPro")
         };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);

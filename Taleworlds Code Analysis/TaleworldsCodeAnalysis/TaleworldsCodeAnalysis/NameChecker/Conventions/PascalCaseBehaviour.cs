@@ -7,20 +7,20 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 {
     public class PascalCaseBehaviour : ConventionBehaviour
     {
-        public static UnderScoreCaseBehaviour Instance
+        public static PascalCaseBehaviour Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new UnderScoreCaseBehaviour();
+                    _instance = new PascalCaseBehaviour();
                 }
                 return _instance;
             }
 
         }
 
-        private static UnderScoreCaseBehaviour _instance;
+        private static PascalCaseBehaviour _instance;
         private Regex _regexWhole = new Regex("^[A-Z](([a-z0-9]+[A-Z]?)*)$");
 
         public override IReadOnlyList<string> FindWhiteListCandidates(string name)
@@ -84,8 +84,18 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             {
                 newWord += name[0];
             }
-            bool upperCaseFound = NameCheckerLibrary.IsUpperCase(name[0]);
-            return CamelCaseBehaviour.Instance.FixExceptFirstCharacter(name, whiteIgnoredName, upperCaseFound, newWord);
+
+            if (whiteIgnoredName[1] == name[1])
+            {
+                newWord += name[1].ToString().ToLower();
+            }
+            else
+            {
+                newWord += name[1];
+            }
+
+            bool upperCaseFound = NameCheckerLibrary.IsUpperCase(name[1]);
+            return CamelCaseBehaviour.Instance.FixExceptFirstCharacter(name.Substring(1), whiteIgnoredName, upperCaseFound, newWord); //ERROR
         }
 
         public override bool IsMatching(string name)

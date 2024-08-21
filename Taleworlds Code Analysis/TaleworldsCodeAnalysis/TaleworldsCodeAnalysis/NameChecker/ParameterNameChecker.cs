@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -39,10 +40,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 { "Name", parameter.Name },
             };
 
-            if (!NameCheckerLibrary.IsMatchingConvention(parameter.Name, ConventionType.camelCase))
+            if (!CamelCaseBehaviour.Instance.IsMatching(parameter.Name))
             {
                 properties["NamingConvention"] = "camelCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.Locations[0], properties.ToImmutableDictionary(), parameter.Name));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.Locations[0], properties.ToImmutableDictionary(), parameter.Name,
+                    CamelCaseBehaviour.Instance.FixThis(parameter.Name)));
             }
             
         }

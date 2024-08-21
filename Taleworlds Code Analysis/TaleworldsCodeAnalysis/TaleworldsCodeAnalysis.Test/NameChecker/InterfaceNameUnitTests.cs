@@ -38,9 +38,9 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(0).WithArguments("iTest"),
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(1).WithArguments("Test"),
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(2).WithArguments("_test")
+                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(0).WithArguments("iTest","ITest"),
+                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(1).WithArguments("Test","ITest"),
+                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(2).WithArguments("_test","ITest")
             };
             
 

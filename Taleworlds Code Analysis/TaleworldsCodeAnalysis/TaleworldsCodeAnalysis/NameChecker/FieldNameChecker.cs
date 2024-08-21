@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -49,10 +50,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             if (field.DeclaredAccessibility == Accessibility.Private)
             {
-                if (!NameCheckerLibrary.IsMatchingConvention(field.Name, ConventionType._uscoreCase))
+                if (!UnderScoreCaseBehaviour.Instance.IsMatching(field.Name))
                 {
                     properties["NamingConvention"] = "_uscoreCase";
-                    var diagnostic = Diagnostic.Create(_nameRule, field.Locations[0], properties.ToImmutableDictionary(), field.Name);
+                    var diagnostic = Diagnostic.Create(_nameRule, field.Locations[0], properties.ToImmutableDictionary(), field.Name, 
+                        UnderScoreCaseBehaviour.Instance.FixThis(field.Name));
                     context.ReportDiagnostic(diagnostic);
                 }
             }
