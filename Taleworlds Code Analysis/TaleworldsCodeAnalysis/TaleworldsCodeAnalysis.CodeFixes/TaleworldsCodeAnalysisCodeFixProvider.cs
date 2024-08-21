@@ -23,7 +23,7 @@ namespace TaleworldsCodeAnalysis
         {
             get
             {
-                List<string> fixableDiagnosticIds = new List<string> {ClassNameChecker.ModifierDiagnosticId, ClassNameChecker.NameDiagnosticId, FieldNameChecker.DiagnosticId, InterfaceNameChecker.DiagnosticId, LocalNameChecker.DiagnosticId, MethodNameChecker.DiagnosticId, ParameterNameChecker.DiagnosticId, PropertyNameChecker.DiagnosticId, TemplateParameterNameChecker.DiagnosticId };
+                List<string> fixableDiagnosticIds = new List<string> {ClassNameChecker.ModifierDiagnosticId, ClassNameChecker.NameDiagnosticId, FieldNameChecker.NameDiagnosticId, InterfaceNameChecker.DiagnosticId, LocalNameChecker.DiagnosticId, MethodNameChecker.DiagnosticId, ParameterNameChecker.DiagnosticId, PropertyNameChecker.DiagnosticId, TemplateParameterNameChecker.DiagnosticId };
                 return ImmutableArray.Create(fixableDiagnosticIds.ToArray());
             }
         }

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="TaleworldsCodeAnalysis.377d9dc1-7dd1-4088-bb6b-70436e5e9320" Version="1.0" Language="en-US" Publisher="berkay.karakaya"/>
+    <Identity Id="TaleworldsCodeAnalysis.377d9dc1-7dd1-4088-bb6b-70436e5e9320" Version="1.0" Language="en-US" Publisher="berkay.karakaya, arinc.demir"/>
     <DisplayName>TaleworldsCodeAnalysis</DisplayName>
-    <Description xml:space="preserve">This is a sample diagnostic extension for the .NET Compiler Platform ("Roslyn").</Description>
+    <Description xml:space="preserve">This is a code analysis tool that enforces TW best practices.</Description>
   </Metadata>
-  <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0,)" />
-  </Installation>
+  
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>
@@ -21,4 +19,9 @@
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
     <Prerequisite Id="Microsoft.VisualStudio.Component.Roslyn.LanguageServices" Version="[15.0,)" DisplayName="Roslyn Language Services" />
   </Prerequisites>
+	<Installation>
+		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[15.0,)">
+			<ProductArchitecture>amd64</ProductArchitecture>
+		</InstallationTarget>
+	</Installation>
 </PackageManifest>
