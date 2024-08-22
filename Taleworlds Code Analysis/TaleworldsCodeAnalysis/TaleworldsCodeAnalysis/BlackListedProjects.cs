@@ -28,6 +28,11 @@ namespace TaleworldsCodeAnalysis
             fullPath = Path.Combine(localAppDataPath, pathAfterLocalAppData);
         }
 
+        public bool isBlackListedProjectFromCodePath(string codePath) {
+            var projectName = findProjectNameFromCodeFilePath(codePath);
+            return isBlackListedProject(projectName);
+        }
+
         public bool isBlackListedProject(string projectName)
         {
             XDocument doc;

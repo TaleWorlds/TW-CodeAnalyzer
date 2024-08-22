@@ -31,6 +31,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzer(SymbolAnalysisContext context)
         {
+            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Symbol.Locations[0].ToString())) return;
+
             var method = (IMethodSymbol) context.Symbol;
 
             WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
