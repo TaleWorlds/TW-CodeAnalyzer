@@ -169,7 +169,7 @@
     <value>All method names should use TW conventions.</value>
   </data>
   <data name="MethodNameCheckerMessageFormat" xml:space="preserve">
-    <value>Method {0} with access modifier {1} should be renamed as {2}.</value>
+    <value>Method {0}  should be renamed as {1}.</value>
   </data>
   <data name="MethodNameCheckerTitle" xml:space="preserve">
     <value>All method names should use TW conventions.</value>

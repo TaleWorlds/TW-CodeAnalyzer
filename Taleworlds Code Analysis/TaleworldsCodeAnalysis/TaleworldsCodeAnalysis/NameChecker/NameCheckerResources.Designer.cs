@@ -214,7 +214,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method {0} with access modifier {1} should be renamed as {2}..
+        ///   Looks up a localized string similar to Method {0}  should be renamed as {1}..
         /// </summary>
         internal static string MethodNameCheckerMessageFormat {
             get {
