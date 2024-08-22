@@ -59,7 +59,6 @@ namespace TaleworldsCodeAnalysis
 
         public string findProjectNameFromCodeFilePath(string codeFilePath)
         {
-            codeFilePath = codeFilePath.Substring(11);
             var folderNames = codeFilePath.Split('\\');
             for (int i = folderNames.Length - 2; i >= 0; i--) {
                 var csprojFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), folderNames[i] + ".csproj");
