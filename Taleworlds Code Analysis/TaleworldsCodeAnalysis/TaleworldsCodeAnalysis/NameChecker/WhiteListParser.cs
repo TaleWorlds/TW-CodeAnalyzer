@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -75,6 +76,22 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 fileText = document.ToString();
             }
             return fileText;
+        }
+
+        public string findSolutionPathFromCodeFilePath(string codeFilePath)
+        {
+            codeFilePath = codeFilePath.Substring(11);
+            var folderNames = codeFilePath.Split('\\');
+            for (int i = folderNames.Length - 2; i >= 0; i--)
+            {
+                var csprojFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), folderNames[i] + ".sln");
+                if (File.Exists(csprojFilePath))
+                {
+                    return Path.Combine(String.Join("\\", folderNames, 0, i + 1), folderNames[i]);
+                }
+            }
+
+            throw new Exception("Could not find project from source code path");
         }
     }
 }
