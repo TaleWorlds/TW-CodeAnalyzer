@@ -1,4 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -29,33 +31,35 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(_analyzer, SymbolKind.Field);
+            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.FieldDeclaration);
         }
 
-        private void _analyzer(SymbolAnalysisContext context)
+        private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Symbol.Locations[0].SourceTree.FilePath);
+            var nameNode = (FieldDeclarationSyntax)context.Node;
+            var nameString = nameNode.Declaration.Variables.First().ToString();
+            var accessibility = nameNode.Modifiers.First();
+            var location = nameNode.Declaration.Variables.First().GetLocation();
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
             WhiteListParser.Instance.UpdateWhiteList();
 
-            var field = (IFieldSymbol)context.Symbol;
-
-            if(field.ContainingType.TypeKind==TypeKind.Enum)
+            if(nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
             {
                 return;
             }
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", field.Name },
+                { "Name", nameString },
             };
 
-            if (field.DeclaredAccessibility == Accessibility.Private)
+            if (accessibility.IsKind(SyntaxKind.PrivateKeyword))
             {
-                if (!UnderScoreCaseBehaviour.Instance.IsMatching(field.Name))
+                if (!UnderScoreCaseBehaviour.Instance.IsMatching(nameString))
                 {
                     properties["NamingConvention"] = "_uscoreCase";
-                    var diagnostic = Diagnostic.Create(_nameRule, field.Locations[0], properties.ToImmutableDictionary(), field.Name, 
-                        UnderScoreCaseBehaviour.Instance.FixThis(field.Name));
+                    var diagnostic = Diagnostic.Create(_nameRule, location, properties.ToImmutableDictionary(), nameString, 
+                        UnderScoreCaseBehaviour.Instance.FixThis(nameString));
                     context.ReportDiagnostic(diagnostic);
                 }
             }
