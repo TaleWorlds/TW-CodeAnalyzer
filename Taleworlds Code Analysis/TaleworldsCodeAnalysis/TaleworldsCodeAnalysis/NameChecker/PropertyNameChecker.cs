@@ -40,7 +40,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
 
             WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
-            WhiteListParser.Instance.UpdateWhiteList();
 
             var properties = new Dictionary<string, string>
             {

@@ -57,16 +57,19 @@ namespace TaleworldsCodeAnalysis.NameChecker
         }
 
 
-        public void InitializeWhiteListParser(string sourceText)
-        {
-            _readWhiteList(sourceText);
-        }
-
-
         private string _getFileText()
         {
             XDocument document;
-            document = XDocument.Load(_sharedWhiteListPath);
+            try
+            {
+                document = XDocument.Load(_sharedWhiteListPath);
+            }
+            catch (FileNotFoundException)
+            {
+                document = new XDocument(new XElement("WhiteListRoot",new XElement("Word", "ExampleWord")));
+                document.Save(_sharedWhiteListPath);
+            }
+
             return document.ToString(); ;
         }
 
@@ -76,6 +79,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             {
                 _sharedWhiteListPath = _findXMLFilePath(codeFilePath);
             }
+            UpdateWhiteList();
         }
 
         private string _findXMLFilePath(string codeFilePath)
@@ -86,16 +90,22 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
             //codeFilePath = codeFilePath.Substring(11);
             var folderNames = codeFilePath.Split('\\');
+            string solnFilePath="";
             for (int i = folderNames.Length - 2; i >= 0; i--)
             {
-                var solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), "WhiteList.xml");
+                solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), "WhiteList.xml");
                 if (File.Exists(solnFilePath))
                 {
-                    return Path.Combine(String.Join("\\", folderNames, 0, i + 1), "WhiteList.xml");
+                    return solnFilePath;
                 }
+                else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length!=0);
+                {
+                    return solnFilePath ;
+                }
+
             }
 
-            throw new Exception("Could not find project from source code path");
+            return solnFilePath;
         }
 
         public void EnableTesting()

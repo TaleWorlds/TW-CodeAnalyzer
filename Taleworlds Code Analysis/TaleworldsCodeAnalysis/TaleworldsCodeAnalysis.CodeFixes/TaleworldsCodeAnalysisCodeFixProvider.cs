@@ -78,10 +78,7 @@ namespace TaleworldsCodeAnalysis
         {
             var diagnosticProperties = diagnostic.Properties;
             var identifier = diagnosticProperties["Name"];
-
-            XDocument doc = XDocument.Load(WhiteListParser.Instance.SharedPathXml);
-            
-            WhiteListParser.Instance.InitializeWhiteListParser(doc.ToString());
+            WhiteListParser.Instance.UpdateWhiteList();
             IReadOnlyList<string> words = new List<string>();
 
             if (diagnosticProperties.ContainsKey("NamingConvention"))

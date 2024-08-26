@@ -38,7 +38,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Identifier.GetLocation();
             WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
-            WhiteListParser.Instance.UpdateWhiteList();
 
             if (nameNode.IsKind(SyntaxKind.GetAccessorDeclaration) || nameNode.IsKind(SyntaxKind.SetAccessorDeclaration) || nameNode.IsKind(SyntaxKind.ConstructorDeclaration))
             {

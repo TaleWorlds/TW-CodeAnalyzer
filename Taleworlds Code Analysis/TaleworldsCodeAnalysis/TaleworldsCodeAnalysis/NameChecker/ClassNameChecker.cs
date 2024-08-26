@@ -45,7 +45,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var location = nameNode.Identifier.GetLocation();
 
             WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
-            WhiteListParser.Instance.UpdateWhiteList();
+            
 
             var properties = new Dictionary<string, string>
             {
