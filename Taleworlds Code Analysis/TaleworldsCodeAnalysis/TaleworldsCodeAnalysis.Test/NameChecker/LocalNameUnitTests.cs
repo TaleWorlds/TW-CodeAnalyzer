@@ -32,7 +32,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         }
 
         [TestMethod]
-        public async Task InterfaceWarningTest()
+        public async Task LocalWarningTest()
         {
             var test = @"
             public class Test

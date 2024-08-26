@@ -49,7 +49,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", nameNode.ToString()},
+                { "Name", nameString},
             };
 
             if (accessibility.IsKind(SyntaxKind.PrivateKeyword) ||

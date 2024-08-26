@@ -1,4 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -26,37 +28,42 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(_analyzer, SymbolKind.Property);
+            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.PropertyDeclaration);
         }
 
-        private void _analyzer(SymbolAnalysisContext context)
+        private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            var property = (IPropertySymbol)context.Symbol;
-            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Symbol.Locations[0].SourceTree.FilePath);
+            var nameNode = (PropertyDeclarationSyntax)context.Node;
+            var nameString = nameNode.Identifier.ToString();
+            var accessibility = nameNode.Modifiers.First();
+            var location = nameNode.Identifier.GetLocation();
+
+
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
             WhiteListParser.Instance.UpdateWhiteList();
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", property.Name },
+                { "Name", nameString },
             };
 
-            if (property.DeclaredAccessibility == Accessibility.Private ||
-                 property.DeclaredAccessibility == Accessibility.Internal)
+            if (accessibility.IsKind(SyntaxKind.PrivateKeyword) ||
+                 accessibility.IsKind(SyntaxKind.InternalKeyword))
             {
-                if (!UnderScoreCaseBehaviour.Instance.IsMatching(property.Name))
+                if (!UnderScoreCaseBehaviour.Instance.IsMatching(nameString))
                 {
                     properties["NamingConvention"] = "_uscoreCase";
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, property.Locations[0], properties.ToImmutableDictionary(), property.Name,
-                        UnderScoreCaseBehaviour.Instance.FixThis(property.Name)));
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
+                        UnderScoreCaseBehaviour.Instance.FixThis(nameString)));
                 }
             }
             else
             {
-                if (!PascalCaseBehaviour.Instance.IsMatching(property.Name))
+                if (!PascalCaseBehaviour.Instance.IsMatching(nameString))
                 {
                     properties["NamingConvention"] = "PascalCase";
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, property.Locations[0], properties.ToImmutableDictionary(), property.Name,
-                        PascalCaseBehaviour.Instance.FixThis(property.Name)));
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
+                        PascalCaseBehaviour.Instance.FixThis(nameString)));
                 }
             }
         }

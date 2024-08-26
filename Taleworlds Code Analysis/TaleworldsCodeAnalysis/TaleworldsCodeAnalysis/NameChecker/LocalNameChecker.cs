@@ -37,19 +37,18 @@ namespace TaleworldsCodeAnalysis.NameChecker
             WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Node.SyntaxTree.FilePath);
             WhiteListParser.Instance.UpdateWhiteList();
 
-            var local = (LocalDeclarationStatementSyntax) context.Node;
-            var localDeclaration = local.Declaration.Variables.Single();
-            ISymbol localName = context.SemanticModel.GetDeclaredSymbol(localDeclaration, context.CancellationToken);
-
+            var localDeclaration = (LocalDeclarationStatementSyntax) context.Node;
+            var localName = localDeclaration.Declaration.Variables.Single().Identifier.ToString();
+            var location = localDeclaration.Declaration.Variables.Single().Identifier.GetLocation();
             var properties = new Dictionary<string, string>
             {
-                { "Name", localName.Name },
+                { "Name", localName },
             };
 
-            if (!CamelCaseBehaviour.Instance.IsMatching(localName.Name))
+            if (!CamelCaseBehaviour.Instance.IsMatching(localName))
             {
                 properties["NamingConvention"] = "camelCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, localName.Locations[0], properties.ToImmutableDictionary(), localName,CamelCaseBehaviour.Instance.FixThis(localName.Name)));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), localName,CamelCaseBehaviour.Instance.FixThis(localName)));
             }
             
         }

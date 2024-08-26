@@ -61,17 +61,21 @@ namespace TaleworldsCodeAnalysis
             return Task.CompletedTask;
         }
 
-        private Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word)
+        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word)
         {
             if (isPreview)
             {
-                return Task.FromResult(document.Project.Solution);
+                return document.Project.Solution;
             }
-
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
             var path = WhiteListParser.Instance.SharedPathXml;
             var solution = document.Project.Solution;
             AddStringToWhiteList(path, word);
-            return Task.FromResult(solution);
+            var declarationEnd=root.FindNode(diagnostic.Location.SourceSpan);
+            var spacedDeclaration = declarationEnd.ReplaceNode(
+                declarationEnd, declarationEnd.WithTrailingTrivia(SyntaxFactory.Space));
+            var newRoot=root.ReplaceNode(declarationEnd, spacedDeclaration);
+            return document.WithSyntaxRoot(newRoot).Project.Solution;
         }
 
         private IReadOnlyList<string> _getWordsToAddToWhitelist(Document document, Diagnostic diagnostic)

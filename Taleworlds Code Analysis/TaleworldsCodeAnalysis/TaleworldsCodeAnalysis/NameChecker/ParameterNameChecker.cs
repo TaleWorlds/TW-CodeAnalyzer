@@ -1,4 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -26,26 +28,28 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(_analyzer, SymbolKind.Parameter);
+            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.Parameter);
         }
 
-        private void _analyzer(SymbolAnalysisContext context)
+        private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Symbol.Locations[0].SourceTree.FilePath);
-            WhiteListParser.Instance.UpdateWhiteList();
+            var nameNode = (ParameterSyntax)context.Node;
+            var nameString = nameNode.Identifier.ToString();
+            var location = nameNode.Identifier.GetLocation();
 
-            var parameter = (IParameterSymbol)context.Symbol;
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
+            WhiteListParser.Instance.UpdateWhiteList();
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", parameter.Name },
+                { "Name", nameString },
             };
 
-            if (!CamelCaseBehaviour.Instance.IsMatching(parameter.Name))
+            if (!CamelCaseBehaviour.Instance.IsMatching(nameString))
             {
                 properties["NamingConvention"] = "camelCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.Locations[0], properties.ToImmutableDictionary(), parameter.Name,
-                    CamelCaseBehaviour.Instance.FixThis(parameter.Name)));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(),nameString,
+                    CamelCaseBehaviour.Instance.FixThis(nameString)));
             }
             
         }

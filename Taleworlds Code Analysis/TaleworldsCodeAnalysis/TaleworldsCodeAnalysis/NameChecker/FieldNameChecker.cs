@@ -37,9 +37,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
             var nameNode = (FieldDeclarationSyntax)context.Node;
-            var nameString = nameNode.Declaration.Variables.First().ToString();
+            var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
             var accessibility = nameNode.Modifiers.First();
-            var location = nameNode.Declaration.Variables.First().GetLocation();
+            var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
             WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
             WhiteListParser.Instance.UpdateWhiteList();
 

@@ -39,6 +39,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var parameter = (TypeParameterSyntax)context.Node;
             var parameterName = parameter.Identifier.Text;
+            var location = parameter.GetLocation();
 
             var properties = new Dictionary<string, string>
             {
@@ -48,7 +49,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             if (!TPascalCaseBehaviour.Instance.IsMatching(parameterName))
             {
                 properties["NamingConvention"] = "TPascalCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.GetLocation(), properties.ToImmutableDictionary(), parameterName,
+                context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), parameterName,
                     TPascalCaseBehaviour.Instance.FixThis(parameterName)));
             }
             
