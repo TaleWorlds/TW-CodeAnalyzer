@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.ParameterNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -26,7 +27,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 }
             }"
             ;
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -46,6 +47,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                     return ;
                 }   
             }";
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
                 VerifyCS.Diagnostic("ParameterNameChecker").WithLocation(0).WithArguments("Value","value"),

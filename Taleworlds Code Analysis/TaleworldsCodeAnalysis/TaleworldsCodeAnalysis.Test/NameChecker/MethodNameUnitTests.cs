@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.MethodNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -23,7 +24,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 protected void Foo2(){}
                 public void Foo3(){}
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -41,7 +42,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             }"
             ;
-
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
                 VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPriv","_fooPriv"),
@@ -65,7 +66,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 protected void {|#2:fooPro|}(){}
                 protected void {|#3:_FooPro|}(){}
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
                 VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPub","FooPub"),

@@ -26,8 +26,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 return _instance;
             } 
         }
-
-        //public string TestPathXml => _testPathXML;
         public string SharedPathXml => _sharedWhiteListPath;
 
         public IReadOnlyList<string> WhiteListWords => _whiteListedWords;
@@ -67,7 +65,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private string _getFileText()
         {
-            string fileText = "";
             XDocument document;
             document = XDocument.Load(_sharedWhiteListPath);
             return document.ToString(); ;
@@ -83,6 +80,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private string _findXMLFilePath(string codeFilePath)
         {
+            if (_sharedWhiteListPath!=null)
+            {
+                return _sharedWhiteListPath;
+            }
             //codeFilePath = codeFilePath.Substring(11);
             var folderNames = codeFilePath.Split('\\');
             for (int i = folderNames.Length - 2; i >= 0; i--)
@@ -95,6 +96,13 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
 
             throw new Exception("Could not find project from source code path");
+        }
+
+        public void EnableTesting()
+        {
+            var _testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\" +
+            "TaleworldsCodeAnalysis\\WhiteList.xml";
+            _sharedWhiteListPath= _testPathXML;
         }
 
 

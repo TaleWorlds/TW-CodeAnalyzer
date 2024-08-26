@@ -14,6 +14,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         [TestMethod]
         public void WhiteListTestCases()
         {
+            WhiteListParser.Instance.EnableTesting();
             WhiteListParser.Instance.UpdateWhiteList();
             Assert.IsTrue(WhiteListParser.Instance.WhiteListWords.Contains("ASAP"));
             Assert.IsTrue(WhiteListParser.Instance.WhiteListWords.Contains("TW"));

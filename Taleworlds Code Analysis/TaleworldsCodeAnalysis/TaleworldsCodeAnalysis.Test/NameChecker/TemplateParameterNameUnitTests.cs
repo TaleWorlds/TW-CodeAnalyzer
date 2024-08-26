@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.TemplateParameterNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -50,7 +51,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             {   
                 
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             var expected1 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("tApp","TApp");
             var expected2 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("Tapp","TApp");
             var expected3 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("tapp","TApp");
