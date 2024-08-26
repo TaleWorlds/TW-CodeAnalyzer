@@ -88,7 +88,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
             {
                 return _sharedWhiteListPath;
             }
-            //codeFilePath = codeFilePath.Substring(11);
             var folderNames = codeFilePath.Split('\\');
             string solnFilePath="";
             for (int i = folderNames.Length - 2; i >= 0; i--)
@@ -98,7 +97,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 {
                     return solnFilePath;
                 }
-                else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length!=0);
+                else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length!=0)
                 {
                     return solnFilePath ;
                 }
