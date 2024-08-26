@@ -34,7 +34,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _analyzer(SymbolAnalysisContext context)
         {
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            WhiteListParser.Instance.UpdateWhiteList();
 
             var field = (IFieldSymbol)context.Symbol;
 

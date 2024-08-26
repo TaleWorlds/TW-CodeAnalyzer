@@ -32,7 +32,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzer(SymbolAnalysisContext context)
         {
             var property = (IPropertySymbol)context.Symbol;
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Symbol.Locations[0].SourceTree.FilePath);
+            WhiteListParser.Instance.UpdateWhiteList();
 
             var properties = new Dictionary<string, string>
             {

@@ -1,7 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -35,19 +37,19 @@ namespace TaleworldsCodeAnalysis
         }
 
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Document.FilePath);
             var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var diagnosticProperties = diagnostic.Properties;
 
             var document = context.Document;
             var listOfWords = _getWordsToAddToWhitelist(document, diagnostic);
             if (listOfWords.Count== 0)
             {
-                return;
+                return Task.CompletedTask;
             }
+
+            
 
             foreach (var item in listOfWords)
             {
@@ -55,33 +57,29 @@ namespace TaleworldsCodeAnalysis
                 createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item),
                 equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item), diagnostic);
             }
-            
 
-
+            return Task.CompletedTask;
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word)
+        private Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word)
         {
             if (isPreview)
             {
-                return document.Project.Solution;
+                return Task.FromResult(document.Project.Solution);
             }
-            //IReadOnlyList<string> words = _getWordsToAddToWhitelist(document, diagnostic);
-            var path = _getPathOfXml(document.Project.AdditionalDocuments);
 
+            var path = WhiteListParser.Instance.SharedPathXml;
+            var solution = document.Project.Solution;
             AddStringToWhiteList(path, word);
-
-            var originalSolution = document.Project.Solution;
-            return originalSolution;
+            return Task.FromResult(solution);
         }
 
         private IReadOnlyList<string> _getWordsToAddToWhitelist(Document document, Diagnostic diagnostic)
         {
-            var additionalFiles = document.Project.AdditionalDocuments;
             var diagnosticProperties = diagnostic.Properties;
             var identifier = diagnosticProperties["Name"];
 
-            XDocument doc = XDocument.Load(_getPathOfXml(additionalFiles));
+            XDocument doc = XDocument.Load(WhiteListParser.Instance.SharedPathXml);
             
             WhiteListParser.Instance.InitializeWhiteListParser(doc.ToString());
             IReadOnlyList<string> words = new List<string>();
@@ -112,23 +110,7 @@ namespace TaleworldsCodeAnalysis
                     return TPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 default:
                     return new List<string>();
-
             }
-        }
-
-        private string _getPathOfXml(IEnumerable<TextDocument> additionalFiles)
-        {
-            string path = "";
-            if (additionalFiles.Count() != 0)
-            {
-                var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
-                path = externalFile.FilePath;
-            }
-            else
-            {
-                path = WhiteListParser.Instance.TestPathXml;
-            }
-            return path;
         }
 
         private void AddStringToWhiteList(string filePath, string wordToAdd)

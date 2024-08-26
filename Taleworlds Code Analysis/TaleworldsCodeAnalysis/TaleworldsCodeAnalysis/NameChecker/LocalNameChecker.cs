@@ -34,7 +34,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Node.SyntaxTree.FilePath);
+            WhiteListParser.Instance.UpdateWhiteList();
 
             var local = (LocalDeclarationStatementSyntax) context.Node;
             var localDeclaration = local.Declaration.Variables.Single();

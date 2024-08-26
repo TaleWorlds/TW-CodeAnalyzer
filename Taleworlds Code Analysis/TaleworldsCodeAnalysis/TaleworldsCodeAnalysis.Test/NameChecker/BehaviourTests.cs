@@ -13,8 +13,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         [TestInitialize]
         public void Init()
         {
-            WhiteListParser.Instance.UpdateWhiteList(
-    new System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.AdditionalText>());
+            WhiteListParser.Instance.UpdateWhiteList();
         }
 
         [TestMethod]

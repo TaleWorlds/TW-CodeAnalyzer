@@ -33,9 +33,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             var method = (IMethodSymbol) context.Symbol;
 
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Symbol.Locations[0].SourceTree.FilePath);
+            WhiteListParser.Instance.UpdateWhiteList();
 
-            if(method.MethodKind == MethodKind.PropertyGet || MethodKind.PropertySet == method.MethodKind || MethodKind.Constructor==method.MethodKind)
+            if (method.MethodKind == MethodKind.PropertyGet || MethodKind.PropertySet == method.MethodKind || MethodKind.Constructor==method.MethodKind)
             {
                 return;
             }
