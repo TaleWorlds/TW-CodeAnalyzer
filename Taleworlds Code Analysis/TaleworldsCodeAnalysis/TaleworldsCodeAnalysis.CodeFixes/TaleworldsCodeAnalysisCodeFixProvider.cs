@@ -71,11 +71,7 @@ namespace TaleworldsCodeAnalysis
             var path = WhiteListParser.Instance.SharedPathXml;
             var solution = document.Project.Solution;
             AddStringToWhiteList(path, word);
-            var declarationEnd=root.FindNode(diagnostic.Location.SourceSpan);
-            var spacedDeclaration = declarationEnd.ReplaceNode(
-                declarationEnd, declarationEnd.WithTrailingTrivia(SyntaxFactory.Space));
-            var newRoot=root.ReplaceNode(declarationEnd, spacedDeclaration);
-            return document.WithSyntaxRoot(newRoot).Project.Solution;
+            return document.Project.Solution;
         }
 
         private IReadOnlyList<string> _getWordsToAddToWhitelist(Document document, Diagnostic diagnostic)
