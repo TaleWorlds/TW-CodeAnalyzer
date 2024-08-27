@@ -5,23 +5,28 @@
     <DisplayName>TaleworldsCodeAnalysis</DisplayName>
     <Description xml:space="preserve">This is a code analysis tool that enforces TW best practices.</Description>
   </Metadata>
-  
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis" Path="|TaleworldsCodeAnalysis|"/>
-    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis" Path="|TaleworldsCodeAnalysis|"/>
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis.CodeFixes" Path="|TaleworldsCodeAnalysis.CodeFixes|"/>
-    <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis.CodeFixes" Path="|TaleworldsCodeAnalysis.CodeFixes|"/>
-  </Assets>
-  <Prerequisites>
-    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
-    <Prerequisite Id="Microsoft.VisualStudio.Component.Roslyn.LanguageServices" Version="[15.0,)" DisplayName="Roslyn Language Services" />
-  </Prerequisites>
+
 	<Installation>
 		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[15.0,)">
 			<ProductArchitecture>amd64</ProductArchitecture>
 		</InstallationTarget>
 	</Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+	<Dependency d:Source="File" DisplayName="TaleworldsCodeAnalysis.Commands" Id="TaleworldsCodeAnalysis.Commands.27b56ac2-5ccf-4154-95a7-4e980f842101" Version="[1.0,2.0.0.0)" d:InstallSource="Embed" Location="TaleworldsCodeAnalysis.Commands.vsix" />
+  </Dependencies>
+  
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
+    <Prerequisite Id="Microsoft.VisualStudio.Component.Roslyn.LanguageServices" Version="[15.0,)" DisplayName="Roslyn Language Services" />
+  </Prerequisites>
+
+	<Assets>
+		<Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis" Path="|TaleworldsCodeAnalysis|"/>
+		<Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis" Path="|TaleworldsCodeAnalysis|"/>
+		<Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis.CodeFixes" Path="|TaleworldsCodeAnalysis.CodeFixes|"/>
+		<Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis.CodeFixes" Path="|TaleworldsCodeAnalysis.CodeFixes|"/>
+		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysisCommands" Path="|TaleworldsCodeAnalysisCommands;PkgdefProjectOutputGroup|" />
+	</Assets>
+	
 </PackageManifest>

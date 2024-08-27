@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.8.3038" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.11.435" PrivateAssets="all" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaleworldsCodeAnalysis.CodeFixes\TaleworldsCodeAnalysis.CodeFixes.csproj" />
+    <ProjectReference Include="..\TaleworldsCodeAnalysis.Commands\TaleworldsCodeAnalysisCommands.csproj" />
     <ProjectReference Include="..\TaleworldsCodeAnalysis\TaleworldsCodeAnalysis.csproj" />
   </ItemGroup>
 
