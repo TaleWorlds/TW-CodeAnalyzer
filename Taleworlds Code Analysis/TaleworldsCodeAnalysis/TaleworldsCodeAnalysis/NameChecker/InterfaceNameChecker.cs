@@ -44,11 +44,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 { "Name", nameString },
             };
 
-            if(!IPascalCaseBehaviour.Instance.IsMatching(nameString))
+            if(!IpascalCaseBehaviour.Instance.IsMatching(nameString))
             {
                 properties["NamingConvention"] = "IPascalCase";
                 context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
-                    IPascalCaseBehaviour.Instance.FixThis(nameString)));
+                    IpascalCaseBehaviour.Instance.FixThis(nameString)));
             }
 
         }

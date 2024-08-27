@@ -30,7 +30,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         public string LocalPathXml => _findLocalXMLFilePath();
         public HashSet<string> WhiteListWords => _whiteListedWords;
 
-        private const string pathAfterLocalAppData = "Microsoft\\VisualStudio\\LocalWhiteList.xml";
+        private const string _pathAfterLocalAppData = "Microsoft\\VisualStudio\\LocalWhiteList.xml";
         private static WhiteListParser _instance;
         private HashSet<string> _whiteListedWords;
         private string _sharedWhiteListPath;
@@ -110,7 +110,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private string _findLocalXMLFilePath()
         {
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            return Path.Combine(appData, pathAfterLocalAppData);
+            return Path.Combine(appData, _pathAfterLocalAppData);
         }
 
         public void EnableTesting()

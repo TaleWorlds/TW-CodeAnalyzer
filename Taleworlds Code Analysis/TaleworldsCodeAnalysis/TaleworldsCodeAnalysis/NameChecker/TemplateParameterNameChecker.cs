@@ -45,11 +45,11 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 { "Name", parameterName },
             };
 
-            if (!TPascalCaseBehaviour.Instance.IsMatching(parameterName))
+            if (!TpascalCaseBehaviour.Instance.IsMatching(parameterName))
             {
                 properties["NamingConvention"] = "TPascalCase";
                 context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), parameterName,
-                    TPascalCaseBehaviour.Instance.FixThis(parameterName)));
+                    TpascalCaseBehaviour.Instance.FixThis(parameterName)));
             }
             
         }
