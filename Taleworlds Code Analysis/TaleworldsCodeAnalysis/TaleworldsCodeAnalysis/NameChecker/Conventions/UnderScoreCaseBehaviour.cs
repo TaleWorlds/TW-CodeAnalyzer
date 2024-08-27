@@ -40,7 +40,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return newName;
         }
 
-        public override string FixListedItems(string name,IReadOnlyList<string> list)
+        public override string FixListedItems(string name,HashSet<string> list)
         {
             name= name[0]+CamelCaseBehaviour.Instance.FixListedItems(name.Substring(1),list);
             return name;

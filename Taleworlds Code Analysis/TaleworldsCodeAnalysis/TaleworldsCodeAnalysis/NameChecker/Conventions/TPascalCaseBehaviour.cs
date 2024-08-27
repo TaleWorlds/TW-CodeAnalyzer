@@ -31,7 +31,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         }
 
-        public override string FixListedItems(string name, IReadOnlyList<string> list)
+        public override string FixListedItems(string name, HashSet<string> list)
         {
             name = name[0] + PascalCaseBehaviour.Instance.FixListedItems(name.Substring(1), list);
             return name;

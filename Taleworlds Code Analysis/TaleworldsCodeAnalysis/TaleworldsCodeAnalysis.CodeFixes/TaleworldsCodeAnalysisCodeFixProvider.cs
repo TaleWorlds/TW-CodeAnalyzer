@@ -53,22 +53,30 @@ namespace TaleworldsCodeAnalysis
 
             foreach (var item in listOfWords)
             {
-                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to whitelist.",
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item),
-                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item), diagnostic);
+                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to shared whitelist.",
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item, WhiteListType.Shared),
+                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item+WhiteListType.Shared), diagnostic);
+            }
+
+            foreach (var item in listOfWords)
+            {
+                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to local whitelist.",
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Local),
+                equivalenceKey: nameof(CodeFixResources.CodeFixTitle) + item+WhiteListType.Local), diagnostic);
             }
 
             return Task.CompletedTask;
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word)
+        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word, WhiteListType whiteListType)
         {
             if (isPreview)
             {
                 return document.Project.Solution;
             }
             SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            var path = WhiteListParser.Instance.SharedPathXml;
+            
+            var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
             var solution = document.Project.Solution;
             AddStringToWhiteList(path, word);
             return document.Project.Solution;

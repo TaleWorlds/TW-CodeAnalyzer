@@ -27,10 +27,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
             } 
         }
         public string SharedPathXml => _sharedWhiteListPath;
+        public string LocalPathXml => _findLocalXMLFilePath();
+        public HashSet<string> WhiteListWords => _whiteListedWords;
 
-        public IReadOnlyList<string> WhiteListWords => _whiteListedWords;
+        private const string pathAfterLocalAppData = "Microsoft\\VisualStudio\\LocalWhiteList.xml";
         private static WhiteListParser _instance;
-        private IReadOnlyList<string> _whiteListedWords;
+        private HashSet<string> _whiteListedWords;
         private string _sharedWhiteListPath;
 
         private WhiteListParser(){}
@@ -41,33 +43,31 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var xElements=document.Descendants("Word");
             
-            List<string> words = new List<string>();
-
             foreach (var xElement in xElements)
             {
-                words.Add(xElement.Value);
+                _whiteListedWords.Add(xElement.Value);
             }
-
-            _whiteListedWords = new List<string> (words);
         }
 
         public void UpdateWhiteList()
         {
-            _readWhiteList(_getFileText());
+            _whiteListedWords = new HashSet<string>();
+            _readWhiteList(_getFileText(_sharedWhiteListPath));
+            _readWhiteList(_getFileText(_findLocalXMLFilePath()));
         }
 
 
-        private string _getFileText()
+        private string _getFileText(string path)
         {
             XDocument document;
             try
             {
-                document = XDocument.Load(_sharedWhiteListPath);
+                document = XDocument.Load(path);
             }
             catch (FileNotFoundException)
             {
                 document = new XDocument(new XElement("WhiteListRoot",new XElement("Word", "ExampleWord")));
-                document.Save(_sharedWhiteListPath);
+                document.Save(path);
             }
 
             return document.ToString(); ;
@@ -77,12 +77,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             if(_sharedWhiteListPath==null)
             {
-                _sharedWhiteListPath = _findXMLFilePath(codeFilePath);
+                _sharedWhiteListPath = _findSharedXMLFilePath(codeFilePath);
             }
             UpdateWhiteList();
         }
 
-        private string _findXMLFilePath(string codeFilePath)
+        private string _findSharedXMLFilePath(string codeFilePath)
         {
             if (_sharedWhiteListPath!=null)
             {
@@ -105,6 +105,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
             }
 
             return solnFilePath;
+        }
+
+        private string _findLocalXMLFilePath()
+        {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            return Path.Combine(appData, pathAfterLocalAppData);
         }
 
         public void EnableTesting()

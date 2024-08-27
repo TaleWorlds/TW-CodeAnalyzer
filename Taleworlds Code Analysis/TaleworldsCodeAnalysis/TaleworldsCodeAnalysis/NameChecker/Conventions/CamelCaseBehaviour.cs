@@ -87,7 +87,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return NameCheckerLibrary.OneUpperCaseAllowedCandidates(name,currentCandidate,upperFound);
         }
 
-        public override string FixListedItems(string name,IReadOnlyList<string> list)
+        public override string FixListedItems(string name,HashSet<string> list)
         {
             foreach (var item in list)
             {
