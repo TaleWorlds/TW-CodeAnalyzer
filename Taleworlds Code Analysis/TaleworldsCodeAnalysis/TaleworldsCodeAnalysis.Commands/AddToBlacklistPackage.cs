@@ -34,9 +34,9 @@ namespace TaleworldsCodeAnalysis.Commands
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(Command1Package.PackageGuidString)]
+    [Guid(AddToBlacklistPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class Command1Package : AsyncPackage
+    public sealed class AddToBlacklistPackage : AsyncPackage
     {
         /// <summary>
         /// Command1Package GUID string.
@@ -44,9 +44,9 @@ namespace TaleworldsCodeAnalysis.Commands
         public const string PackageGuidString = "f088b465-3356-4286-8f7a-5fe01044e86c";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Command1Package"/> class.
+        /// Initializes a new instance of the <see cref="AddToBlacklistPackage"/> class.
         /// </summary>
-        public Command1Package()
+        public AddToBlacklistPackage()
         {
             // Inside this method you can place any initialization code that does not require
             // any Visual Studio service because at this point the package object is created but
@@ -68,7 +68,7 @@ namespace TaleworldsCodeAnalysis.Commands
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await Command1.InitializeAsync(this);
+            await AddToBlacklistCommand.InitializeAsync(this);
         }
 
         #endregion

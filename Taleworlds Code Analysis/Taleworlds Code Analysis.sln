@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaleworldsCodeAnalysis.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaleworldsCodeAnalysis.Vsix", "TaleworldsCodeAnalysis\TaleworldsCodeAnalysis.Vsix\TaleworldsCodeAnalysis.Vsix.csproj", "{7679D496-2387-4DCD-879C-90EAC54F9216}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaleworldsCodeAnalysisCommands", "TaleworldsCodeAnalysis\TaleworldsCodeAnalysis.Commands\TaleworldsCodeAnalysisCommands.csproj", "{B85F1EFA-354D-45FA-936C-28991D2C4DD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaleworldsCodeAnalysis.Commands", "TaleworldsCodeAnalysis\TaleworldsCodeAnalysis.Commands\TaleworldsCodeAnalysis.Commands.csproj", "{B85F1EFA-354D-45FA-936C-28991D2C4DD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

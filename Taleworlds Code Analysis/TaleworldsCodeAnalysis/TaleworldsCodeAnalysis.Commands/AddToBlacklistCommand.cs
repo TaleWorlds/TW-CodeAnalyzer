@@ -3,16 +3,21 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
 using System.Globalization;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using Task = System.Threading.Tasks.Task;
+
 
 namespace TaleworldsCodeAnalysis.Commands
 {
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class Command1
+    internal sealed class AddToBlacklistCommand
     {
         /// <summary>
         /// Command ID.
@@ -30,12 +35,12 @@ namespace TaleworldsCodeAnalysis.Commands
         private readonly AsyncPackage package;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Command1"/> class.
+        /// Initializes a new instance of the <see cref="AddToBlacklistCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private Command1(AsyncPackage package, OleMenuCommandService commandService)
+        private AddToBlacklistCommand(AsyncPackage package, OleMenuCommandService commandService)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -48,7 +53,7 @@ namespace TaleworldsCodeAnalysis.Commands
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static Command1 Instance
+        public static AddToBlacklistCommand Instance
         {
             get;
             private set;
@@ -76,8 +81,12 @@ namespace TaleworldsCodeAnalysis.Commands
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            Instance = new Command1(package, commandService);
+            Instance = new AddToBlacklistCommand(package, commandService);
         }
+
+        private string localAppDataPath;
+        private const string pathAfterLocalAppData = "Microsoft\\VisualStudio\\BlackListedProjects.xml";
+        private string fullPath;
 
         /// <summary>
         /// This function is the callback used to execute the command when the menu item is clicked.
@@ -88,9 +97,39 @@ namespace TaleworldsCodeAnalysis.Commands
         /// <param name="e">Event args.</param>
         private void Execute(object sender, EventArgs e)
         {
+
+
             ThreadHelper.ThrowIfNotOnUIThread();
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            string title = "Command1";
+            localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            fullPath = Path.Combine(localAppDataPath, pathAfterLocalAppData);
+
+            String projectName = "aa";
+
+            XDocument doc;
+            try
+            {
+                doc = XDocument.Load(fullPath);
+            }
+            catch (FileNotFoundException)
+            {
+                doc = new XDocument(new XElement("BlackListRoot", new XElement("Project", "ExampleProjectName")));
+                doc.Save(fullPath);
+            }
+
+            var root = doc.Element("BlackListRoot");
+            if (root != null)
+            {
+                var existingProject = root.Elements("Project").FirstOrDefault(elem => elem.Value.Equals(projectName, StringComparison.OrdinalIgnoreCase));
+                if (existingProject == null)
+                {
+                    root.Add(new XElement("Project", projectName));
+                }
+                doc.Save(fullPath);
+            }
+
+
+            string message = string.Format("Added {0} to the blacklist", projectName);
+            string title = "Add to Blacklist";
 
             // Show a message box to prove we were here
             VsShellUtilities.ShowMessageBox(

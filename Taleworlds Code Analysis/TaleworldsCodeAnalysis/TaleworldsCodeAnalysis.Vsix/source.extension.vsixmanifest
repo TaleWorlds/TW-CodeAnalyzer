@@ -26,7 +26,7 @@
 		<Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis" Path="|TaleworldsCodeAnalysis|"/>
 		<Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis.CodeFixes" Path="|TaleworldsCodeAnalysis.CodeFixes|"/>
 		<Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis.CodeFixes" Path="|TaleworldsCodeAnalysis.CodeFixes|"/>
-		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysisCommands" Path="|TaleworldsCodeAnalysisCommands;PkgdefProjectOutputGroup|" />
+		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="TaleworldsCodeAnalysis.Commands" Path="|TaleworldsCodeAnalysis.Commands;PkgdefProjectOutputGroup|" />
 	</Assets>
 	
 </PackageManifest>

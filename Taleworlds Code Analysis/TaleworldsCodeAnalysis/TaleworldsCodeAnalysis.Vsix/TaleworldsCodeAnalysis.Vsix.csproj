@@ -34,7 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaleworldsCodeAnalysis.CodeFixes\TaleworldsCodeAnalysis.CodeFixes.csproj" />
-    <ProjectReference Include="..\TaleworldsCodeAnalysis.Commands\TaleworldsCodeAnalysisCommands.csproj" />
+    <ProjectReference Include="..\TaleworldsCodeAnalysis.Commands\TaleworldsCodeAnalysis.Commands.csproj" />
     <ProjectReference Include="..\TaleworldsCodeAnalysis\TaleworldsCodeAnalysis.csproj" />
   </ItemGroup>
 
