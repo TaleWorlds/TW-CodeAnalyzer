@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SealedOverrideChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "SealedOverrideChecker";
+        public const string DiagnosticId = "TW2103";
         internal static readonly LocalizableString _title = "Overridden methods should be sealed.";
         internal static readonly LocalizableString _messageFormat = "Overridden methods should be sealed.";
         internal const string _category = "Inheritance";
