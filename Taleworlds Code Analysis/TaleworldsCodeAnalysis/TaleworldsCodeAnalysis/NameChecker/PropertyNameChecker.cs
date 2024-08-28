@@ -33,6 +33,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
+            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Symbol.Locations[0].SourceTree.FilePath)) return;
+
             var nameNode = (PropertyDeclarationSyntax)context.Node;
             var nameString = nameNode.Identifier.ToString();
             var accessibility = nameNode.Modifiers.First();
@@ -40,6 +42,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
 
             WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
+
 
             var properties = new Dictionary<string, string>
             {

@@ -33,11 +33,15 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
+
+            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Symbol.Locations[0].SourceTree.FilePath)) return;
+
             var nameNode = (MethodDeclarationSyntax)context.Node;
             var nameString = nameNode.Identifier.ToString();
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Identifier.GetLocation();
             WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
+
 
             if (nameNode.IsKind(SyntaxKind.GetAccessorDeclaration) || nameNode.IsKind(SyntaxKind.SetAccessorDeclaration) || nameNode.IsKind(SyntaxKind.ConstructorDeclaration))
             {
