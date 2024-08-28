@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.FieldNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -17,7 +18,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             {   
                 private int _value;
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -29,7 +30,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             {   
                 private int {|#0:value|};
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value","_value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }     

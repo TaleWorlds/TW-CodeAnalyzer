@@ -1,4 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -29,30 +31,33 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(_analyzer, SymbolKind.Field);
+            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.FieldDeclaration);
         }
 
-        private void _analyzer(SymbolAnalysisContext context)
+        private void _analyzer(SyntaxNodeAnalysisContext context)
         {
+
             if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Symbol.Locations[0].SourceTree.FilePath)) return;
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Node.SyntaxTree.FilePath);
 
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            var nameNode = (FieldDeclarationSyntax)context.Node;
+            var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
+            var accessibility = nameNode.Modifiers.First();
+            var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
 
-            var field = (IFieldSymbol)context.Symbol;
-
-            if (field.ContainingType.TypeKind == TypeKind.Enum)
+            if (nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
             {
                 return;
             }
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", field.Name },
+                { "Name", nameString },
             };
 
-            if (field.DeclaredAccessibility != Accessibility.Private)
+            if (!accessibility.IsKind(SyntaxKind.PrivateKeyword))
             {
-                var diagnostic = Diagnostic.Create(_accessibilityRule, field.Locations[0], properties.ToImmutableDictionary(), field.Name);
+                var diagnostic = Diagnostic.Create(_accessibilityRule, location, properties.ToImmutableDictionary(), nameString);
                 context.ReportDiagnostic(diagnostic);
             }
         }

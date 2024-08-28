@@ -1,7 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -36,55 +38,56 @@ namespace TaleworldsCodeAnalysis
         }
 
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Document.FilePath);
             var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var diagnosticProperties = diagnostic.Properties;
 
             var document = context.Document;
             var listOfWords = _getWordsToAddToWhitelist(document, diagnostic);
             if (listOfWords.Count== 0)
             {
-                return;
+                return Task.CompletedTask;
+            }
+
+            
+
+            foreach (var item in listOfWords)
+            {
+                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to shared whitelist.",
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item, WhiteListType.Shared),
+                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item+WhiteListType.Shared), diagnostic);
             }
 
             foreach (var item in listOfWords)
             {
-                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to whitelist.",
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item),
-                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item), diagnostic);
+                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to local whitelist.",
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Local),
+                equivalenceKey: nameof(CodeFixResources.CodeFixTitle) + item+WhiteListType.Local), diagnostic);
             }
-            
 
-
+            return Task.CompletedTask;
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word)
+        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word, WhiteListType whiteListType)
         {
             if (isPreview)
             {
                 return document.Project.Solution;
             }
-            //IReadOnlyList<string> words = _getWordsToAddToWhitelist(document, diagnostic);
-            var path = _getPathOfXml(document.Project.AdditionalDocuments);
-
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            
+            var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
+            var solution = document.Project.Solution;
             AddStringToWhiteList(path, word);
-
-            var originalSolution = document.Project.Solution;
-            return originalSolution;
+            return document.Project.Solution;
         }
 
         private IReadOnlyList<string> _getWordsToAddToWhitelist(Document document, Diagnostic diagnostic)
         {
-            var additionalFiles = document.Project.AdditionalDocuments;
             var diagnosticProperties = diagnostic.Properties;
             var identifier = diagnosticProperties["Name"];
-
-            XDocument doc = XDocument.Load(_getPathOfXml(additionalFiles));
-            
-            WhiteListParser.Instance.InitializeWhiteListParser(doc.ToString());
+            WhiteListParser.Instance.UpdateWhiteList();
             IReadOnlyList<string> words = new List<string>();
 
             if (diagnosticProperties.ContainsKey("NamingConvention"))
@@ -108,28 +111,12 @@ namespace TaleworldsCodeAnalysis
                 case ConventionType.PascalCase:
                     return PascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 case ConventionType.IPascalCase:
-                    return IPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    return IpascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 case ConventionType.TPascalCase:
-                    return TPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    return TpascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 default:
                     return new List<string>();
-
             }
-        }
-
-        private string _getPathOfXml(IEnumerable<TextDocument> additionalFiles)
-        {
-            string path = "";
-            if (additionalFiles.Count() != 0)
-            {
-                var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
-                path = externalFile.FilePath;
-            }
-            else
-            {
-                path = WhiteListParser.Instance.TestPathXml;
-            }
-            return path;
         }
 
         private void AddStringToWhiteList(string filePath, string wordToAdd)

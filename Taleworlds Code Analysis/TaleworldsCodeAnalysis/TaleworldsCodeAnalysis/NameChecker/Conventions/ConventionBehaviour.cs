@@ -10,7 +10,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public abstract string FixThis(string name);
 
-        public abstract string FixListedItems(string name,IReadOnlyList<string> list);
+        public abstract string FixListedItems(string name,HashSet<string> list);
 
         public abstract IReadOnlyList<string> FindWhiteListCandidates(string name);
     }

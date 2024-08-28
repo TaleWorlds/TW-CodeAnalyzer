@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.OtherCheckers.FieldAccessibilityChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -20,7 +21,7 @@ namespace TaleworldsCodeAnalysis.Test.OtherCheckers
                 public int {|#0:_value|};
             }"
             ;
-
+            WhiteListParser.Instance.EnableTesting();
             var expected = VerifyCS.Diagnostic("FieldAccessibilityChecker").WithLocation(0).WithArguments("_value");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
@@ -34,7 +35,7 @@ namespace TaleworldsCodeAnalysis.Test.OtherCheckers
                 internal int {|#0:_value|};
             }"
             ;
-
+            WhiteListParser.Instance.EnableTesting();
             var expected = VerifyCS.Diagnostic("FieldAccessibilityChecker").WithLocation(0).WithArguments("_value");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
@@ -48,7 +49,7 @@ namespace TaleworldsCodeAnalysis.Test.OtherCheckers
                 protected int {|#0:_value|};
             }"
             ;
-
+            WhiteListParser.Instance.EnableTesting();
             var expected = VerifyCS.Diagnostic("FieldAccessibilityChecker").WithLocation(0).WithArguments("_value");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }

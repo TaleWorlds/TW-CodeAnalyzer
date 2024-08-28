@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.PropertyNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -28,7 +29,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
                 private int _valueLoc;
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -46,7 +47,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
                 private int _value;
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
                 VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("ValuePriv","_valuePriv"),
@@ -72,6 +73,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
                 private int _value;
             }";
+
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
                 VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valuePub", "ValuePub"),

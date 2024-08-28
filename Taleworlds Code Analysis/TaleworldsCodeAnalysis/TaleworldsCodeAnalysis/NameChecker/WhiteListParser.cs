@@ -1,11 +1,14 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Xml.Linq;
+using Microsoft.Build.Tasks;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -23,13 +26,14 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 return _instance;
             } 
         }
+        public string SharedPathXml => _sharedWhiteListPath;
+        public string LocalPathXml => _findLocalXMLFilePath();
+        public HashSet<string> WhiteListWords => _whiteListedWords;
 
-        public string TestPathXml => _testPathXML;
-
-        public IReadOnlyList<string> WhiteListWords => _whiteListedWords;
+        private const string _pathAfterLocalAppData = "Microsoft\\VisualStudio\\LocalWhiteList.xml";
         private static WhiteListParser _instance;
-        private IReadOnlyList<string> _whiteListedWords;
-        private const string _testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\TaleworldsCodeAnalysis\\WhiteList.xml";
+        private HashSet<string> _whiteListedWords;
+        private string _sharedWhiteListPath;
 
         private WhiteListParser(){}
 
@@ -39,59 +43,83 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             var xElements=document.Descendants("Word");
             
-            List<string> words = new List<string>();
-
             foreach (var xElement in xElements)
             {
-                words.Add(xElement.Value);
+                _whiteListedWords.Add(xElement.Value);
             }
-
-            _whiteListedWords = new List<string> (words);
         }
 
-        public void UpdateWhiteList(ImmutableArray<AdditionalText> additionalFiles)
+        public void UpdateWhiteList()
         {
-            _readWhiteList(_getFileText(additionalFiles));
-        }
-
-
-        public void InitializeWhiteListParser(string sourceText)
-        {
-            _readWhiteList(sourceText);
+            _whiteListedWords = new HashSet<string>();
+            _readWhiteList(_getFileText(_sharedWhiteListPath));
+            _readWhiteList(_getFileText(_findLocalXMLFilePath()));
         }
 
 
-        private string _getFileText(ImmutableArray<AdditionalText> additionalFiles)
+        private string _getFileText(string path)
         {
-            string fileText = "";
-            if (additionalFiles!=null && additionalFiles.Length != 0 )
+            XDocument document;
+            try
             {
-                AdditionalText whiteListFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.Path).Equals("WhiteList.xml"));
-                SourceText fileSourceText = whiteListFile.GetText();
-                fileText = fileSourceText.ToString();
+                document = XDocument.Load(path);
             }
-            else
+            catch (FileNotFoundException)
             {
-                XDocument document = XDocument.Load(_testPathXML);
-                fileText = document.ToString();
+                document = new XDocument(new XElement("WhiteListRoot",new XElement("Word", "ExampleWord")));
+                document.Save(path);
             }
-            return fileText;
+
+            return document.ToString(); ;
         }
 
-        public string findSolutionPathFromCodeFilePath(string codeFilePath)
+        public void ReadGlobalWhiteListPath(string codeFilePath)
         {
-            codeFilePath = codeFilePath.Substring(11);
+            if(_sharedWhiteListPath==null)
+            {
+                _sharedWhiteListPath = _findSharedXMLFilePath(codeFilePath);
+            }
+            UpdateWhiteList();
+        }
+
+        private string _findSharedXMLFilePath(string codeFilePath)
+        {
+            if (_sharedWhiteListPath!=null)
+            {
+                return _sharedWhiteListPath;
+            }
             var folderNames = codeFilePath.Split('\\');
+            string solnFilePath="";
             for (int i = folderNames.Length - 2; i >= 0; i--)
             {
-                var csprojFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), folderNames[i] + ".sln");
-                if (File.Exists(csprojFilePath))
+                solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), "WhiteList.xml");
+                if (File.Exists(solnFilePath))
                 {
-                    return Path.Combine(String.Join("\\", folderNames, 0, i + 1), folderNames[i]);
+                    return solnFilePath;
                 }
+                else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length!=0)
+                {
+                    return solnFilePath ;
+                }
+
             }
 
-            throw new Exception("Could not find project from source code path");
+            return solnFilePath;
         }
+
+        private string _findLocalXMLFilePath()
+        {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            return Path.Combine(appData, _pathAfterLocalAppData);
+        }
+
+        public void EnableTesting()
+        {
+            var _testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\" +
+            "TaleworldsCodeAnalysis\\WhiteList.xml";
+            _sharedWhiteListPath= _testPathXML;
+        }
+
+
     }
 }

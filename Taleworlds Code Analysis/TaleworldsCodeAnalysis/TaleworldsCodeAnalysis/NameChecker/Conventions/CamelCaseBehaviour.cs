@@ -21,7 +21,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         private static CamelCaseBehaviour _instance;
 
-        private Regex _regexWhole = new Regex("^[a-z](([a-z0-9]+[A-Z]?)*)$");
+        private Regex _regexWhole = new Regex("^[a-z](([a-z0-9]*[A-Z]?)*)$");
         public override string FixThis(string name)
         {
             Regex regex = new Regex("[^A-Za-z0-9]");
@@ -87,7 +87,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return NameCheckerLibrary.OneUpperCaseAllowedCandidates(name,currentCandidate,upperFound);
         }
 
-        public override string FixListedItems(string name,IReadOnlyList<string> list)
+        public override string FixListedItems(string name,HashSet<string> list)
         {
             foreach (var item in list)
             {

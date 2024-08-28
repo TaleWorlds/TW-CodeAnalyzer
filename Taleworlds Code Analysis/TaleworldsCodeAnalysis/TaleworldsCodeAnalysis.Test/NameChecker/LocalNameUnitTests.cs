@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.LocalNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -26,12 +27,12 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 }
             }
             ";
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
         [TestMethod]
-        public async Task InterfaceWarningTest()
+        public async Task LocalWarningTest()
         {
             var test = @"
             public class Test
@@ -44,7 +45,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 }
             }
             ";
-
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
                 VerifyCS.Diagnostic("LocalNameChecker").WithLocation(0).WithArguments("Value","value"),
