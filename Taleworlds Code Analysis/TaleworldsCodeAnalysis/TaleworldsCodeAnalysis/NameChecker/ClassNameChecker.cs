@@ -40,7 +40,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
 
-            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Symbol.Locations[0].SourceTree.FilePath)) return;
+            
 
             var nameNode = (ClassDeclarationSyntax) context.Node;
             var nameString = nameNode.Identifier.Text;
@@ -48,7 +48,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var location = nameNode.Identifier.GetLocation();
 
             WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
-            
+            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(location.SourceTree.FilePath)) return;
 
             var properties = new Dictionary<string, string>
             {

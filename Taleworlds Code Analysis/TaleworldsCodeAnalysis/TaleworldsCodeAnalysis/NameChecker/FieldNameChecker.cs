@@ -36,17 +36,14 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-
-            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Symbol.Locations[0].SourceTree.FilePath)) return;
-
             var nameNode = (FieldDeclarationSyntax)context.Node;
             var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
             WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
+            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(location.SourceTree.FilePath)) return;
 
-
-            if(nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
+            if (nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
             {
                 return;
             }
