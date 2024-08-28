@@ -1,135 +1,86 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
     public static class NameCheckerLibrary
     {
-        private const string _pascalRegex = "^[A-Z](([a-z0-9]+[A-Z]?)*)$";
-        private const string _pascalSingleRegex = "[A-Z][a-z0-9]+";
-        private const string _underScoreRegex = "^[_][a-z]*([a-z0-9]+[A-Z]?)*$";
-        private const string _underScoreBeginningSingleRegex = "^[_][a-z0-9]+";
-        private const string _camelRegex = "^[a-z](([a-z0-9]*[A-Z]?)*)$";
-        private const string _camelBeginningSingleRegex = "^[a-z0-9]+";
-
-        public static bool IsMatchingConvention(string name, ConventionType type)
+        public static string GetWhiteListedIgnoreVersion(string name)
         {
-            name = _removeWhiteListItems(name);
-            string pattern="";
-            switch(type)
+            string ignorePattern = "";
+            foreach (var item in WhiteListParser.Instance.WhiteListWords)
             {
-                case ConventionType.camelCase:
-                    pattern = _camelRegex;
-                    break;
-                case ConventionType._uscoreCase:
-                    pattern = _underScoreRegex;
-                    break;
-                case ConventionType.PascalCase:
-                    pattern = _pascalRegex;
-                    break;
+                ignorePattern += "" + item + "+|";
             }
-            Regex regex = new Regex(pattern);
-            return regex.IsMatch(name);
-
-        }
-
-        private static string _removeWhiteListItems(string name)
-        {
-            foreach(var white in WhiteListParser.Instance.WhiteListWords)
+            ignorePattern = ignorePattern.TrimEnd('|');
+            Regex regex = new Regex(ignorePattern);
+            var matchCollection = regex.Matches(name);
+            var whiteIgnoredName = name;
+            foreach (Match match in matchCollection)
             {
-                Regex regex = new Regex(white);
-                name = regex.Replace(name,"");
-            }
-            return name;
-        }
-
-        public static IReadOnlyList<string> GetForbiddenPieces(string name,ConventionType type)
-        {
-            string originalName = name;
-            name=_removeWhiteListItems(name);
-            string pattern = "";
-            var forbiddenWords = new List<string>();
-            Regex regex;
-            switch (type)
-            {
-                case ConventionType.camelCase:
-                    pattern = _camelBeginningSingleRegex;
-                    regex = new Regex(pattern);
-                    name=regex.Replace(name, "0");
-                    break;
-                case ConventionType._uscoreCase:
-                    pattern = _underScoreBeginningSingleRegex;
-                    regex = new Regex(pattern);
-                    name=regex.Replace(name, "0");
-                    break;
-                case ConventionType.PascalCase:
-                    pattern = "^"+_pascalSingleRegex;
-                    regex = new Regex(pattern);
-                    name = regex.Replace(name, "0");
-                    break;   
-            }
-
-            pattern = _pascalSingleRegex;
-            regex = new Regex(pattern);
-            name=regex.Replace(name, "0");
-            
-            string currentWord="";
-
-            void AddWord(string word)
-            {
-                if (!forbiddenWords.Contains(currentWord))
+                for (int i = 0; i < match.Length; i++)
                 {
-                    if(currentWord!="_")
+                    whiteIgnoredName = whiteIgnoredName.Substring(0, match.Index) + new string('#', match.Length) + whiteIgnoredName.Substring(match.Index + match.Length);
+                }
+            }
+            return whiteIgnoredName;
+        }
+
+        public static List<string> OneUpperCaseAllowedCandidates(string name,string currentCandidate, bool upperFound)
+        {
+            List<string> candidates = new List<string>();
+            for (int i = 1; i < name.Length; i++)
+            {
+                if (upperFound && IsUpperCase(name[i]))
+                {
+                    currentCandidate += name[i];
+                }
+                else
+                {
+                    if (currentCandidate.Length > 2)
                     {
-                        forbiddenWords.Add(currentWord);
+                        currentCandidate = currentCandidate.Substring(0, currentCandidate.Length - 1);
+                        _addCandidate(currentCandidate);
+
                     }
-                    currentWord = "";
+                    currentCandidate = name[i].ToString();
                 }
+                upperFound = IsUpperCase(name[i]);
             }
 
-            foreach (var item in name)
+            void _addCandidate(string candidate)
             {
-                if(item!='0')
+                if (!candidates.Contains(candidate))
                 {
-                    currentWord += item;
-                }
-                else if(currentWord!="")
-                {
-                    AddWord(currentWord);
+                    candidates.Add(candidate);
                 }
             }
 
-            if (currentWord != "")
+            if (currentCandidate.Length > 1)
             {
-                AddWord(currentWord);
+                currentCandidate = currentCandidate.Substring(0, currentCandidate.Length);
+                _addCandidate(currentCandidate);
             }
 
-            if(forbiddenWords.Contains(originalName))
+            foreach (string word in WhiteListParser.Instance.WhiteListWords)
             {
-                forbiddenWords.Remove(originalName);
+                candidates.Remove(word);
             }
-            return forbiddenWords;
+            return candidates;
         }
 
-        public static ConventionType stringToConventionType(string type)
+        public static bool IsUpperCase(char c)
         {
-            switch (type)
-            {
-                case "camelCase":
-                    return ConventionType.camelCase;
-                case "_uscoreCase":
-                    return ConventionType._uscoreCase;
-                case "PascalCase":
-                    return ConventionType.PascalCase;
-                case "IPascalCase":
-                    return ConventionType.IPascalCase;
-                case "TPascalCase":
-                    return ConventionType.TPascalCase;
-                default:
-                    throw new Exception("Invalid convention type");
-            }
+            return c == char.ToUpper(c);
+        }
+
+        public static bool IsLowerCase(char c)
+        {
+            return c == char.ToLower(c);
         }
     }
 }

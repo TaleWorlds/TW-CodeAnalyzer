@@ -1,7 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -24,29 +27,28 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(_analyzer, SymbolKind.NamedType);
+            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.InterfaceDeclaration);
         }
 
-        private void _analyzer(SymbolAnalysisContext context)
+        private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            var nameNode = (InterfaceDeclarationSyntax)context.Node;
+            var nameString = nameNode.Identifier.Text;
+            var accessibility = nameNode.Modifiers.First();
+            var location = nameNode.Identifier.GetLocation();
 
-            var symbol = (INamedTypeSymbol)context.Symbol;
-            if (symbol.TypeKind != TypeKind.Interface)
-            {
-                return;
-            }
-            var symbolName = symbol.Name;
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", symbolName.StartsWith("I") ? symbolName.Substring(1) : symbolName },
+                { "Name", nameString },
             };
 
-            if(!(symbolName.StartsWith("I") && NameCheckerLibrary.IsMatchingConvention(symbolName.Substring(1),ConventionType.PascalCase)))
+            if(!IpascalCaseBehaviour.Instance.IsMatching(nameString))
             {
                 properties["NamingConvention"] = "IPascalCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, symbol.Locations[0], properties.ToImmutableDictionary(), symbolName));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
+                    IpascalCaseBehaviour.Instance.FixThis(nameString)));
             }
 
         }

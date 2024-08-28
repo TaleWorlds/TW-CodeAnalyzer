@@ -1,7 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -30,45 +33,47 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(_analyzer, SymbolKind.NamedType);
+            context.RegisterSyntaxNodeAction(_analyzer,SyntaxKind.ClassDeclaration);
+            
         }
 
-        private void _analyzer(SymbolAnalysisContext context)
+        private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            var nameNode = (ClassDeclarationSyntax) context.Node;
+            var nameString = nameNode.Identifier.Text;
+            var accessibility = nameNode.Modifiers.First();
+            var location = nameNode.Identifier.GetLocation();
 
-            var symbol = (INamedTypeSymbol)context.Symbol;
-
-            if (symbol.TypeKind != TypeKind.Class)
-            {
-                return;
-            }
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
+            
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", symbol.Name },
+                { "Name", nameString},
             };
 
-            if (symbol.DeclaredAccessibility == Accessibility.Private ||
-                symbol.DeclaredAccessibility == Accessibility.Internal)
+            if (accessibility.IsKind(SyntaxKind.PrivateKeyword) ||
+                accessibility.IsKind(SyntaxKind.InternalKeyword))
             {
-                if (!NameCheckerLibrary.IsMatchingConvention(symbol.Name,ConventionType._uscoreCase))
+                if (!UnderScoreCaseBehaviour.Instance.IsMatching(nameString))
                 {
                     properties["NamingConvention"] = "_uscoreCase";
-                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], properties.ToImmutableDictionary(), symbol.Name, symbol.DeclaredAccessibility.ToString(), "_uscoreCase"));
+                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, location, properties.ToImmutableDictionary(), nameString,
+                        UnderScoreCaseBehaviour.Instance.FixThis(nameString)));
                 }
             }
-            else if (symbol.DeclaredAccessibility == Accessibility.Public)
+            else if (accessibility.IsKind(SyntaxKind.PublicKeyword))
             {
-                if (!NameCheckerLibrary.IsMatchingConvention(symbol.Name, ConventionType.PascalCase))
+                if (!PascalCaseBehaviour.Instance.IsMatching(nameString))
                 {
                     properties["NamingConvention"] = "PascalCase";
-                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, symbol.Locations[0], properties.ToImmutableDictionary(), symbol.Name, symbol.DeclaredAccessibility.ToString(), "PascalCase"));
+                    context.ReportDiagnostic(Diagnostic.Create(_nameRule, location, properties.ToImmutableDictionary(), nameString,
+                        PascalCaseBehaviour.Instance.FixThis(nameString)));
                 }
             }
             else
             {
-                context.ReportDiagnostic(Diagnostic.Create(_modifierRule, symbol.Locations[0], symbol.Name));
+                context.ReportDiagnostic(Diagnostic.Create(_modifierRule, location, nameString));
             }
         }
     }

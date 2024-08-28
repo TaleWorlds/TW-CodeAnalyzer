@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.FieldNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -17,7 +18,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             {   
                 private int _value;
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -29,51 +30,10 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             {   
                 private int {|#0:value|};
             }";
-
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value"); 
+            WhiteListParser.Instance.EnableTesting();
+            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value","_value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldPublicWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                public int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldInternalWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                internal int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task FieldProtectedWarningTest()
-        {
-            var test = @"
-            public class Test
-            {   
-                protected int {|#0:_value|};
-            }";
-
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("_value"); 
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        
+        }     
 
     }
 }

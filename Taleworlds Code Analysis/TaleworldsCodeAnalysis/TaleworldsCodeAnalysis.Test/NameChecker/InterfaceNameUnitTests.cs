@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.InterfaceNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -20,7 +21,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             public interface ITest : IBase
             {
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -35,12 +36,12 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             internal interface {|#1:Test|} : IBase {}
             public interface {|#2:_test|} : IBase{}
             ";
-
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(0).WithArguments("iTest"),
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(1).WithArguments("Test"),
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(2).WithArguments("_test")
+                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(0).WithArguments("iTest","ITest"),
+                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(1).WithArguments("Test","ITest"),
+                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(2).WithArguments("_test","ITest")
             };
             
 

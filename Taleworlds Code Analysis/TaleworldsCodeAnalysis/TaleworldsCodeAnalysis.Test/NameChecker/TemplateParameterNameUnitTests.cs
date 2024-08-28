@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.TemplateParameterNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -50,11 +51,11 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             {   
                 
             }";
-
-            var expected1 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("tApp");
-            var expected2 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("Tapp");
-            var expected3 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("tapp");
-            var expected4 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("IApp");
+            WhiteListParser.Instance.EnableTesting();
+            var expected1 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("tApp","TApp");
+            var expected2 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("Tapp","TApp");
+            var expected3 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("tapp","TApp");
+            var expected4 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("IApp","TIapp");
             await VerifyCS.VerifyAnalyzerAsync(test1, expected1);
             await VerifyCS.VerifyAnalyzerAsync(test2, expected2);
             await VerifyCS.VerifyAnalyzerAsync(test3, expected3);

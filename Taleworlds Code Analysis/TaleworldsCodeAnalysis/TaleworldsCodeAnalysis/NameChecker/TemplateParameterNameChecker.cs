@@ -2,8 +2,10 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -32,20 +34,22 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Node.SyntaxTree.FilePath);
 
             var parameter = (TypeParameterSyntax)context.Node;
             var parameterName = parameter.Identifier.Text;
+            var location = parameter.GetLocation();
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", parameterName.StartsWith("T") ? parameterName.Substring(1) : parameterName },
+                { "Name", parameterName },
             };
 
-            if (!(parameterName.StartsWith("T") && NameCheckerLibrary.IsMatchingConvention(parameterName.Substring(1), ConventionType.PascalCase)))
+            if (!TpascalCaseBehaviour.Instance.IsMatching(parameterName))
             {
                 properties["NamingConvention"] = "TPascalCase";
-                context.ReportDiagnostic(Diagnostic.Create(_rule, parameter.GetLocation(), properties.ToImmutableDictionary(), parameterName));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), parameterName,
+                    TpascalCaseBehaviour.Instance.FixThis(parameterName)));
             }
             
         }

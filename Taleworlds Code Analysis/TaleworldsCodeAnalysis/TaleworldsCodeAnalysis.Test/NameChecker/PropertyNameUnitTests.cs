@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.PropertyNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -28,7 +29,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
                 private int _valueLoc;
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -46,14 +47,14 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
                 private int _value;
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("ValuePriv", "Private","_uscoreCase"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePriv", "Private", "_uscoreCase"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("value_Priv", "Private", "_uscoreCase"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("ValueInt", "Internal", "_uscoreCase"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(4).WithArguments("valueInt", "Internal", "_uscoreCase"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("ValuePriv","_valuePriv"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePriv","_valuePriv"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("value_Priv", "_valuePriv"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("ValueInt", "_valueInt"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(4).WithArguments("valueInt", "_valueInt")
             };
             
             await VerifyCS.VerifyAnalyzerAsync(test,expectedResults);
@@ -72,12 +73,14 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
                 private int _value;
             }";
+
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valuePub", "Public", "PascalCase"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePub", "Public", "PascalCase"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("_valueProp", "Protected", "PascalCase"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("valueProp", "Protected", "PascalCase")
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valuePub", "ValuePub"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePub",  "ValuePub"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("_valueProp", "ValueProp"),
+                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("valueProp", "ValueProp")
             };
             
 

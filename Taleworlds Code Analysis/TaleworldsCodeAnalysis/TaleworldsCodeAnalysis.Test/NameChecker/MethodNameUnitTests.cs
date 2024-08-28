@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using TaleworldsCodeAnalysis.NameChecker;
 using VerifyCS = TaleworldsCodeAnalysis.Test.CSharpCodeFixVerifier<
     TaleworldsCodeAnalysis.NameChecker.MethodNameChecker,
     TaleworldsCodeAnalysis.TaleworldsCodeAnalysisCodeFixProvider>;
@@ -23,7 +24,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 protected void Foo2(){}
                 public void Foo3(){}
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -41,13 +42,13 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
 
             }"
             ;
-
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPriv", "Private", "_uscoreCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPriv", "Private", "_uscoreCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooInt", "Internal", "_uscoreCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooInt", "Internal", "_uscoreCase")
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPriv","_fooPriv"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPriv","_fooPriv"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooInt","_fooInt"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooInt","_fooInt")
             };
             
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
@@ -65,13 +66,13 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 protected void {|#2:fooPro|}(){}
                 protected void {|#3:_FooPro|}(){}
             }";
-
+            WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPub", "Public", "PascalCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPub", "Public", "PascalCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooPro", "Protected", "PascalCase"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooPro", "Protected", "PascalCase")
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPub","FooPub"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPub","FooPub"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooPro", "FooPro"),
+                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooPro", "FooPro")
         };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);

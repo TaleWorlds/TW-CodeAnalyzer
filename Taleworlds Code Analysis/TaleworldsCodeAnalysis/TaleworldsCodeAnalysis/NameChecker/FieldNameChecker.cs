@@ -1,64 +1,66 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FieldNameChecker : DiagnosticAnalyzer
     {
-        public static string DiagnosticId => _diagnosticId;
-        private const string _diagnosticId = "FieldNameChecker";
-        private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private const string _category = "Naming";
+        public static string NameDiagnosticId => _nameDiagnosticId;
+        private const string _nameDiagnosticId = "FieldNameChecker";
+        private static readonly LocalizableString _nameTitle = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
+        private static readonly LocalizableString _nameMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
+        private static readonly LocalizableString _nameDescription = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
+        private const string _namingCategory = "Naming";
 
-        private static readonly DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_nameDiagnosticId, _nameTitle, _nameMessageFormat, _namingCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _nameDescription);
+
 
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
-            get { return ImmutableArray.Create(_rule); }
+            get { return ImmutableArray.Create(_nameRule); }
         }
 
         public override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(_analyzer, SymbolKind.Field);
+            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.FieldDeclaration);
         }
 
-        private void _analyzer(SymbolAnalysisContext context)
+        private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            WhiteListParser.Instance.UpdateWhiteList(context.Options.AdditionalFiles);
+            var nameNode = (FieldDeclarationSyntax)context.Node;
+            var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
+            var accessibility = nameNode.Modifiers.First();
+            var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
 
-            var field = (IFieldSymbol)context.Symbol;
-
-            if(field.ContainingType.TypeKind==TypeKind.Enum)
+            if(nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
             {
                 return;
             }
 
             var properties = new Dictionary<string, string>
             {
-                { "Name", field.Name },
+                { "Name", nameString },
             };
 
-            if (field.DeclaredAccessibility == Accessibility.Private)
+            if (accessibility.IsKind(SyntaxKind.PrivateKeyword))
             {
-                if (!NameCheckerLibrary.IsMatchingConvention(field.Name, ConventionType._uscoreCase))
+                if (!UnderScoreCaseBehaviour.Instance.IsMatching(nameString))
                 {
                     properties["NamingConvention"] = "_uscoreCase";
-                    var diagnostic = Diagnostic.Create(_rule, field.Locations[0], properties.ToImmutableDictionary(), field.Name);
+                    var diagnostic = Diagnostic.Create(_nameRule, location, properties.ToImmutableDictionary(), nameString, 
+                        UnderScoreCaseBehaviour.Instance.FixThis(nameString));
                     context.ReportDiagnostic(diagnostic);
                 }
-            }
-            else
-            {
-                var diagnostic = Diagnostic.Create(_rule, field.Locations[0], field.Name);
-                context.ReportDiagnostic(diagnostic);
             }
         }
 

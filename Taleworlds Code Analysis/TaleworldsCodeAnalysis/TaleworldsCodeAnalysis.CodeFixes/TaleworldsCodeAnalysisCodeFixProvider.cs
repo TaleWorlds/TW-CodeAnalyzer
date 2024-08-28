@@ -1,7 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -12,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TaleworldsCodeAnalysis.NameChecker;
+using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis
 {
@@ -22,7 +25,7 @@ namespace TaleworldsCodeAnalysis
         {
             get
             {
-                List<string> fixableDiagnosticIds = new List<string> {ClassNameChecker.ModifierDiagnosticId, ClassNameChecker.NameDiagnosticId, FieldNameChecker.DiagnosticId, InterfaceNameChecker.DiagnosticId, LocalNameChecker.DiagnosticId, MethodNameChecker.DiagnosticId, ParameterNameChecker.DiagnosticId, PropertyNameChecker.DiagnosticId, TemplateParameterNameChecker.DiagnosticId };
+                List<string> fixableDiagnosticIds = new List<string> {ClassNameChecker.ModifierDiagnosticId, ClassNameChecker.NameDiagnosticId, FieldNameChecker.NameDiagnosticId, InterfaceNameChecker.DiagnosticId, LocalNameChecker.DiagnosticId, MethodNameChecker.DiagnosticId, ParameterNameChecker.DiagnosticId, PropertyNameChecker.DiagnosticId, TemplateParameterNameChecker.DiagnosticId };
                 return ImmutableArray.Create(fixableDiagnosticIds.ToArray());
             }
         }
@@ -34,80 +37,88 @@ namespace TaleworldsCodeAnalysis
         }
 
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
         {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Document.FilePath);
             var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var diagnosticProperties = diagnostic.Properties;
-            var identifier = diagnosticProperties["Name"];
-            var convention = diagnosticProperties["NamingConvention"];
-            var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
+
             var document = context.Document;
-            if (_getWordsToAddToWhitelist(document,diagnostic).Count== 0)
+            var listOfWords = _getWordsToAddToWhitelist(document, diagnostic);
+            if (listOfWords.Count== 0)
             {
-                return;
+                return Task.CompletedTask;
             }
 
-            context.RegisterCodeFix(CustomCodeAction.Create(title: CodeFixResources.CodeFixTitle,
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview), 
-                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)), diagnostic);
+            
 
+            foreach (var item in listOfWords)
+            {
+                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to shared whitelist.",
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item, WhiteListType.Shared),
+                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item+WhiteListType.Shared), diagnostic);
+            }
 
+            foreach (var item in listOfWords)
+            {
+                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to local whitelist.",
+                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Local),
+                equivalenceKey: nameof(CodeFixResources.CodeFixTitle) + item+WhiteListType.Local), diagnostic);
+            }
+
+            return Task.CompletedTask;
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview)
+        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word, WhiteListType whiteListType)
         {
             if (isPreview)
             {
                 return document.Project.Solution;
             }
-            IReadOnlyList<string> words = _getWordsToAddToWhitelist(document, diagnostic);
-            var path = _getPathOfXml(document.Project.AdditionalDocuments);
-
-            AddStringToWhiteList(path, words);
-
-            var originalSolution = document.Project.Solution;
-            return originalSolution;
+            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            
+            var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
+            var solution = document.Project.Solution;
+            AddStringToWhiteList(path, word);
+            return document.Project.Solution;
         }
 
         private IReadOnlyList<string> _getWordsToAddToWhitelist(Document document, Diagnostic diagnostic)
         {
-            var additionalFiles = document.Project.AdditionalDocuments;
             var diagnosticProperties = diagnostic.Properties;
             var identifier = diagnosticProperties["Name"];
-
-            XDocument doc = XDocument.Load(_getPathOfXml(additionalFiles));
-            
-            WhiteListParser.Instance.InitializeWhiteListParser(doc.ToString());
+            WhiteListParser.Instance.UpdateWhiteList();
             IReadOnlyList<string> words = new List<string>();
 
             if (diagnosticProperties.ContainsKey("NamingConvention"))
             {
                 var convention = diagnosticProperties["NamingConvention"];
                 var conventionEnum = (ConventionType)Enum.Parse(typeof(ConventionType), convention);
-                words = NameCheckerLibrary.GetForbiddenPieces(identifier, conventionEnum);
+                words = _getNewWhiteListItemsToFix(identifier, conventionEnum);
             }
 
             return words;
         }
 
-        private string _getPathOfXml(IEnumerable<TextDocument> additionalFiles)
+        private IReadOnlyList<string> _getNewWhiteListItemsToFix(string identifier, ConventionType conventionEnum)
         {
-            string path = "";
-            if (additionalFiles.Count() != 0)
+            switch(conventionEnum)
             {
-                var externalFile = additionalFiles.FirstOrDefault(file => Path.GetFileName(file.FilePath).Equals("WhiteList.xml", StringComparison.OrdinalIgnoreCase));
-                path = externalFile.FilePath;
+                case ConventionType.camelCase:
+                    return CamelCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                case ConventionType._uscoreCase:
+                    return UnderScoreCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                case ConventionType.PascalCase:
+                    return PascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                case ConventionType.IPascalCase:
+                    return IpascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                case ConventionType.TPascalCase:
+                    return TpascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                default:
+                    return new List<string>();
             }
-            else
-            {
-                path = WhiteListParser.Instance.TestPathXml;
-            }
-            return path;
         }
 
-        private void AddStringToWhiteList(string filePath, IReadOnlyList<string> wordsToAdd)
+        private void AddStringToWhiteList(string filePath, string wordToAdd)
         {
             try
             {
@@ -115,13 +126,10 @@ namespace TaleworldsCodeAnalysis
                 var root = doc.Element("WhiteListRoot");
                 if (root != null)
                 {
-                    foreach (var word in wordsToAdd)
+                    var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(wordToAdd, StringComparison.OrdinalIgnoreCase));
+                    if (existingWord == null)
                     {
-                        var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(word, StringComparison.OrdinalIgnoreCase));
-                        if (existingWord == null)
-                        {
-                            root.Add(new XElement("Word", word));
-                        }
+                        root.Add(new XElement("Word", wordToAdd));
                     }
                     doc.Save(filePath);
                 }
