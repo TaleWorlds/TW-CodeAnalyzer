@@ -28,6 +28,7 @@ namespace TaleworldsCodeAnalysis
             }
         }
 
+
         public sealed override FixAllProvider GetFixAllProvider()
         {
             // See https://github.com/dotnet/roslyn/blob/main/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
