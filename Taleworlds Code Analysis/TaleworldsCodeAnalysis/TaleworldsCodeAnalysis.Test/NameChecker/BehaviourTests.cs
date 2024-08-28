@@ -13,6 +13,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         [TestInitialize]
         public void Init()
         {
+            WhiteListParser.Instance.EnableTesting();
             WhiteListParser.Instance.UpdateWhiteList();
         }
 

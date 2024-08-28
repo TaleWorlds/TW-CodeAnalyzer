@@ -63,6 +63,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         [TestMethod]
         public async Task PropertyPublicProtWarning()
         {
+            WhiteListParser.Instance.EnableTesting();
             var test = @"
             public class Test
             {   
@@ -72,9 +73,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 protected int {|#3:valueProp|} {get => _value;}
 
                 private int _value;
-            }";
-
-            WhiteListParser.Instance.EnableTesting();
+            }";   
             var expectedResults = new DiagnosticResult[]
             {
                 VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valuePub", "ValuePub"),
