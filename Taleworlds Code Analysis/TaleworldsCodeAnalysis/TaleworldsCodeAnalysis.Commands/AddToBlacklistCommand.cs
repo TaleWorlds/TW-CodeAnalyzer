@@ -10,6 +10,8 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Task = System.Threading.Tasks.Task;
+using EnvDTE;
+using EnvDTE80;
 
 
 namespace TaleworldsCodeAnalysis.Commands
@@ -98,12 +100,19 @@ namespace TaleworldsCodeAnalysis.Commands
         private void Execute(object sender, EventArgs e)
         {
 
+            
 
             ThreadHelper.ThrowIfNotOnUIThread();
+
+            DTE dte = (DTE)Package.GetGlobalService(typeof(DTE));
+            SelectedItems selectedItems = dte.SelectedItems;
+            if (selectedItems == null || selectedItems.Count != 1) return;
+            SelectedItem item = selectedItems.Item(1);
+            String projectName = item.Project.Name;
+
             localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             fullPath = Path.Combine(localAppDataPath, pathAfterLocalAppData);
 
-            String projectName = "aa";
 
             XDocument doc;
             try
