@@ -31,6 +31,8 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+
             var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
             var semanticModel = context.SemanticModel;
             var classSymbol = semanticModel.GetDeclaredSymbol(classDeclarationSyntax);

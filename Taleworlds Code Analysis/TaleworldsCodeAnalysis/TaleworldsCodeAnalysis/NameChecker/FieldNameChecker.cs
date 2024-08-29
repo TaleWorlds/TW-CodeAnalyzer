@@ -40,8 +40,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
-            WhiteListParser.Instance.ReadGlobalWhiteListPath(location.SourceTree.FilePath);
-            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(location.SourceTree.FilePath)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
 
             if (nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
             {
