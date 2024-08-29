@@ -34,13 +34,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(_analyzer,SyntaxKind.ClassDeclaration);
+
             
         }
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-
-            
 
             var nameNode = (ClassDeclarationSyntax) context.Node;
             var nameString = nameNode.Identifier.Text;
