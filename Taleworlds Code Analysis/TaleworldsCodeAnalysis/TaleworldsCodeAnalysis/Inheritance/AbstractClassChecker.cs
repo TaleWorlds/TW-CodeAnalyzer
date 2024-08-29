@@ -32,7 +32,10 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            var classDec= (ClassDeclarationSyntax) context.Node;
+
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+
+            var classDec = (ClassDeclarationSyntax) context.Node;
 
             bool isAbstract = false;
 

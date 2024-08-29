@@ -37,8 +37,8 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
 
-            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Node.SyntaxTree.FilePath)) return;
-            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Node.SyntaxTree.FilePath);
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+
 
             var nameNode = (FieldDeclarationSyntax)context.Node;
             var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
