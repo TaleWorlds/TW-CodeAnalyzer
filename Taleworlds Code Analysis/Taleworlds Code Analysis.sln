@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaleworldsCodeAnalysis.Vsix
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaleworldsCodeAnalysis.Commands", "TaleworldsCodeAnalysis\TaleworldsCodeAnalysis.Commands\TaleworldsCodeAnalysis.Commands.csproj", "{B85F1EFA-354D-45FA-936C-28991D2C4DD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaleworldsCodeAnalysisController", "TaleworldsCodeAnalysis.Controller\TaleworldsCodeAnalysisController.csproj", "{62BBC7E2-75BA-4425-9328-F620D5EB5786}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaleworldsCodeAnalysisController", "TaleworldsCodeAnalysis\TaleworldsCodeAnalysis.Controller\TaleworldsCodeAnalysisController.csproj", "{62BBC7E2-75BA-4425-9328-F620D5EB5786}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

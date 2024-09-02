@@ -14,6 +14,7 @@
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
 	<Dependency d:Source="File" DisplayName="TaleworldsCodeAnalysis.Commands" Id="TaleworldsCodeAnalysis.Commands.27b56ac2-5ccf-4154-95a7-4e980f842101" Version="[1.0,2.0.0.0)" d:InstallSource="Embed" Location="TaleworldsCodeAnalysis.Commands.vsix" />
+	<Dependency d:Source="File" DisplayName="TaleworldsCodeAnalysis.Controller" Id="TaleworldsCodeAnalysis.Controller.90a0ba77-7c1d-4576-9636-20acb555acaf" Version="[1.0,2.0.0.0)" d:InstallSource="Embed" Location="TaleworldsCodeAnalysis.Controller.vsix" />
   </Dependencies>
   
   <Prerequisites>

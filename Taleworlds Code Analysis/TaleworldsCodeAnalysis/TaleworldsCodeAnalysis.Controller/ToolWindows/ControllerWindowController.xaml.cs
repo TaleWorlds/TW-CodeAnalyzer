@@ -58,7 +58,7 @@ namespace TaleworldsCodeAnalysis.Controller
             Dispatcher.VerifyAccess();
             Solution solution = _dte.Solution;
             string directoryPath = new FileInfo(solution.FullName).FullName;
-            string settingPath = Path.Combine(directoryPath, _pathOfSettingsFile);
+            string settingPath = Path.Combine(Path.GetDirectoryName(directoryPath), _pathOfSettingsFile);
             return settingPath;
         }
 
