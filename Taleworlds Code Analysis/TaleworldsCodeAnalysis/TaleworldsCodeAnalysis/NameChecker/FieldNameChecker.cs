@@ -11,14 +11,14 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FieldNameChecker : DiagnosticAnalyzer
     {
-        public static string NameDiagnosticId => _nameDiagnosticId;
-        private const string _nameDiagnosticId = "FieldNameChecker";
+        public static string DiagnosticId => _diagnosticId;
+        private const string _diagnosticId = "TW2002";
         private static readonly LocalizableString _nameTitle = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _nameMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _nameDescription = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private const string _namingCategory = "Naming";
 
-        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_nameDiagnosticId, _nameTitle, _nameMessageFormat, _namingCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _nameDescription);
+        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_diagnosticId, _nameTitle, _nameMessageFormat, _namingCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _nameDescription);
 
 
 
@@ -40,7 +40,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
             if (nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
             {

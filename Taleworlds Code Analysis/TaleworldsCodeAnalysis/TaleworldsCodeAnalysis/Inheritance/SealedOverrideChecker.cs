@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SealedOverrideChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "TW2103";
+        public const string DiagnosticId = "TW2102";
         internal static readonly LocalizableString _title = "Overridden methods should be sealed.";
         internal static readonly LocalizableString _messageFormat = "Overridden methods should be sealed.";
         internal const string _category = "Inheritance";
@@ -31,7 +31,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
             var method = (MethodDeclarationSyntax) context.Node;
             var modifiers = method.Modifiers;

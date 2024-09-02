@@ -61,11 +61,29 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Classes cannot be &quot;Protected&quot; by TW conventions..
+        /// </summary>
+        internal static string ClassModifierCheckerDescription {
+            get {
+                return ResourceManager.GetString("ClassModifierCheckerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Class {0} cannot be &quot;Protected&quot; by TW conventions..
         /// </summary>
         internal static string ClassModifierCheckerMessageFormat {
             get {
                 return ResourceManager.GetString("ClassModifierCheckerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classes cannot be &quot;Protected&quot; by TW conventions..
+        /// </summary>
+        internal static string ClassModifierCheckerTitle {
+            get {
+                return ResourceManager.GetString("ClassModifierCheckerTitle", resourceCulture);
             }
         }
         

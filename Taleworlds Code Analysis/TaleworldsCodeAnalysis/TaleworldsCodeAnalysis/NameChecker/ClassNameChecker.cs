@@ -11,23 +11,19 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ClassNameChecker : DiagnosticAnalyzer
     {
-        public static string NameDiagnosticId =>_nameDiagnosticId;
-        public static string ModifierDiagnosticId=>_modifierDiagnosticId;
+        public static string DiagnosticId =>_diagnosticId;
 
-        private const string _nameDiagnosticId = "ClassNameChecker";
-        private const string _modifierDiagnosticId = "ClassModifierChecker";
+        private const string _diagnosticId = "TW2000";
 
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private static readonly LocalizableString _modifierMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ClassModifierCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
 
         private const string _category = "Naming";
 
-        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_nameDiagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
-        private static readonly DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(_modifierDiagnosticId, _title, _modifierMessageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_nameRule, _modifierRule);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_nameRule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -40,14 +36,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
 
-            
-
             var nameNode = (ClassDeclarationSyntax) context.Node;
             var nameString = nameNode.Identifier.Text;
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Identifier.GetLocation();
 
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
 
             var properties = new Dictionary<string, string>
@@ -73,10 +67,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     context.ReportDiagnostic(Diagnostic.Create(_nameRule, location, properties.ToImmutableDictionary(), nameString,
                         PascalCaseBehaviour.Instance.FixThis(nameString)));
                 }
-            }
-            else
-            {
-                context.ReportDiagnostic(Diagnostic.Create(_modifierRule, location, nameString));
             }
         }
     }

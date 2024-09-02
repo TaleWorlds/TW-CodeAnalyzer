@@ -21,11 +21,11 @@ namespace TaleworldsCodeAnalysis
 
         private PreAnalyzerConditions() { }
 
-        public bool IsNotAllowedToAnalyze(SyntaxNodeAnalysisContext context) {
+        public bool IsNotAllowedToAnalyze(SyntaxNodeAnalysisContext context, String diagnosticId) {
             var filePath = context.Node.GetLocation().SourceTree.FilePath;
             WhiteListParser.Instance.ReadGlobalWhiteListPath(filePath);
             if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(filePath)) return true;
-            if (AnalyzerDisablingComments.Instance.IsInDisablingComments(context.Node)) return true;
+            if (AnalyzerDisablingComments.Instance.IsInDisablingComments(context.Node, diagnosticId)) return true;
             return false;
         }
     }

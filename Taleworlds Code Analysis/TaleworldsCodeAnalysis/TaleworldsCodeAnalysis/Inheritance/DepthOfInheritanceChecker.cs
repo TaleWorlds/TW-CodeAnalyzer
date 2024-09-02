@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DepthOfInheritanceChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "TW2102";
+        public const string DiagnosticId = "TW2101";
         internal static readonly LocalizableString Title = "Depth of inheritance should be 2 at maximum.";
         internal static readonly LocalizableString MessageFormat = "Depth of inheritance should be 2 at maximum.";
         internal const string Category = "Inheritance";
@@ -31,7 +31,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
             var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
             var semanticModel = context.SemanticModel;

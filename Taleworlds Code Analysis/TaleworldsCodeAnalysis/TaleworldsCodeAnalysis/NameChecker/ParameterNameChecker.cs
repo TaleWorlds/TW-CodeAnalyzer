@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static string DiagnosticId => _diagnosticId;
 
-        private const string _diagnosticId = "ParameterNameChecker";
+        private const string _diagnosticId = "TW2006";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.ParameterNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ParameterNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.ParameterNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
@@ -39,7 +39,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var nameNode = (ParameterSyntax)context.Node;
             var nameString = nameNode.Identifier.ToString();
             var location = nameNode.Identifier.GetLocation();
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
 
             var properties = new Dictionary<string, string>
