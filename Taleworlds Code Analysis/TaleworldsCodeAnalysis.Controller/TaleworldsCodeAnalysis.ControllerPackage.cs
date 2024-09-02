@@ -9,7 +9,7 @@ namespace TaleworldsCodeAnalysis.Controller
 {
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
-    [ProvideToolWindow(typeof(MyToolWindow.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
+    [ProvideToolWindow(typeof(ControllerWindow.Pane), Style = VsDockStyle.Tabbed, Window = WindowGuids.SolutionExplorer)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuids.TaleworldsCodeAnalysisControllerString)]
     public sealed class TaleworldsCodeAnalysisControllerPackage : ToolkitPackage

@@ -46,7 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Commands\MyToolWindowCommand.cs" />
+    <Compile Include="Commands\ControllerWindowCommand.cs" />
     <Compile Include="TaleworldsCodeAnalysis.ControllerPackage.cs" />
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
@@ -78,13 +78,13 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ToolWindows\MyToolWindow.cs" />
-    <Page Include="ToolWindows\MyToolWindowControl.xaml">
+    <Compile Include="ToolWindows\ControllerWindow.cs" />
+    <Page Include="ToolWindows\ControllerWindowController.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="ToolWindows\MyToolWindowControl.xaml.cs">
-      <DependentUpon>MyToolWindowControl.xaml</DependentUpon>
+    <Compile Include="ToolWindows\ControllerWindowController.xaml.cs">
+      <DependentUpon>ControllerWindowController.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
