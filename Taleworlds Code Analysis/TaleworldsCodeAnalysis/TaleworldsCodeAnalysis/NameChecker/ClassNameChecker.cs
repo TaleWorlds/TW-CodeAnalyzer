@@ -11,9 +11,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ClassNameChecker : DiagnosticAnalyzer
     {
-        public static string NameDiagnosticId =>_nameDiagnosticId;
+        public static string DiagnosticId =>_diagnosticId;
 
-        private const string _nameDiagnosticId = "TW2000";
+        private const string _diagnosticId = "TW2000";
 
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
@@ -21,7 +21,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private const string _category = "Naming";
 
-        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_nameDiagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_nameRule);
 
@@ -41,7 +41,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Identifier.GetLocation();
 
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
 
             var properties = new Dictionary<string, string>

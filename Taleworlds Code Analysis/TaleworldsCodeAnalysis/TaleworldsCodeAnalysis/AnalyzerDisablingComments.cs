@@ -19,7 +19,7 @@ namespace TaleworldsCodeAnalysis
 
         private AnalyzerDisablingComments() { }
 
-        public bool IsInDisablingComments(SyntaxNode node) {
+        public bool IsInDisablingComments(SyntaxNode node, String diagnosticId) {
             var root = node.SyntaxTree.GetRoot();
             var singleLineComments = root.DescendantTrivia().Where(trivia => trivia.IsKind(SyntaxKind.SingleLineCommentTrivia));
 
@@ -27,13 +27,13 @@ namespace TaleworldsCodeAnalysis
 
             foreach (var commentSyntax in singleLineComments)
             {
-                if (commentSyntax.ToString().ToLower() == "//twcodeanalysis off")
-                {
-                    commentsList.Add(new Comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OffComment));
-                }
-                else if (commentSyntax.ToString().ToLower() == "//twcodeanalysis on")
+                if (commentSyntax.ToString().ToLower() == "//twcodeanalysis enable all" || commentSyntax.ToString().ToLower() == String.Format("//twcodeanalysis enable {0}", diagnosticId.ToLower()))
                 {
                     commentsList.Add(new Comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OnComment));
+                }
+                else if (commentSyntax.ToString().ToLower() == "//twcodeanalysis disable all" || commentSyntax.ToString().ToLower() == String.Format("//twcodeanalysis disable {0}", diagnosticId.ToLower()))
+                {
+                    commentsList.Add(new Comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OffComment));
                 }
             }
 

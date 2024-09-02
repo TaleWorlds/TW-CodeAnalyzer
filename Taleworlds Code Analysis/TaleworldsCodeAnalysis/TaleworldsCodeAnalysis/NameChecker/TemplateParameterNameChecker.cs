@@ -35,7 +35,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
 
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
 
             var parameter = (TypeParameterSyntax)context.Node;

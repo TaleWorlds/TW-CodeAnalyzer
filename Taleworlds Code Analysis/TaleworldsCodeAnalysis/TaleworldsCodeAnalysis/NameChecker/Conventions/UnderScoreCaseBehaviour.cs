@@ -54,6 +54,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public override IReadOnlyList<string> FindWhiteListCandidates(string name)
         {
+            if (!name.StartsWith("_") || name == "_") return new List<string>();
             var candidates = CamelCaseBehaviour.Instance.FindWhiteListCandidates(name.Substring(1));
            return candidates;
             

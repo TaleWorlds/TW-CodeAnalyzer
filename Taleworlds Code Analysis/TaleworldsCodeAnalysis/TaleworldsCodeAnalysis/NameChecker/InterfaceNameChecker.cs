@@ -38,7 +38,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var nameString = nameNode.Identifier.Text;
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Identifier.GetLocation();
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
 
             var properties = new Dictionary<string, string>

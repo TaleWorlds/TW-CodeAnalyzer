@@ -33,7 +33,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
 
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
             var classDec = (ClassDeclarationSyntax) context.Node;
 

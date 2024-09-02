@@ -43,7 +43,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var localDeclaration = (LocalDeclarationStatementSyntax) context.Node;
             var localName = localDeclaration.Declaration.Variables.Single().Identifier.ToString();
             var location = localDeclaration.Declaration.Variables.Single().Identifier.GetLocation();
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context)) return;
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
 
             var properties = new Dictionary<string, string>
             {
