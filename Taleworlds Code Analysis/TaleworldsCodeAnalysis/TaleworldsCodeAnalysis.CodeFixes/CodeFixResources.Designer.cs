@@ -68,5 +68,14 @@ namespace TaleworldsCodeAnalysis {
                 return ResourceManager.GetString("CodeFixTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surpress warnings for including class.
+        /// </summary>
+        internal static string SurpressWarningsClass {
+            get {
+                return ResourceManager.GetString("SurpressWarningsClass", resourceCulture);
+            }
+        }
     }
 }
