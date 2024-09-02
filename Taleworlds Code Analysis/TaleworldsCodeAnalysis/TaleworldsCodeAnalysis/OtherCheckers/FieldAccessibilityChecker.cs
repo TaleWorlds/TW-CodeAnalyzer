@@ -12,7 +12,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     public class FieldAccessibilityChecker : DiagnosticAnalyzer
     {
         public static string AccesabilityDiagnosticId => _accessibilityDiagnosticId;
-        private const string _accessibilityDiagnosticId = "FieldAccessibilityChecker";
+        private const string _accessibilityDiagnosticId = "TW2200";
         private static readonly LocalizableString _accessibilityTitle = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _accessibilityMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _accessibilityDescription = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));

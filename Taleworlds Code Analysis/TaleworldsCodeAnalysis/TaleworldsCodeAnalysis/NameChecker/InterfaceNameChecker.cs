@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static string DiagnosticId => _diagnosticId;
 
-        private const string _diagnosticId = "InterfaceNameChecker";
+        private const string _diagnosticId = "TW2003";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.InterfaceNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.InterfaceNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.InterfaceNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));

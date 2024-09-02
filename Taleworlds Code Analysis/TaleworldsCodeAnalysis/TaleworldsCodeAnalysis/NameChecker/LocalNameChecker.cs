@@ -14,7 +14,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static string DiagnosticId => _diagnosticId;
 
-        private const string _diagnosticId = "LocalNameChecker";
+        private const string _diagnosticId = "TW2004";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.LocalNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.LocalNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.LocalNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));

@@ -14,8 +14,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
         public static string NameDiagnosticId =>_nameDiagnosticId;
         public static string ModifierDiagnosticId=>_modifierDiagnosticId;
 
-        private const string _nameDiagnosticId = "ClassNameChecker";
-        private const string _modifierDiagnosticId = "ClassModifierChecker";
+        private const string _nameDiagnosticId = "TW2000";
+        private const string _modifierDiagnosticId = "TW2001";
 
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
