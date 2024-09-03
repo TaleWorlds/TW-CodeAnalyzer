@@ -16,7 +16,7 @@ namespace TaleworldsCodeAnalysis.Controller
     {
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
     {
-        await this.RegisterCommandsAsync();
+            await this.RegisterCommandsAsync();
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             this.RegisterToolWindows();
