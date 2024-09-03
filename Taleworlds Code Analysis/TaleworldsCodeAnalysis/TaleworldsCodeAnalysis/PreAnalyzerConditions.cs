@@ -26,6 +26,7 @@ namespace TaleworldsCodeAnalysis
             WhiteListParser.Instance.ReadGlobalWhiteListPath(filePath);
             if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(filePath)) return true;
             if (AnalyzerDisablingComments.Instance.IsInDisablingComments(context.Node, diagnosticId)) return true;
+            if (!SettingsChecker.Instance.IsAnalysisEnabled(diagnosticId,filePath)) return true;
             return false;
         }
     }

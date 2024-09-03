@@ -30,6 +30,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(_analyzer,SyntaxKind.ClassDeclaration);
+
             
         }
 

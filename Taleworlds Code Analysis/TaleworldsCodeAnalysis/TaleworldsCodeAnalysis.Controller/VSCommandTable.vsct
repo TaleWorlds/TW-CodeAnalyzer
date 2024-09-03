@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+  <Include href="KnownImageIds.vsct"/>
+  <Include href="VSGlobals.vsct"/>
+
+  <Commands package="TaleworldsCodeAnalysisController">
+    <!--This section defines the elements the user can interact with, like a menu command or a button or combo box in a toolbar. -->
+    <Buttons>
+      <Button guid="TaleworldsCodeAnalysisController" id="ControllerCommand" priority="0x0100" type="Button">
+        <Parent guid="VSMainMenu" id="View.DevWindowsGroup.OtherWindows.Group1"/>
+        <Icon guid="ImageCatalogGuid" id="ToolWindow" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Taleworlds Code Analysis Controller</ButtonText>
+          <LocCanonicalName>.View.TWCodeAnalysisController</LocCanonicalName>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="TaleworldsCodeAnalysisController" value="{bb14e7f4-1f15-4413-b903-3c38e1df9ecc}">
+      <IDSymbol name="ControllerCommand" value="0x0100" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
