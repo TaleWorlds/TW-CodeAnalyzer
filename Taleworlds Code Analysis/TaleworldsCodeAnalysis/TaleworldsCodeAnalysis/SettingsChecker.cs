@@ -24,7 +24,7 @@ namespace TaleworldsCodeAnalysis
             } 
         private static SettingsChecker _instance;
 
-        private const string _nameOfSettingsFile = "Settings.xml";
+        private const string _nameOfSettingsFile = "TaleworldsCodeAnalysisSettings.xml";
         private string _settingsFilePath;
         
 

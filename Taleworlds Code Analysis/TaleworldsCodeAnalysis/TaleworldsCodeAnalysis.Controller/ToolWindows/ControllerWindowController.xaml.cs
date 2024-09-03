@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.Controller
     public partial class ControllerWindowController
     {
         private DTE _dte;
-        private const string _pathOfSettingsFile = "Settings.xml";
+        private const string _pathOfSettingsFile = "TaleworldsCodeAnalysisSettings.xml";
         private string _fullPath;
 
         public ControllerWindowController()
