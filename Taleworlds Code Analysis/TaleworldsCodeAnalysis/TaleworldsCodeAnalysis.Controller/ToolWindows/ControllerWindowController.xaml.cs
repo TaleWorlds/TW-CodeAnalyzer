@@ -45,12 +45,7 @@ namespace TaleworldsCodeAnalysis.Controller
             var node = xDocument.Root.Element(name);
             node.ReplaceNodes(source.IsChecked.ToString());
             xDocument.Save(path);
-           
-            var activeDocument = _dte.ActiveDocument;
-            if (activeDocument!=null)
-            {
-                activeDocument.Activate();
-            }
+          
         }
 
         private string GetSettingsFilePath()
