@@ -9,22 +9,55 @@ using System.Xml.Linq;
 
 namespace TaleworldsCodeAnalysis
 {
-    public static class SettingsChecker
+    public class SettingsChecker
     {
-        private const string _pathOfSettingsFile = "Settings.xml";
-        public static bool IsAnalysisEnabled(string diagnosticID, Solution solution)
+        public static SettingsChecker Instance
+            {
+                get 
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new SettingsChecker();
+                    }
+                    return _instance;
+                }
+            } 
+        private static SettingsChecker _instance;
+
+        private const string _nameOfSettingsFile = "Settings.xml";
+        private string _settingsFilePath;
+        
+
+        public bool IsAnalysisEnabled(string diagnosticID, string contextPath)
         {
-            var document = GetSettingsFile(GetSettingsFilePath(solution));
+            var document = GetSettingsFile(GetSettingsFilePath(contextPath));
             return document.Root.Element(diagnosticID).Value == "True";
         }
 
-        public static string GetSettingsFilePath(Solution solution)
+        public string GetSettingsFilePath(string contextPath)
         {
-            string directoryPath = solution.FilePath;
-            string settingPath = Path.Combine(Path.GetDirectoryName(directoryPath), _pathOfSettingsFile);
-            return settingPath;
+            if (_settingsFilePath != null)
+            {
+                return _settingsFilePath;
+            }
+            var folderNames = contextPath.Split('\\');
+            string solnFilePath = "";
+            for (int i = folderNames.Length - 2; i >= 0; i--)
+            {
+                solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), _nameOfSettingsFile);
+                if (File.Exists(solnFilePath))
+                {
+                    return solnFilePath;
+                }
+                else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length != 0)
+                {
+                    return solnFilePath;
+                }
+
+            }
+            return solnFilePath;
         }
-        public static XDocument GetSettingsFile(string settingPath)
+        public XDocument GetSettingsFile(string settingPath)
         {
             XDocument xDocument;
             try
@@ -34,6 +67,8 @@ namespace TaleworldsCodeAnalysis
             catch
             {
                 xDocument = new XDocument(new XElement("Settings",
+                    new XElement("TW2200","True"),
+                    new XElement("TW2001","True"),
                     new XElement("TW2002", "True"),
                     new XElement("TW2005", "True"),
                     new XElement("TW2000", "True"),

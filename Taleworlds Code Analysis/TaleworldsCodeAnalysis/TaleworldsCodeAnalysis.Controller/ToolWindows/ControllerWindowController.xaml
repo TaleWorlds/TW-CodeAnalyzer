@@ -10,7 +10,7 @@
              xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
              toolkit:Themes.UseVsTheme="True"
              mc:Ignorable="d"
-             d:DesignHeight="300"
+             d:DesignHeight="400"
              d:DesignWidth="300"
              Name="ControllerWindow"
              LostFocus="UserControl_GotFocus"
@@ -24,18 +24,21 @@
                    HorizontalAlignment="Center" Content="Taleworlds Code Analysis Settings"
                    FontSize="17"/>
             <Label Content="Name Checkers" FontSize="15"/>
-            <CheckBox Name="ClassNameCheckerEnabled" Content="Class Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="FieldNameCheckerEnabled" Content="Field Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="InterfaceNameCheckerEnabled" Content="Interface Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="LocalNameCheckerEnabled" Content="Local Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="MethodNameCheckerEnabled" Content="Method Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="ParameterNameCheckerEnabled" Content="Parameter Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="PropertyNameCheckerEnabled" Content="Property Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="TemplateParameterNameCheckerEnabled" Content="Template Parameter Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <Label Content="Inheritance" FontSize="15"/>
-            <CheckBox Name="AbstractClassCheckerEnabled" Content="Abstract Class Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="DepthOfInheritanceCheckerEnabled" Content="Depth of Inheritance Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
-            <CheckBox Name="SealedOverrideCheckerEnabled" Content="Sealed Override Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsChecked="False"/>
+            <CheckBox Name="TW2000" Content="Class Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <CheckBox Name="TW2002" Content="Field Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <CheckBox Name="TW2003" Content="Interface Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <CheckBox Name="TW2004" Content="Local Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <CheckBox Name="TW2005" Content="Method Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <CheckBox Name="TW2006" Content="Parameter Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <CheckBox Name="TW2007" Content="Property Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <CheckBox Name="TW2008" Content="Template Parameter Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
+            <Label Content="Inheritance Checkers" FontSize="15"/>
+            <CheckBox Name="TW2100" Content="Abstract Class Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
+            <CheckBox Name="TW2101" Content="Depth of Inheritance Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
+            <CheckBox Name="TW2102" Content="Sealed Override Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <Label Content="Accesibility Checkers" FontSize="15"/>
+            <CheckBox Name="TW2001" Content="Class Accesibility Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
+            <CheckBox Name="TW2200" Content="Field Accesibility Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
         </StackPanel>
     </Grid>
 </UserControl>

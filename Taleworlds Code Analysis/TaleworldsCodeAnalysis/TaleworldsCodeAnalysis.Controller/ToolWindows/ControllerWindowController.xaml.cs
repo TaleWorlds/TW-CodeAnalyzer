@@ -40,7 +40,7 @@ namespace TaleworldsCodeAnalysis.Controller
             CheckBox source = (CheckBox)e.OriginalSource;
 
             var path = GetSettingsFilePath();
-            var xDocument = SettingsChecker.GetSettingsFile(path);
+            var xDocument = SettingsChecker.Instance.GetSettingsFile(path);
             string name = source.Name;
             var node = xDocument.Root.Element(name);
             node.ReplaceNodes(source.IsChecked.ToString());
@@ -69,24 +69,26 @@ namespace TaleworldsCodeAnalysis.Controller
             Dispatcher.VerifyAccess();
             try
             {
-                var document = SettingsChecker.GetSettingsFile(GetSettingsFilePath());
-                
+                var document = SettingsChecker.Instance.GetSettingsFile(GetSettingsFilePath());
+
                 //Name Checkers
-                FieldNameCheckerEnabled.IsChecked = _isTrue("TW2002", document);
-                MethodNameCheckerEnabled.IsChecked = _isTrue("TW2005", document);
-                ClassNameCheckerEnabled.IsChecked = _isTrue("TW2000", document);
-                InterfaceNameCheckerEnabled.IsChecked = _isTrue("TW2003", document);
-                LocalNameCheckerEnabled.IsChecked = _isTrue("TW2004", document);
-                ParameterNameCheckerEnabled.IsChecked = _isTrue("TW2006", document);
-                PropertyNameCheckerEnabled.IsChecked = _isTrue("TW2007", document);
-                TemplateParameterNameCheckerEnabled.IsChecked = _isTrue("TW2008", document);
+                TW2002.IsChecked = _isTrue("TW2002", document);
+                TW2005.IsChecked = _isTrue("TW2005", document);
+                TW2000.IsChecked = _isTrue("TW2000", document);
+                TW2003.IsChecked = _isTrue("TW2003", document);
+                TW2004.IsChecked = _isTrue("TW2004", document);
+                TW2006.IsChecked = _isTrue("TW2006", document);
+                TW2007.IsChecked = _isTrue("TW2007", document);
+                TW2008.IsChecked = _isTrue("TW2008", document);
+
+                //Accesibility Checkers
+                TW2001.IsChecked = _isTrue("TW2001", document);
+                TW2200.IsChecked = _isTrue("TW2200", document);
 
                 //Inheritance Checkers
-                AbstractClassCheckerEnabled.IsChecked = _isTrue("TW2100", document);
-                DepthOfInheritanceCheckerEnabled.IsChecked = _isTrue("TW2101", document);
-                SealedOverrideCheckerEnabled.IsChecked = _isTrue("TW2102", document);
-
-                _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
+                TW2100.IsChecked = _isTrue("TW2100", document);
+                TW2101.IsChecked = _isTrue("TW2101", document);
+                TW2102.IsChecked = _isTrue("TW2102", document);
             }
             catch 
             {
