@@ -14,7 +14,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static string DiagnosticId => _diagnosticId;
 
-        public const string _diagnosticId = "TemplateParameterNameChecker";
+        public const string _diagnosticId = "TW2008";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.TemplateParameterNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.TemplateParameterNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.TemplateParameterNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
@@ -35,8 +35,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
 
-            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Node.GetLocation().SourceTree.FilePath)) return;
-            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Node.SyntaxTree.FilePath);
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
+
 
             var parameter = (TypeParameterSyntax)context.Node;
             var parameterName = parameter.Identifier.Text;

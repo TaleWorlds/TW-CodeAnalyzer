@@ -11,14 +11,14 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class FieldAccessibilityChecker : DiagnosticAnalyzer
     {
-        public static string AccesabilityDiagnosticId => _accessibilityDiagnosticId;
-        private const string _accessibilityDiagnosticId = "FieldAccessibilityChecker";
+        public static string DiagnosticId => _diagnosticId;
+        private const string _diagnosticId = "TW2200";
         private static readonly LocalizableString _accessibilityTitle = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _accessibilityMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _accessibilityDescription = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private const string _accessibilityCategory = "Accessibility";
 
-        private static readonly DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_accessibilityDiagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _accessibilityDescription);
+        private static readonly DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _accessibilityDescription);
 
 
 
@@ -37,8 +37,8 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
 
-            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(context.Node.SyntaxTree.FilePath)) return;
-            WhiteListParser.Instance.ReadGlobalWhiteListPath(context.Node.SyntaxTree.FilePath);
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
+
 
             var nameNode = (FieldDeclarationSyntax)context.Node;
             var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();

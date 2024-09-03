@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AbstractClassChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "TW2101";
+        public const string DiagnosticId = "TW2100";
         internal static readonly LocalizableString _title = "Abstract classes should not have any method that has a body.";
         internal static readonly LocalizableString _messageFormat = "Abstract classes should not have any method that has a body.";
         internal const string _category = "Inheritance";
@@ -32,7 +32,10 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            var classDec= (ClassDeclarationSyntax) context.Node;
+
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
+
+            var classDec = (ClassDeclarationSyntax) context.Node;
 
             bool isAbstract = false;
 

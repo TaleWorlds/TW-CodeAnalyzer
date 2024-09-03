@@ -201,4 +201,10 @@
   <data name="TemplateParameterNameCheckerTitle" xml:space="preserve">
     <value>Template parameters should use "TPascalCase".</value>
   </data>
+  <data name="ClassModifierCheckerDescription" xml:space="preserve">
+    <value>Classes cannot be "Protected" by TW conventions.</value>
+  </data>
+  <data name="ClassModifierCheckerTitle" xml:space="preserve">
+    <value>Classes cannot be "Protected" by TW conventions.</value>
+  </data>
 </root>
