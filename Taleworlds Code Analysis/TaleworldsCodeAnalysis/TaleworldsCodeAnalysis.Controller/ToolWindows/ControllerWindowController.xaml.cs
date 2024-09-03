@@ -40,7 +40,7 @@ namespace TaleworldsCodeAnalysis.Controller
             CheckBox source = (CheckBox)e.OriginalSource;
 
             var path = GetSettingsFilePath();
-            var xDocument = GetSettingsFile(path);
+            var xDocument = SettingsChecker.GetSettingsFile(path);
             string name = source.Name;
             var node = xDocument.Root.Element(name);
             node.ReplaceNodes(source.IsChecked.ToString());
@@ -62,53 +62,29 @@ namespace TaleworldsCodeAnalysis.Controller
             return settingPath;
         }
 
-        private XDocument GetSettingsFile(string settingPath)
-        {
-            XDocument xDocument;
-            try
-            {
-                 xDocument = XDocument.Load(settingPath);
-            }
-            catch 
-            {
-                xDocument = new XDocument(new XElement("Settings", 
-                    new XElement("FieldNameCheckerEnabled", "True"),
-                    new XElement("MethodNameCheckerEnabled", "True"),
-                    new XElement("ClassNameCheckerEnabled", "True"),
-                    new XElement("InterfaceNameCheckerEnabled", "True"),
-                    new XElement("LocalNameCheckerEnabled", "True"),
-                    new XElement("ParameterNameCheckerEnabled", "True"),
-                    new XElement("PropertyNameCheckerEnabled", "True"),
-                    new XElement("TemplateParameterNameCheckerEnabled", "True"),
-                    new XElement("AbstractClassCheckerEnabled", "True"),
-                    new XElement("DepthOfInheritanceCheckerEnabled", "True"),
-                    new XElement("SealedOverrideCheckerEnabled", "True")));
-                xDocument.Save(settingPath);
-            }
-            return xDocument;
-        }
+
 
         public void Init()
         {
             Dispatcher.VerifyAccess();
             try
             {
-                var document = GetSettingsFile(GetSettingsFilePath());
+                var document = SettingsChecker.GetSettingsFile(GetSettingsFilePath());
                 
                 //Name Checkers
-                FieldNameCheckerEnabled.IsChecked = _isTrue("FieldNameCheckerEnabled",document);
-                MethodNameCheckerEnabled.IsChecked = _isTrue("MethodNameCheckerEnabled", document);
-                ClassNameCheckerEnabled.IsChecked = _isTrue("ClassNameCheckerEnabled", document);
-                InterfaceNameCheckerEnabled.IsChecked = _isTrue("InterfaceNameCheckerEnabled", document);
-                LocalNameCheckerEnabled.IsChecked = _isTrue("LocalNameCheckerEnabled", document);
-                ParameterNameCheckerEnabled.IsChecked = _isTrue("ParameterNameCheckerEnabled", document);
-                PropertyNameCheckerEnabled.IsChecked = _isTrue("PropertyNameCheckerEnabled", document);
-                TemplateParameterNameCheckerEnabled.IsChecked = _isTrue("TemplateParameterNameCheckerEnabled", document);
+                FieldNameCheckerEnabled.IsChecked = _isTrue("TW2002", document);
+                MethodNameCheckerEnabled.IsChecked = _isTrue("TW2005", document);
+                ClassNameCheckerEnabled.IsChecked = _isTrue("TW2000", document);
+                InterfaceNameCheckerEnabled.IsChecked = _isTrue("TW2003", document);
+                LocalNameCheckerEnabled.IsChecked = _isTrue("TW2004", document);
+                ParameterNameCheckerEnabled.IsChecked = _isTrue("TW2006", document);
+                PropertyNameCheckerEnabled.IsChecked = _isTrue("TW2007", document);
+                TemplateParameterNameCheckerEnabled.IsChecked = _isTrue("TW2008", document);
 
                 //Inheritance Checkers
-                AbstractClassCheckerEnabled.IsChecked = _isTrue("AbstractClassCheckerEnabled", document);
-                DepthOfInheritanceCheckerEnabled.IsChecked = _isTrue("DepthOfInheritanceCheckerEnabled", document);
-                SealedOverrideCheckerEnabled.IsChecked = _isTrue("SealedOverrideCheckerEnabled", document);
+                AbstractClassCheckerEnabled.IsChecked = _isTrue("TW2100", document);
+                DepthOfInheritanceCheckerEnabled.IsChecked = _isTrue("TW2101", document);
+                SealedOverrideCheckerEnabled.IsChecked = _isTrue("TW2102", document);
 
                 _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
             }
