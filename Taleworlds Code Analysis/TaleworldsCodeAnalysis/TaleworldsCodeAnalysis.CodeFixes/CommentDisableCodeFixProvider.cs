@@ -75,14 +75,16 @@ namespace TaleworldsCodeAnalysis
                 return context.Document.Project.Solution;
             }
 
-            // Create a new trivia (comment) node
             var commentTrivia = SyntaxFactory.Comment(comment);
 
             var newLineTrivia = SyntaxFactory.CarriageReturnLineFeed;
 
-            var leadingTrivia = targetNode.GetLeadingTrivia()
-                .Insert(0, newLineTrivia)
-                .Insert(0, commentTrivia);
+            var leadingTrivia = targetNode.GetLeadingTrivia();
+            var lastTrivia = leadingTrivia.LastOrDefault();
+            leadingTrivia = leadingTrivia.Add(newLineTrivia).Add(commentTrivia).Add(newLineTrivia);
+            if (lastTrivia.IsKind(SyntaxKind.WhitespaceTrivia)) leadingTrivia = leadingTrivia.Add(lastTrivia);
+
+
             var newTargetNode = targetNode.WithLeadingTrivia(leadingTrivia);
             var newRoot = root.ReplaceNode(targetNode, newTargetNode);
 
