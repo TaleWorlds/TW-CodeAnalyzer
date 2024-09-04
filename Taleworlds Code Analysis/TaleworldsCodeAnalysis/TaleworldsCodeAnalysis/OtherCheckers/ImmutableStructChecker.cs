@@ -26,7 +26,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.StructDeclaration);
+            //context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.StructDeclaration);
         }
 
         private void _analyzer(SyntaxNodeAnalysisContext context)

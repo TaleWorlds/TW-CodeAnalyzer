@@ -32,6 +32,8 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _methodAnalyzer(SyntaxNodeAnalysisContext context)
         {
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
+
             var methodNode = (MethodDeclarationSyntax)context.Node;
             _checkMixedAccessibility(methodNode.Modifiers,context);
             
@@ -59,6 +61,8 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _propertyAnalyzer(SyntaxNodeAnalysisContext context)
         {
+            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
+
             var propertyNode = (PropertyDeclarationSyntax)context.Node;
             _checkMixedAccessibility(propertyNode.Modifiers, context);
         }
