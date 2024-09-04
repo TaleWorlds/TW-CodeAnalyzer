@@ -21,7 +21,7 @@ namespace TaleworldsCodeAnalysis.Test.Inheritance
             class BaseClass {}
             class FirstDerivedClass : BaseClass {}
             ";
-
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -37,10 +37,11 @@ namespace TaleworldsCodeAnalysis.Test.Inheritance
             ";
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("TW2102").WithLocation(0),
-                VerifyCS.Diagnostic("TW2102").WithLocation(1),
-                VerifyCS.Diagnostic("TW2102").WithLocation(2)
+                VerifyCS.Diagnostic("TW2101").WithLocation(0),
+                VerifyCS.Diagnostic("TW2101").WithLocation(1),
+                VerifyCS.Diagnostic("TW2101").WithLocation(2)
             };
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test,expectedResults);
         }
     }

@@ -39,6 +39,10 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public override string FixListedItems(string name, HashSet<string> list)
         {
+            if (list == null)
+            {
+                return name;
+            }
             foreach (var item in list)
             {
                 Regex regex = new Regex(item);

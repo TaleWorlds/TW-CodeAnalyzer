@@ -42,7 +42,11 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public override string FixListedItems(string name,HashSet<string> list)
         {
-            name= name[0]+CamelCaseBehaviour.Instance.FixListedItems(name.Substring(1),list);
+            if (list == null)
+            {
+                return name;
+            }
+            name = name[0]+CamelCaseBehaviour.Instance.FixListedItems(name.Substring(1),list);
             return name;
         }
 

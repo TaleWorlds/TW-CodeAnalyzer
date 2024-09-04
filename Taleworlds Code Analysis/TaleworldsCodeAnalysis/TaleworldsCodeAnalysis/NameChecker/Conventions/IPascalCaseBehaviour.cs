@@ -33,6 +33,10 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public override string FixListedItems(string name, HashSet<string> list)
         {
+            if (list == null)
+            {
+                return name;
+            }
             name = name[0] + PascalCaseBehaviour.Instance.FixListedItems(name.Substring(1), list);
             return name;
         }

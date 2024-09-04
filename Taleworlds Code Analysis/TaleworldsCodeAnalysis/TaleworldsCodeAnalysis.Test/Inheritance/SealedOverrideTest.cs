@@ -33,7 +33,7 @@ namespace TaleworldsCodeAnalysis.Test.Inheritance
                 }
             }
             ";
-
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -59,9 +59,9 @@ namespace TaleworldsCodeAnalysis.Test.Inheritance
 
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("TW2103").WithLocation(0),
+                VerifyCS.Diagnostic("TW2102").WithLocation(0),
             };
-
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
         }
     }

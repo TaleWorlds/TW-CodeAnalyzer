@@ -21,7 +21,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             {   
                 
             }";
-
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test1);
         }
 
@@ -52,10 +52,11 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 
             }";
             WhiteListParser.Instance.EnableTesting();
-            var expected1 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("tApp","TApp");
-            var expected2 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("Tapp","TApp");
-            var expected3 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("tapp","TApp");
-            var expected4 = VerifyCS.Diagnostic("TemplateParameterNameChecker").WithLocation(0).WithArguments("IApp","TIapp");
+            PreAnalyzerConditions.Instance.EnableTest();
+            var expected1 = VerifyCS.Diagnostic("TW2008").WithLocation(0).WithArguments("tApp","TApp");
+            var expected2 = VerifyCS.Diagnostic("TW2008").WithLocation(0).WithArguments("Tapp","TApp");
+            var expected3 = VerifyCS.Diagnostic("TW2008").WithLocation(0).WithArguments("tapp","TApp");
+            var expected4 = VerifyCS.Diagnostic("TW2008").WithLocation(0).WithArguments("IApp","TIapp");
             await VerifyCS.VerifyAnalyzerAsync(test1, expected1);
             await VerifyCS.VerifyAnalyzerAsync(test2, expected2);
             await VerifyCS.VerifyAnalyzerAsync(test3, expected3);

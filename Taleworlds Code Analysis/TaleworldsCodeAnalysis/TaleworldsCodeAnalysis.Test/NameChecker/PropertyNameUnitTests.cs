@@ -30,6 +30,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 private int _valueLoc;
             }";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -48,13 +49,14 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 private int _value;
             }";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("ValuePriv","_valuePriv"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePriv","_valuePriv"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("value_Priv", "_valuePriv"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("ValueInt", "_valueInt"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(4).WithArguments("valueInt", "_valueInt")
+                VerifyCS.Diagnostic("TW2007").WithLocation(0).WithArguments("ValuePriv","_valuePriv"),
+                VerifyCS.Diagnostic("TW2007").WithLocation(1).WithArguments("valuePriv","_valuePriv"),
+                VerifyCS.Diagnostic("TW2007").WithLocation(2).WithArguments("value_Priv", "_valuePriv"),
+                VerifyCS.Diagnostic("TW2007").WithLocation(3).WithArguments("ValueInt", "_valueInt"),
+                VerifyCS.Diagnostic("TW2007").WithLocation(4).WithArguments("valueInt", "_valueInt")
             };
             
             await VerifyCS.VerifyAnalyzerAsync(test,expectedResults);
@@ -64,6 +66,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
         public async Task PropertyPublicProtWarning()
         {
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             var test = @"
             public class Test
             {   
@@ -76,10 +79,10 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }";   
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(0).WithArguments("_valuePub", "ValuePub"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(1).WithArguments("valuePub",  "ValuePub"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(2).WithArguments("_valueProp", "ValueProp"),
-                VerifyCS.Diagnostic("PropertyNameChecker").WithLocation(3).WithArguments("valueProp", "ValueProp")
+                VerifyCS.Diagnostic("TW2007").WithLocation(0).WithArguments("_valuePub", "ValuePub"),
+                VerifyCS.Diagnostic("TW2007").WithLocation(1).WithArguments("valuePub",  "ValuePub"),
+                VerifyCS.Diagnostic("TW2007").WithLocation(2).WithArguments("_valueProp", "ValueProp"),
+                VerifyCS.Diagnostic("TW2007").WithLocation(3).WithArguments("valueProp", "ValueProp")
             };
             
 
