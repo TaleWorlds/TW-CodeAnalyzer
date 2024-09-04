@@ -42,6 +42,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
             var nameNode = (FieldDeclarationSyntax)context.Node;
             var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
+
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
 
