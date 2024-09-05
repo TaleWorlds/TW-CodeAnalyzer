@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DepthOfInheritanceChecker : DiagnosticAnalyzer
     {
-        public string DiagnosticId => _diagnosticId;
+        public static string DiagnosticId => _diagnosticId;
 
         private const string _diagnosticId = "TW2101";
         private static readonly LocalizableString _title = "Depth of inheritance should be 2 at maximum";

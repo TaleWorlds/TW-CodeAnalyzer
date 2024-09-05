@@ -13,7 +13,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AbstractClassChecker : DiagnosticAnalyzer
     {
-        public string DiagnosticId => _diagnosticId;
+        public static string DiagnosticId => _diagnosticId;
 
         private const string _diagnosticId = "TW2100";
         private static readonly LocalizableString _title = "Abstract classes should not have any method that has a body";

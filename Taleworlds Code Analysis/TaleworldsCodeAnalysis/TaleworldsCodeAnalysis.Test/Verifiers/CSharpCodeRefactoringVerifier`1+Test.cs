@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis.Testing.Verifiers;
 
 namespace TaleworldsCodeAnalysis.Test
 {
+    
+//TWCodeAnalysis disable all
     public static partial class CSharpCodeRefactoringVerifier<TCodeRefactoring>
         where TCodeRefactoring : CodeRefactoringProvider, new()
     {

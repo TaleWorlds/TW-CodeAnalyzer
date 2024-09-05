@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace TaleworldsCodeAnalysis.Test
 {
+    
+//TWCodeAnalysis disable all
     public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         where TAnalyzer : DiagnosticAnalyzer, new()
         where TCodeFix : CodeFixProvider, new()

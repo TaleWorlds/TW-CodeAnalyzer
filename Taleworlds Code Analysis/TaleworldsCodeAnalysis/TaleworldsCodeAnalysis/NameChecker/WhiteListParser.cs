@@ -107,7 +107,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             return solnFilePath;
         }
 
-        private string _findLocalXMLFilePath()
+        private string _findLocalXMLFilePath()  
         {
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             return Path.Combine(appData, _pathAfterLocalAppData);
