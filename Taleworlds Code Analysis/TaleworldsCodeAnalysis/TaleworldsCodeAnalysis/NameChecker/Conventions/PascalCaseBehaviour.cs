@@ -23,7 +23,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
         private static PascalCaseBehaviour _instance;
         private Regex _regexWhole = new Regex("^[A-Z](([a-z0-9]+[A-Z]?)*)$");
 
-        public override IReadOnlyList<string> FindWhiteListCandidates(string name)
+        public sealed override IReadOnlyList<string> FindWhiteListCandidates(string name)
         {
             List<string> candidates = new List<string>();
 
@@ -37,7 +37,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return NameCheckerLibrary.OneUpperCaseAllowedCandidates(name, currentCandidate, upperFound);
         }
 
-        public override string FixListedItems(string name, HashSet<string> list)
+        public sealed override string FixListedItems(string name, HashSet<string> list)
         {
             if (list == null)
             {
@@ -72,7 +72,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return name;
         }
 
-        public override string FixThis(string name)
+        public sealed override string FixThis(string name)
         {
             Regex regex = new Regex("[^A-Za-z0-9]");
             name = regex.Replace(name, "");
@@ -102,7 +102,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return CamelCaseBehaviour.Instance.FixExceptFirstCharacter(name.Substring(1), whiteIgnoredName, upperCaseFound, newWord); //ERROR
         }
 
-        public override bool IsMatching(string name)
+        public sealed override bool IsMatching(string name)
         {
             name = FixListedItems(name, WhiteListParser.Instance.WhiteListWords);
             return _regexWhole.IsMatch(name);

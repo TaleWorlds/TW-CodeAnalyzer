@@ -19,6 +19,8 @@ namespace TaleworldsCodeAnalysis.Commands
     /// <summary>
     /// Command handler
     /// </summary>
+    
+//TWCodeAnalysis disable all
     internal sealed class AddToBlacklistCommand
     {
         /// <summary>
@@ -135,7 +137,6 @@ namespace TaleworldsCodeAnalysis.Commands
                 }
                 doc.Save(fullPath);
             }
-
 
             string message = string.Format("Added {0} to the blacklist", projectName);
             string title = "Add to Blacklist";

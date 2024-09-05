@@ -20,9 +20,9 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
         }
 
         private static CamelCaseBehaviour _instance;
-
         private Regex _regexWhole = new Regex("^[a-z](([a-z0-9]*[A-Z]?)*)$");
-        public override string FixThis(string name)
+
+        public sealed override string FixThis(string name)
         {
             Regex regex = new Regex("[^A-Za-z0-9]");
             name=regex.Replace(name, "");
@@ -73,10 +73,8 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return newWord;
         }
 
-        public override IReadOnlyList<string> FindWhiteListCandidates(string name)
+        public sealed override IReadOnlyList<string> FindWhiteListCandidates(string name)
         {
-            
-
             string currentCandidate="";
             bool upperFound = false;
             if (NameCheckerLibrary.IsUpperCase(name[0]))
@@ -87,7 +85,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return NameCheckerLibrary.OneUpperCaseAllowedCandidates(name,currentCandidate,upperFound);
         }
 
-        public override string FixListedItems(string name,HashSet<string> list)
+        public sealed override string FixListedItems(string name,HashSet<string> list)
         {
             if (list==null)
             {
@@ -120,7 +118,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return name;
         }
 
-        public override bool IsMatching(string name)
+        public sealed override bool IsMatching(string name)
         {
             name = FixListedItems(name,WhiteListParser.Instance.WhiteListWords);
             return _regexWhole.IsMatch(name);

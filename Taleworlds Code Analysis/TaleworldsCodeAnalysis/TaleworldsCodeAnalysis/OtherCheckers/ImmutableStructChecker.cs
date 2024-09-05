@@ -13,16 +13,17 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ImmutableStructChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "ImmutableStructChecker";
-        internal static readonly LocalizableString Title = "ImmutableStructChecker Title";
-        internal static readonly LocalizableString MessageFormat = "ImmutableStructChecker '{0}'";
-        internal const string Category = "ImmutableStructChecker Category";
+        public string DiagnosticId => _diagnosticId;
+        private const string _diagnosticId = "ImmutableStructChecker";
+        private static readonly LocalizableString _title = "ImmutableStructChecker Title";
+        private static readonly LocalizableString _messageFormat = "ImmutableStructChecker '{0}'";
+        private const string _category = "ImmutableStructChecker Category";
 
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, true);
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
 
-        public override void Initialize(AnalysisContext context)
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();

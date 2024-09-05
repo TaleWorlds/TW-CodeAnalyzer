@@ -22,12 +22,12 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
 
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
             get { return ImmutableArray.Create(_accessibilityRule); }
         }
 
-        public override void Initialize(AnalysisContext context)
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
@@ -36,9 +36,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-
             if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
-
 
             var nameNode = (FieldDeclarationSyntax)context.Node;
             var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();

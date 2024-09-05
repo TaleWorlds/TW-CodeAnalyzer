@@ -13,16 +13,18 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DepthOfInheritanceChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "TW2101";
-        internal static readonly LocalizableString Title = "Depth of inheritance should be 2 at maximum.";
-        internal static readonly LocalizableString MessageFormat = "Depth of inheritance should be 2 at maximum.";
-        internal const string Category = "Inheritance";
+        public string DiagnosticId => _diagnosticId;
 
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, true);
+        private const string _diagnosticId = "TW2101";
+        private static readonly LocalizableString _title = "Depth of inheritance should be 2 at maximum";
+        private static readonly LocalizableString _messageFormat = "Depth of inheritance should be 2 at maximum";
+        private const string _category = "Inheritance";
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
 
-        public override void Initialize(AnalysisContext context)
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
+
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
@@ -47,10 +49,8 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
             if (depth>1)
             {
-                context.ReportDiagnostic(Diagnostic.Create(Rule, classDeclarationSyntax.Identifier.GetLocation()));
+                context.ReportDiagnostic(Diagnostic.Create(_rule, classDeclarationSyntax.Identifier.GetLocation()));
             }
-
-
         }
     }
 }

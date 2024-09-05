@@ -13,16 +13,18 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class MixedAccessModifierChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "TW2202";
-        internal static readonly LocalizableString Title = "MixedAccessModifierChecker Title";
-        internal static readonly LocalizableString MessageFormat = "MixedAccessModifierChecker '{0}'";
-        internal const string Category = "MixedAccessModifierChecker Category";
+        public string DiagnosticId => _diagnosticId;
 
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, true);
+        private const string _diagnosticId = "TW2202";
+        private static readonly LocalizableString _title = "MixedAccessModifierChecker Title";
+        private static readonly LocalizableString _messageFormat = "MixedAccessModifierChecker '{0}'";
+        private const string _category = "MixedAccessModifierChecker Category";
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
 
-        public override void Initialize(AnalysisContext context)
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
+
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
@@ -51,7 +53,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
                 {
                     if (accesibilityFound)
                     {
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, item.GetLocation()));
+                        context.ReportDiagnostic(Diagnostic.Create(_rule, item.GetLocation()));
                         return;
                     }
                     accesibilityFound = true;

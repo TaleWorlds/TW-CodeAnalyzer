@@ -22,10 +22,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         private static UnderScoreCaseBehaviour _instance;
         private Regex _regexWhole = new Regex("^[_][a-z]*([a-z0-9]+[A-Z]?)*$");
-
-
-
-        public override string FixThis(string name)
+        public sealed override string FixThis(string name)
         {
             string newName = "";
             if(!name.StartsWith("_"))
@@ -40,7 +37,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return newName;
         }
 
-        public override string FixListedItems(string name,HashSet<string> list)
+        public sealed override string FixListedItems(string name,HashSet<string> list)
         {
             if (list == null)
             {
@@ -50,13 +47,13 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
             return name;
         }
 
-        public override bool IsMatching(string name)
+        public sealed override bool IsMatching(string name)
         {
             name = FixListedItems(name,WhiteListParser.Instance.WhiteListWords);
             return _regexWhole.IsMatch(name);
         }
 
-        public override IReadOnlyList<string> FindWhiteListCandidates(string name)
+        public sealed override IReadOnlyList<string> FindWhiteListCandidates(string name)
         {
             if (!name.StartsWith("_") || name == "_") return new List<string>();
             var candidates = CamelCaseBehaviour.Instance.FindWhiteListCandidates(name.Substring(1));

@@ -115,11 +115,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         public void EnableTesting()
         {
-            var _testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\" +
+            var testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\" +
             "TaleworldsCodeAnalysis\\WhiteList.xml";
-            _sharedWhiteListPath= _testPathXML;
+            _sharedWhiteListPath= testPathXML;
         }
-
-
     }
 }

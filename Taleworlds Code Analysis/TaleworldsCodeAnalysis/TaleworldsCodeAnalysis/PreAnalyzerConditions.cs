@@ -29,7 +29,7 @@ namespace TaleworldsCodeAnalysis
             if(_testMod) return false; ;
             var filePath = context.Node.GetLocation().SourceTree.FilePath;
             WhiteListParser.Instance.ReadGlobalWhiteListPath(filePath);
-            if (BlackListedProjects.Instance.isBlackListedProjectFromCodePath(filePath)) return true;
+            if (BlackListedProjects.Instance.IsBlackListedProjectFromCodePath(filePath)) return true;
             if (AnalyzerDisablingComments.Instance.IsInDisablingComments(context.Node, diagnosticId)) return true;
             if (!SettingsChecker.Instance.IsAnalysisEnabled(diagnosticId,filePath)) return true;
             return false;

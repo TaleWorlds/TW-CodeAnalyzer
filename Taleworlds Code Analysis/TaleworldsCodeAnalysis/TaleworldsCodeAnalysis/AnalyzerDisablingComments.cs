@@ -12,8 +12,11 @@ namespace TaleworldsCodeAnalysis
     {
         private static AnalyzerDisablingComments _instance;
         public static AnalyzerDisablingComments Instance { get {
-                if (_instance == null) return new AnalyzerDisablingComments();
-                else return _instance;
+                if (_instance == null)
+                {
+                    _instance = new AnalyzerDisablingComments();
+                }
+                return _instance;
             }
         }
 
@@ -23,23 +26,23 @@ namespace TaleworldsCodeAnalysis
             var root = node.SyntaxTree.GetRoot();
             var singleLineComments = root.DescendantTrivia().Where(trivia => trivia.IsKind(SyntaxKind.SingleLineCommentTrivia));
 
-            List<Comment> commentsList = new List<Comment>();
+            List<_comment> commentsList = new List<_comment>();
 
             foreach (var commentSyntax in singleLineComments)
             {
                 if (commentSyntax.ToString().ToLower() == "//twcodeanalysis enable all" || commentSyntax.ToString().ToLower() == String.Format("//twcodeanalysis enable {0}", diagnosticId.ToLower()))
                 {
-                    commentsList.Add(new Comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OnComment));
+                    commentsList.Add(new _comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OnComment));
                 }
                 else if (commentSyntax.ToString().ToLower() == "//twcodeanalysis disable all" || commentSyntax.ToString().ToLower() == String.Format("//twcodeanalysis disable {0}", diagnosticId.ToLower()))
                 {
-                    commentsList.Add(new Comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OffComment));
+                    commentsList.Add(new _comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OffComment));
                 }
             }
 
 
             int nodeLine = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-            Comment closestCommentBeforeNode = null;
+            _comment closestCommentBeforeNode = null;
             foreach (var comment in commentsList)
             {
                 if (comment.Line < nodeLine)
@@ -55,12 +58,12 @@ namespace TaleworldsCodeAnalysis
         }
     }
 
-    internal class Comment
+    internal class _comment
     {
         public int Line { get; private set; }
         public CommentType Type { get; private set; }
 
-        public Comment(int line, CommentType type) {
+        public _comment(int line, CommentType type) {
             Line = line;
             Type = type;
         }

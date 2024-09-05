@@ -13,19 +13,20 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class NamedParameterChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "TW2201";
-        internal static readonly LocalizableString Title = "You need to call method with its parameter names " +
-            "if it has more than "+argumentThreshold+".";
-        internal static readonly LocalizableString MessageFormat = "You need to call method with its parameter names " +
-            "if it has more than "+argumentThreshold+".";
-        internal const string Category = "Parameter";
+        public string DiagnosticId => _diagnosticId;
+        private const string _diagnosticId = "TW2201";
+        private static readonly LocalizableString _title = "You need to call method with its parameter names " +
+            "if it has more than "+_argumentThreshold+".";
+        private static readonly LocalizableString _messageFormat = "You need to call method with its parameter names " +
+            "if it has more than "+_argumentThreshold+".";
+        private const string _category = "Parameter";
 
-        internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, true);
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
 
-        private const int argumentThreshold = 3;
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+        private const int _argumentThreshold = 3;
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
 
-        public override void Initialize(AnalysisContext context)
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
@@ -46,7 +47,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
             {
                 if (item.NameColon==null)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(Rule, invocationExpr.GetLocation()));
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, invocationExpr.GetLocation()));
                 }
             }
         }
