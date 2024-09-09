@@ -51,5 +51,30 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
         public static readonly DependencyProperty AdditionalChoiceProperty =
             DependencyProperty.Register("AdditionalChoice", typeof(string), typeof(SeverityController), new PropertyMetadata(string.Empty));
 
+        internal void SetSelectedIndex(int index)
+        {
+            ComboBox.SelectedIndex = index;
+        }
+
+        private void ComboBox_Selected(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Dispatcher.VerifyAccess();
+                ComboBox source = (ComboBox)e.OriginalSource;
+
+                var path = SettingsParser.Instance.GetSettingsFilePath();
+                var xDocument = SettingsChecker.Instance.GetSettingsFile(path);
+                var node = xDocument.Root.Element(Code);
+                node.ReplaceNodes(source.SelectedIndex);
+                xDocument.Save(path);
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+            
+        }
+
     }
 }

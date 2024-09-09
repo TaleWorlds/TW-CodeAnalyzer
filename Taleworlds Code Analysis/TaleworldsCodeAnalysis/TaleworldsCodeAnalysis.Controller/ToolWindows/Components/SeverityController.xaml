@@ -13,7 +13,7 @@
                 <TextBlock Text="{Binding Title, ElementName=root}" FontSize="12" VerticalAlignment="Center" Width="300" Padding="5,0,0,0" />
             </Grid>
             <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
-                <ComboBox Name ="TW20000" Width="100" FontSize="12" HorizontalAlignment="Right" SelectedValue="None" SelectedIndex="0">
+                <ComboBox Name ="ComboBox" Width="100" FontSize="12" HorizontalAlignment="Right" SelectedIndex="0" SelectionChanged="ComboBox_Selected">
                     <ComboBoxItem Name="None" Content="Severity.None" FontSize="12"></ComboBoxItem>
                     <ComboBoxItem Name="Warning" Content="Severity.Warning" FontSize="12"></ComboBoxItem>
                     <ComboBoxItem Name="Error" Content="Severity.Error" FontSize="12"></ComboBoxItem>

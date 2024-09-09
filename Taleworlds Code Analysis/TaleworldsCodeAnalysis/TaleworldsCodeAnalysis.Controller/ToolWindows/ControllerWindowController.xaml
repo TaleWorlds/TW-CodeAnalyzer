@@ -13,7 +13,7 @@
              mc:Ignorable="d"
              Name="ControllerWindow"
              LostFocus="UserControl_GotFocus"
-             GotFocus="UserControl_GotFocus" ClipToBounds="True" Loaded="ControllerWindow_Loaded"
+             GotFocus="UserControl_GotFocus" ClipToBounds="True"
             >
 
     <StackPanel VerticalAlignment="Stretch">
@@ -28,7 +28,7 @@
                             <TextBlock Text="Severity Presets" FontSize="12" VerticalAlignment="Center" Width="300" Padding="5,0,0,0" />
                         </Grid>
                         <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <ComboBox Name ="TW20000" Width="100" FontSize="12" HorizontalAlignment="Right" SelectedValue="None" SelectedIndex="0">
+                            <ComboBox Name ="OverAll" Width="100" FontSize="12" HorizontalAlignment="Right" SelectedValue="None" SelectedIndex="0">
                                 <ComboBoxItem Name="None" Content="Severity.None" FontSize="12"></ComboBoxItem>
                                 <ComboBoxItem Name="Warning" Content="Severity.Warning" FontSize="12"></ComboBoxItem>
                                 <ComboBoxItem Name="Error" Content="Severity.Error" FontSize="12"></ComboBoxItem>
@@ -47,92 +47,109 @@
                 <Label Content="Name Checkers" FontSize="15"/>
 
                 <components:SeverityController 
-                 Title="Class Name Checker Enabled"
                  x:Name="TW2000"
+                 Title="Class Name Checker Enabled"
+                 Code="TW2000"
                  />
 
                 <components:SeverityController 
                  Title="Field Name Checker Enabled"
+                 Code="TW2002"
                  x:Name="TW2002"
                  />
 
                 <components:SeverityController 
                  Title="Interface Name Checker Enabled"
-                 x:Name="TW2003"
+                 Code="TW2003"
+                x:Name="TW2003"
                  />
 
                 <components:SeverityController 
                  Title="Local Name Checker Enabled"
-                 x:Name="TW2004"
+                 Code="TW2004"
+                x:Name="TW2004"
                  />
 
                 <components:SeverityController 
                  Title="Method Name Checker Enabled"
-                 x:Name="TW2005"
+                 Code="TW2005"
+                x:Name="TW2005"
                  />
 
                 <components:SeverityController 
                  Title="Parameter Name Checker Enabled"
-                 x:Name="TW2006"
+                 Code="TW2006"
+                x:Name="TW2006"
                  />
 
                 <components:SeverityController 
                  Title="Property Name Checker Enabled"
-                 x:Name="TW2007"
+                 Code="TW2007"
+                x:Name="TW2007"
                  />
 
                 <components:SeverityController 
                  Title="Template Parameter Name Checker Enabled"
-                 x:Name="TW2008"
+                 Code="TW2008"
+                x:Name="TW2008"
                  />
 
                 <Label Content="Inheritance Checkers" FontSize="15"/>
 
                 <components:SeverityController 
                  Title="Abstract Class Checker Enabled"
-                 x:Name="TW2100"
+                 Code="TW2100"
+                x:Name="TW2100"
                  />
 
                 <components:SeverityController 
                  Title="Depth of Inheritance Checker Enabled"
-                 x:Name="TW2101"
+                 Code="TW2101"
+                x:Name="TW2101"
                  />
 
                 <components:SeverityController 
                  Title="Sealed Override Checker Enabled"
-                 x:Name="TW2102"
+                 Code="TW2102"
+                x:Name="TW2102"
                  />
 
                 <Label Content="Accesibility Checkers" FontSize="15"/>
 
                 <components:SeverityController 
                  Title="Class Accesibility Checker Enabled"
-                 x:Name="TW2001"
+                 Code="TW2001"
+                x:Name="TW2001"
                  />
 
                 <components:SeverityController 
                  Title="Class Accesibility Checker Enabled"
-                 x:Name="TW2200"
+                 Code="TW2200"
+                x:Name="TW2200"
                  />
 
                 <Label Content="Other Checkers" FontSize="15"/>
                 <components:SeverityController 
                  Title="Named Parameter Checker Enabled"
-                 x:Name="TW2201"
+                 Code="TW2201"
+                x:Name="TW2201"
                  />
 
                 <components:SeverityController 
                  Title="Named Parameter Checker Enabled"
+                 Code="TW2202"
                  x:Name="TW2202"
                  />
 
                 <components:SeverityController 
                  Title="Var Keyword Checker Enabled"
+                 Code="TW2204"
                  x:Name="TW2204"
                  />
 
                 <components:SeverityController 
                  Title="Immutable Structs Checker Enabled"
+                 Code="TW2205"
                  x:Name="TW2205"
                  />
             </StackPanel>

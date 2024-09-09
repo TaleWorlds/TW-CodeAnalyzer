@@ -57,6 +57,7 @@
     <Compile Include="ToolWindows\Components\SeverityController.xaml.cs">
       <DependentUpon>SeverityController.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ToolWindows\SettingsParser.cs" />
     <Compile Include="VSCommandTable.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
