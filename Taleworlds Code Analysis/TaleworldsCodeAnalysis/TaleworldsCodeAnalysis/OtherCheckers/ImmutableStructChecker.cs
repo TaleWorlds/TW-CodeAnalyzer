@@ -14,10 +14,10 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     public class ImmutableStructChecker : DiagnosticAnalyzer
     {
         public string DiagnosticId => _diagnosticId;
-        private const string _diagnosticId = "ImmutableStructChecker";
-        private static readonly LocalizableString _title = "ImmutableStructChecker Title";
-        private static readonly LocalizableString _messageFormat = "ImmutableStructChecker '{0}'";
-        private const string _category = "ImmutableStructChecker Category";
+        private const string _diagnosticId = "TW2205";
+        private static readonly LocalizableString _title = "";
+        private static readonly LocalizableString _messageFormat = "Structs that has only one field should be immutable (Place readonly modifier on the field)";
+        private const string _category = "Immutable Structs";
 
         private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
 
@@ -27,7 +27,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            //context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.StructDeclaration);
+            context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.StructDeclaration);
         }
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
@@ -36,6 +36,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
             var members = declarationNode.Members;
 
             int fieldCount = 0;
+            FieldDeclarationSyntax field = null; ;
 
             foreach (var member in members)
             {
@@ -46,16 +47,30 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
                 if (member.IsKind(SyntaxKind.FieldDeclaration))
                 {
                     fieldCount++;
+                    field = (FieldDeclarationSyntax)member;
                 }
             }
 
             if (fieldCount==1)
             {
-                var modifiers = declarationNode.Modifiers;
-                var immutableFound = false;
+                var modifiers = field.Modifiers;
+                var readOnly = false;
                 foreach (var modifier in modifiers)
                 {
                     //Immutable check
+                    if(readOnly)
+                    {
+                        return;
+                    }
+                    if (modifier.IsKind(SyntaxKind.ReadOnlyKeyword))
+                    {
+                        readOnly = true;
+                    }
+                }
+
+                if(!readOnly)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, declarationNode.Identifier.GetLocation()));
                 }
             }
 
