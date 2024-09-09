@@ -41,6 +41,7 @@ namespace TaleworldsCodeAnalysis.Controller
                 var document = SettingsChecker.Instance.GetSettingsFile(SettingsParser.Instance.GetSettingsFilePath());
 
                 //Name Checkers
+                OverAll.SelectedIndex = _getSeverityIndex("OverAll", document);
                 TW2002.SetSelectedIndex(_getSeverityIndex("TW2002", document));
                 TW2000.SetSelectedIndex(_getSeverityIndex("TW2000", document));
                 TW2005.SetSelectedIndex(_getSeverityIndex("TW2005", document));
@@ -62,6 +63,7 @@ namespace TaleworldsCodeAnalysis.Controller
                 TW2202.SetSelectedIndex(_getSeverityIndex("TW2202", document));
                 TW2204.SetSelectedIndex(_getSeverityIndex("TW2204", document));
                 TW2205.SetSelectedIndex(_getSeverityIndex("TW2205", document));
+                
             }
             catch 
             {
@@ -77,6 +79,44 @@ namespace TaleworldsCodeAnalysis.Controller
         private void UserControl_GotFocus(object sender, RoutedEventArgs e)
         {
             Init();
+        }
+
+        private void OverAll_Selected(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TW2002.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2000.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2005.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2003.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2004.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2006.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2007.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2008.SetSelectedIndex(OverAll.SelectedIndex);
+
+                //Accesibility Checkers
+                TW2001.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2200.SetSelectedIndex(OverAll.SelectedIndex);
+
+                //Inheritance Checkers
+                TW2100.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2101.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2102.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2201.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2202.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2204.SetSelectedIndex(OverAll.SelectedIndex);
+                TW2205.SetSelectedIndex(OverAll.SelectedIndex);
+                Dispatcher.VerifyAccess();
+
+                var path = SettingsParser.Instance.GetSettingsFilePath();
+                var xDocument = SettingsChecker.Instance.GetSettingsFile(path);
+                var node = xDocument.Root.Element("OverAll");
+                node.ReplaceNodes(OverAll.SelectedIndex);
+                xDocument.Save(path);
+            }
+            catch (Exception exception){
+                return;
+            }
         }
     }
 }

@@ -28,11 +28,11 @@
                             <TextBlock Text="Severity Presets" FontSize="12" VerticalAlignment="Center" Width="300" Padding="5,0,0,0" />
                         </Grid>
                         <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <ComboBox Name ="OverAll" Width="100" FontSize="12" HorizontalAlignment="Right" SelectedValue="None" SelectedIndex="0">
+                            <ComboBox Name ="OverAll" Width="100" FontSize="12" HorizontalAlignment="Right" SelectionChanged="OverAll_Selected">
                                 <ComboBoxItem Name="None" Content="Severity.None" FontSize="12"></ComboBoxItem>
                                 <ComboBoxItem Name="Warning" Content="Severity.Warning" FontSize="12"></ComboBoxItem>
                                 <ComboBoxItem Name="Error" Content="Severity.Error" FontSize="12"></ComboBoxItem>
-                                <ComboBoxItem Name="Custom" Content="Custom" FontSize="12"></ComboBoxItem>
+                                <ComboBoxItem Name="Custom" Content="Custom" FontSize="12" Visibility="Hidden"></ComboBoxItem>
                             </ComboBox>
                         </Grid>
 
