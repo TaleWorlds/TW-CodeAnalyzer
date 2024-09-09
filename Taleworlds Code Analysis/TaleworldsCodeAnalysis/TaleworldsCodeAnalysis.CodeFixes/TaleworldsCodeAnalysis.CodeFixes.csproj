@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -8,12 +8,22 @@
 
   <ItemGroup>
 
+    <PackageReference Include="envdte" Version="17.11.40262" />
+
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" />
+
+    <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" Version="17.11.40262" />
 
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TaleworldsCodeAnalysis\TaleworldsCodeAnalysis.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WindowsBase">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\WindowsBase.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

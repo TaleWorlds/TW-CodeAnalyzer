@@ -1,20 +1,19 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
-using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TaleworldsCodeAnalysis.NameChecker;
 using TaleworldsCodeAnalysis.NameChecker.Conventions;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Threading;
 
 namespace TaleworldsCodeAnalysis
 {
@@ -36,7 +35,6 @@ namespace TaleworldsCodeAnalysis
             // See https://github.com/dotnet/roslyn/blob/main/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
             return WellKnownFixAllProviders.BatchFixer;
         }
-
 
         public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
         {
@@ -66,10 +64,11 @@ namespace TaleworldsCodeAnalysis
                 equivalenceKey: nameof(CodeFixResources.CodeFixTitle) + item+WhiteListType.Local), diagnostic);
             }
 
+
             return Task.CompletedTask;
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word, WhiteListType whiteListType)
+        private async Task<Microsoft.CodeAnalysis.Solution> _addToWhitelistAsync(Microsoft.CodeAnalysis.Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word, WhiteListType whiteListType)
         {
             if (isPreview)
             {
@@ -79,11 +78,11 @@ namespace TaleworldsCodeAnalysis
             
             var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
             var solution = document.Project.Solution;
-            _addStringToWhiteList(path, word);
+            await _addStringToWhiteList(path, word);
             return document.Project.Solution;
         }
 
-        private IReadOnlyList<string> _getWordsToAddToWhitelist(Document document, Diagnostic diagnostic)
+        private IReadOnlyList<string> _getWordsToAddToWhitelist(Microsoft.CodeAnalysis.Document document, Diagnostic diagnostic)
         {
             var diagnosticProperties = diagnostic.Properties;
             var identifier = diagnosticProperties["Name"];
@@ -119,7 +118,7 @@ namespace TaleworldsCodeAnalysis
             }
         }
 
-        private void _addStringToWhiteList(string filePath, string wordToAdd)
+        private async Task _addStringToWhiteList(string filePath, string wordToAdd)
         {
             try
             {
@@ -139,7 +138,17 @@ namespace TaleworldsCodeAnalysis
             {
                 Console.WriteLine(ex.ToString());
             }
-            
+
+            await ThreadHelper.JoinableTaskFactory.RunAsync(_reanalayzeTheSolution); 
+        }
+
+        private async Task _reanalayzeTheSolution()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            ThreadHelper.CheckAccess();
+            DTE dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            dte.ExecuteCommand("Analyze.OnSolution");
+            //dte.ExecuteCommand("Analyze.ForSolution");
         }
 
     }

@@ -137,7 +137,7 @@ namespace TaleworldsCodeAnalysis.Commands
                 }
                 doc.Save(fullPath);
             }
-
+            ThreadHelper.JoinableTaskFactory.RunAsync(_reanalayzeTheSolution);
             string message = string.Format("Added {0} to the blacklist", projectName);
             string title = "Add to Blacklist";
 
@@ -150,5 +150,14 @@ namespace TaleworldsCodeAnalysis.Commands
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
-    }
+
+        private async Task _reanalayzeTheSolution()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            ThreadHelper.CheckAccess();
+            DTE dte = (DTE)Package.GetGlobalService(typeof(DTE));
+            dte.ExecuteCommand("Analyze.OnSolution");
+            //dte.ExecuteCommand("Analyze.ForSolution");
+        }
+}
 }

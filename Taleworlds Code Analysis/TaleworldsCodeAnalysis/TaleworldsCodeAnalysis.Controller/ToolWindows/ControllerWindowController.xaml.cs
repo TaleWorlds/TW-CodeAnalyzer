@@ -45,10 +45,19 @@ namespace TaleworldsCodeAnalysis.Controller
             var node = xDocument.Root.Element(name);
             node.ReplaceNodes(source.IsChecked.ToString());
             xDocument.Save(path);
-          
+            ThreadHelper.JoinableTaskFactory.RunAsync(_reanalayzeTheSolution);
         }
 
-        private string GetSettingsFilePath()
+    private async Task _reanalayzeTheSolution()
+    {
+        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+        ThreadHelper.CheckAccess();
+        DTE dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            dte.ExecuteCommand("Analyze.OnSolution");
+            //dte.ExecuteCommand("Analyze.ForSolution");
+    }
+
+    private string GetSettingsFilePath()
         {
             Dispatcher.VerifyAccess();
             Solution solution = _dte.Solution;
