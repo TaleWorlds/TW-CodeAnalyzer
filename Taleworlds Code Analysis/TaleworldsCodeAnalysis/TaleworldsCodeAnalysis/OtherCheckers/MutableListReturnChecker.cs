@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using TaleworldsCodeAnalysis.NameChecker;
 
@@ -12,7 +11,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     public class MutebleAccessibilityChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;
-        private const string _diagnosticId = "TW2202";
+        private const string _diagnosticId = "TW2201";
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
@@ -41,6 +40,12 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
             var node = (MethodDeclarationSyntax)context.Node;
             var returnType = node.ReturnType;
+            if (!(returnType is GenericNameSyntax)) return;
+            var identifier = ((GenericNameSyntax)returnType).Identifier;
+
+            if (identifier.ValueText != "List") return;
+
+            var statements = node.Body.Statements;
 
             var a = 1;
            
