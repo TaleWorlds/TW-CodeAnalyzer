@@ -7,38 +7,138 @@
              xmlns:theming="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Imaging"
              xmlns:util="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Utilities"
              xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
-             xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
+             xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit" 
+             xmlns:components="clr-namespace:TaleworldsCodeAnalysis.Controller.ToolWindows.Components"
              toolkit:Themes.UseVsTheme="True"
              mc:Ignorable="d"
-             d:DesignHeight="400"
-             d:DesignWidth="300"
              Name="ControllerWindow"
              LostFocus="UserControl_GotFocus"
-             GotFocus="UserControl_GotFocus"
+             GotFocus="UserControl_GotFocus" ClipToBounds="True" Loaded="ControllerWindow_Loaded"
             >
 
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <Label x:Name="lblHeadline"
-                   Margin="10"
+    <StackPanel VerticalAlignment="Stretch">
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Center">
+            <StackPanel>
+                <Label x:Name="lblHeadline"
                    HorizontalAlignment="Center" Content="Taleworlds Code Analysis Settings"
                    FontSize="17"/>
-            <Label Content="Name Checkers" FontSize="15"/>
-            <CheckBox Name="TW2000" Content="Class Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <CheckBox Name="TW2002" Content="Field Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <CheckBox Name="TW2003" Content="Interface Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <CheckBox Name="TW2004" Content="Local Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <CheckBox Name="TW2005" Content="Method Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <CheckBox Name="TW2006" Content="Parameter Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <CheckBox Name="TW2007" Content="Property Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <CheckBox Name="TW2008" Content="Template Parameter Name Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
-            <Label Content="Inheritance Checkers" FontSize="15"/>
-            <CheckBox Name="TW2100" Content="Abstract Class Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
-            <CheckBox Name="TW2101" Content="Depth of Inheritance Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
-            <CheckBox Name="TW2102" Content="Sealed Override Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <Label Content="Accesibility Checkers" FontSize="15"/>
-            <CheckBox Name="TW2001" Content="Class Accesibility Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-            <CheckBox Name="TW2200" Content="Field Accesibility Checker Enabled" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" />
-        </StackPanel>
-    </Grid>
+                <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <TextBlock Text="Severity Presets" FontSize="12" VerticalAlignment="Center" Width="300" Padding="5,0,0,0" />
+                        </Grid>
+                        <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <ComboBox Name ="TW20000" Width="100" FontSize="12" HorizontalAlignment="Right" SelectedValue="None" SelectedIndex="0">
+                                <ComboBoxItem Name="None" Content="Severity.None" FontSize="12"></ComboBoxItem>
+                                <ComboBoxItem Name="Warning" Content="Severity.Warning" FontSize="12"></ComboBoxItem>
+                                <ComboBoxItem Name="Error" Content="Severity.Error" FontSize="12"></ComboBoxItem>
+                                <ComboBoxItem Name="Custom" Content="Custom" FontSize="12"></ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            
+        </Grid>
+
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                <Label Content="Name Checkers" FontSize="15"/>
+
+                <components:SeverityController 
+                 Title="Class Name Checker Enabled"
+                 x:Name="TW2000"
+                 />
+
+                <components:SeverityController 
+                 Title="Field Name Checker Enabled"
+                 x:Name="TW2002"
+                 />
+
+                <components:SeverityController 
+                 Title="Interface Name Checker Enabled"
+                 x:Name="TW2003"
+                 />
+
+                <components:SeverityController 
+                 Title="Local Name Checker Enabled"
+                 x:Name="TW2004"
+                 />
+
+                <components:SeverityController 
+                 Title="Method Name Checker Enabled"
+                 x:Name="TW2005"
+                 />
+
+                <components:SeverityController 
+                 Title="Parameter Name Checker Enabled"
+                 x:Name="TW2006"
+                 />
+
+                <components:SeverityController 
+                 Title="Property Name Checker Enabled"
+                 x:Name="TW2007"
+                 />
+
+                <components:SeverityController 
+                 Title="Template Parameter Name Checker Enabled"
+                 x:Name="TW2008"
+                 />
+
+                <Label Content="Inheritance Checkers" FontSize="15"/>
+
+                <components:SeverityController 
+                 Title="Abstract Class Checker Enabled"
+                 x:Name="TW2100"
+                 />
+
+                <components:SeverityController 
+                 Title="Depth of Inheritance Checker Enabled"
+                 x:Name="TW2101"
+                 />
+
+                <components:SeverityController 
+                 Title="Sealed Override Checker Enabled"
+                 x:Name="TW2102"
+                 />
+
+                <Label Content="Accesibility Checkers" FontSize="15"/>
+
+                <components:SeverityController 
+                 Title="Class Accesibility Checker Enabled"
+                 x:Name="TW2001"
+                 />
+
+                <components:SeverityController 
+                 Title="Class Accesibility Checker Enabled"
+                 x:Name="TW2200"
+                 />
+
+                <Label Content="Other Checkers" FontSize="15"/>
+                <components:SeverityController 
+                 Title="Named Parameter Checker Enabled"
+                 x:Name="TW2201"
+                 />
+
+                <components:SeverityController 
+                 Title="Named Parameter Checker Enabled"
+                 x:Name="TW2202"
+                 />
+
+                <components:SeverityController 
+                 Title="Var Keyword Checker Enabled"
+                 x:Name="TW2204"
+                 />
+
+                <components:SeverityController 
+                 Title="Immutable Structs Checker Enabled"
+                 x:Name="TW2205"
+                 />
+            </StackPanel>
+
+        </Grid>
+
+    </StackPanel>
+
 </UserControl>

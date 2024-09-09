@@ -31,7 +31,7 @@ namespace TaleworldsCodeAnalysis.Controller
 
         private void WindowActivated(EnvDTE.Window GotFocus, EnvDTE.Window LostFocus)
         {
-            Init();
+            //Init();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -67,9 +67,9 @@ namespace TaleworldsCodeAnalysis.Controller
                 var document = SettingsChecker.Instance.GetSettingsFile(GetSettingsFilePath());
 
                 //Name Checkers
-                TW2002.IsChecked = _isTrue("TW2002", document);
+                /*TW2002.IsChecked = _isTrue("TW2002", document);
                 TW2005.IsChecked = _isTrue("TW2005", document);
-                TW2000.IsChecked = _isTrue("TW2000", document);
+                //TW2000.SelectedValue = _isTrue("TW2000", document);
                 TW2003.IsChecked = _isTrue("TW2003", document);
                 TW2004.IsChecked = _isTrue("TW2004", document);
                 TW2006.IsChecked = _isTrue("TW2006", document);
@@ -84,6 +84,10 @@ namespace TaleworldsCodeAnalysis.Controller
                 TW2100.IsChecked = _isTrue("TW2100", document);
                 TW2101.IsChecked = _isTrue("TW2101", document);
                 TW2102.IsChecked = _isTrue("TW2102", document);
+                TW2201.IsChecked = _isTrue("TW2201", document);
+                TW2202.IsChecked = _isTrue("TW2202", document);
+                TW2204.IsChecked = _isTrue("TW2204", document);
+                TW2205.IsChecked = _isTrue("TW2205", document);*/
             }
             catch 
             {
@@ -98,7 +102,12 @@ namespace TaleworldsCodeAnalysis.Controller
 
         private void UserControl_GotFocus(object sender, RoutedEventArgs e)
         {
-            Init();
+            //Init();
+        }
+
+        private void ControllerWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

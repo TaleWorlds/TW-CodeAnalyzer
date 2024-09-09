@@ -82,7 +82,8 @@ namespace TaleworldsCodeAnalysis
                     new XElement("TW2102", "True"),
                     new XElement("TW2202","True"),
                     new XElement("TW2204", "True"),
-                    new XElement("TW2201", "True")
+                    new XElement("TW2201", "True"),
+                    new XElement("TW2205","True")
                     ));
                 xDocument.Save(settingPath);
             }

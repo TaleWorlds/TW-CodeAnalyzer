@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="TaleworldsCodeAnalysis.Controller.ToolWindows.Components.SeverityController"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TaleworldsCodeAnalysis.Controller.ToolWindows.Components"
+             mc:Ignorable="d"
+             x:Name="root"
+             >
+    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal">
+            <Grid>
+                <TextBlock Text="{Binding Title, ElementName=root}" FontSize="12" VerticalAlignment="Center" Width="300" Padding="5,0,0,0" />
+            </Grid>
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
+                <ComboBox Name ="TW20000" Width="100" FontSize="12" HorizontalAlignment="Right" SelectedValue="None" SelectedIndex="0">
+                    <ComboBoxItem Name="None" Content="Severity.None" FontSize="12"></ComboBoxItem>
+                    <ComboBoxItem Name="Warning" Content="Severity.Warning" FontSize="12"></ComboBoxItem>
+                    <ComboBoxItem Name="Error" Content="Severity.Error" FontSize="12"></ComboBoxItem>
+                </ComboBox>
+            </Grid>
+            
+        </StackPanel>
+    </Border>
+</UserControl>
