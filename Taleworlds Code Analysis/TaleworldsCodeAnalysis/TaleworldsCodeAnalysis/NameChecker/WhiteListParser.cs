@@ -107,7 +107,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             return solnFilePath;
         }
 
-        private string _findLocalXMLFilePath()
+        private string _findLocalXMLFilePath()  
         {
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             return Path.Combine(appData, _pathAfterLocalAppData);
@@ -115,11 +115,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         public void EnableTesting()
         {
-            var _testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\" +
+            var testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\" +
             "TaleworldsCodeAnalysis\\WhiteList.xml";
-            _sharedWhiteListPath= _testPathXML;
+            _sharedWhiteListPath= testPathXML;
         }
-
-
     }
 }

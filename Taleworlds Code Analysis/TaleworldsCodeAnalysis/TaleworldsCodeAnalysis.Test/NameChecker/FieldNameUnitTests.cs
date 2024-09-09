@@ -19,6 +19,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 private int _value;
             }";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -31,7 +32,8 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 private int {|#0:value|};
             }";
             WhiteListParser.Instance.EnableTesting();
-            var expected = VerifyCS.Diagnostic("FieldNameChecker").WithLocation(0).WithArguments("value","_value"); 
+            PreAnalyzerConditions.Instance.EnableTest();
+            var expected = VerifyCS.Diagnostic("TW2002").WithLocation(0).WithArguments("value","_value"); 
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }     
 

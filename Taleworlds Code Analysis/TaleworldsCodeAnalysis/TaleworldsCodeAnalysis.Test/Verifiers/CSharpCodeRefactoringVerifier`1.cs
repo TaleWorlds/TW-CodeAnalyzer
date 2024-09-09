@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace TaleworldsCodeAnalysis.Test
 {
+    
+//TWCodeAnalysis disable all
     public static partial class CSharpCodeRefactoringVerifier<TCodeRefactoring>
         where TCodeRefactoring : CodeRefactoringProvider, new()
     {

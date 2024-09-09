@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace TaleworldsCodeAnalysis.Test
 {
+    
+//TWCodeAnalysis disable all
     public static partial class CSharpAnalyzerVerifier<TAnalyzer>
         where TAnalyzer : DiagnosticAnalyzer, new()
     {

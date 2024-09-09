@@ -13,16 +13,17 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SealedOverrideChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "TW2102";
-        internal static readonly LocalizableString _title = "Overridden methods should be sealed.";
-        internal static readonly LocalizableString _messageFormat = "Overridden methods should be sealed.";
-        internal const string _category = "Inheritance";
+        public static string DiagnosticId => _diagnosticId;
+        private const string _diagnosticId = "TW2102";
+        private static readonly LocalizableString _title = "Overridden methods should be sealed";
+        private static readonly LocalizableString _messageFormat = "Overridden methods should be sealed";
+        private const string _category = "Inheritance";
 
-        internal static DiagnosticDescriptor _rule = new DiagnosticDescriptor(DiagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, true);
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
 
-        public override void Initialize(AnalysisContext context)
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
@@ -36,8 +37,8 @@ namespace TaleworldsCodeAnalysis.Inheritance
             var method = (MethodDeclarationSyntax) context.Node;
             var modifiers = method.Modifiers;
 
-            bool sealedFound = false;
-            bool overrideFound = false;
+            var sealedFound = false;
+            var overrideFound = false;
             Location overrideLocation = null;
 
             foreach (var item in modifiers)

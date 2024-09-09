@@ -22,7 +22,8 @@ namespace TaleworldsCodeAnalysis.Test.OtherCheckers
             }"
             ;
             WhiteListParser.Instance.EnableTesting();
-            var expected = VerifyCS.Diagnostic("FieldAccessibilityChecker").WithLocation(0).WithArguments("_value");
+            PreAnalyzerConditions.Instance.EnableTest();
+            var expected = VerifyCS.Diagnostic("TW2200").WithLocation(0).WithArguments("_value");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -36,7 +37,8 @@ namespace TaleworldsCodeAnalysis.Test.OtherCheckers
             }"
             ;
             WhiteListParser.Instance.EnableTesting();
-            var expected = VerifyCS.Diagnostic("FieldAccessibilityChecker").WithLocation(0).WithArguments("_value");
+            PreAnalyzerConditions.Instance.EnableTest();
+            var expected = VerifyCS.Diagnostic("TW2200").WithLocation(0).WithArguments("_value");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -50,7 +52,8 @@ namespace TaleworldsCodeAnalysis.Test.OtherCheckers
             }"
             ;
             WhiteListParser.Instance.EnableTesting();
-            var expected = VerifyCS.Diagnostic("FieldAccessibilityChecker").WithLocation(0).WithArguments("_value");
+            PreAnalyzerConditions.Instance.EnableTest();
+            var expected = VerifyCS.Diagnostic("TW2200").WithLocation(0).WithArguments("_value");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

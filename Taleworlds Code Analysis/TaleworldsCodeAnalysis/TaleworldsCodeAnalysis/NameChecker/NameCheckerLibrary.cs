@@ -11,6 +11,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static string GetWhiteListedIgnoreVersion(string name)
         {
+            if(WhiteListParser.Instance.WhiteListWords==null)
+            {
+                return name;
+            }
             string ignorePattern = "";
             foreach (var item in WhiteListParser.Instance.WhiteListWords)
             {

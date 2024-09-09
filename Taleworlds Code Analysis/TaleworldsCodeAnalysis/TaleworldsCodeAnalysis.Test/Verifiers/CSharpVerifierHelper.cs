@@ -5,6 +5,8 @@ using System.Collections.Immutable;
 
 namespace TaleworldsCodeAnalysis.Test
 {
+    
+//TWCodeAnalysis disable all
     internal static class CSharpVerifierHelper
     {
         /// <summary>

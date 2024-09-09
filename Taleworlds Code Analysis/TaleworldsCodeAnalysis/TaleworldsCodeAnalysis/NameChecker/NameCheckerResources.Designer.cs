@@ -61,7 +61,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classes cannot be &quot;Protected&quot; by TW conventions..
+        ///   Looks up a localized string similar to Classes cannot be &quot;Protected&quot; by TW conventions.
         /// </summary>
         internal static string ClassModifierCheckerDescription {
             get {
@@ -70,7 +70,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class {0} cannot be &quot;Protected&quot; by TW conventions..
+        ///   Looks up a localized string similar to Class {0} cannot be &quot;Protected&quot; by TW conventions.
         /// </summary>
         internal static string ClassModifierCheckerMessageFormat {
             get {
@@ -79,7 +79,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classes cannot be &quot;Protected&quot; by TW conventions..
+        ///   Looks up a localized string similar to Classes cannot be &quot;Protected&quot; by TW conventions.
         /// </summary>
         internal static string ClassModifierCheckerTitle {
             get {
@@ -88,7 +88,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All class names should use TW conventions..
+        ///   Looks up a localized string similar to All class names should use TW conventions.
         /// </summary>
         internal static string ClassNameCheckerDescription {
             get {
@@ -97,7 +97,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class {0} should be renamed as {1}..
+        ///   Looks up a localized string similar to Class {0} should be renamed as {1}.
         /// </summary>
         internal static string ClassNameCheckerMessageFormat {
             get {
@@ -106,7 +106,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All class names should use TW  conventions..
+        ///   Looks up a localized string similar to All class names should use TW  conventions.
         /// </summary>
         internal static string ClassNameCheckerTitle {
             get {
@@ -115,7 +115,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All fields should be private..
+        ///   Looks up a localized string similar to All fields should be private.
         /// </summary>
         internal static string FieldAccessibilityCheckerDescription {
             get {
@@ -124,7 +124,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field &apos;{0}&apos; should be private..
+        ///   Looks up a localized string similar to Field &apos;{0}&apos; should be private.
         /// </summary>
         internal static string FieldAccessibilityCheckerMessageFormat {
             get {
@@ -133,7 +133,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All fields should be private..
+        ///   Looks up a localized string similar to All fields should be private.
         /// </summary>
         internal static string FieldAccessibilityCheckerTitle {
             get {
@@ -142,7 +142,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All private fields should use &quot;_uscoreCase&quot;..
+        ///   Looks up a localized string similar to All private fields should use &quot;_uscoreCase&quot;.
         /// </summary>
         internal static string FieldNameCheckerDescription {
             get {
@@ -151,7 +151,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field {0} should be renamed as {1}..
+        ///   Looks up a localized string similar to Field {0} should be renamed as {1}.
         /// </summary>
         internal static string FieldNameCheckerMessageFormat {
             get {
@@ -160,7 +160,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All fields should be private and use &quot;_uscoreCase&quot;..
+        ///   Looks up a localized string similar to All fields should be private and use &quot;_uscoreCase&quot;.
         /// </summary>
         internal static string FieldNameCheckerTitle {
             get {
@@ -169,7 +169,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interfaces should use &quot;IPascalCase&quot;..
+        ///   Looks up a localized string similar to Interfaces should use &quot;IPascalCase&quot;.
         /// </summary>
         internal static string InterfaceNameCheckerDescription {
             get {
@@ -178,7 +178,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interface {0} be renamed as {1}..
+        ///   Looks up a localized string similar to Interface {0} be renamed as {1}.
         /// </summary>
         internal static string InterfaceNameCheckerMessageFormat {
             get {
@@ -187,7 +187,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interfaces should use &quot;IPascalCase&quot;..
+        ///   Looks up a localized string similar to Interfaces should use &quot;IPascalCase&quot;.
         /// </summary>
         internal static string InterfaceNameCheckerTitle {
             get {
@@ -196,7 +196,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;..
+        ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;.
         /// </summary>
         internal static string LocalNameCheckerDescription {
             get {
@@ -205,7 +205,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local {0} should be renamed as {1}..
+        ///   Looks up a localized string similar to Local {0} should be renamed as {1}.
         /// </summary>
         internal static string LocalNameCheckerMessageFormat {
             get {
@@ -214,7 +214,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;..
+        ///   Looks up a localized string similar to Locals should use &quot;camelCase&quot;.
         /// </summary>
         internal static string LocalNameCheckerTitle {
             get {
@@ -223,7 +223,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All method names should use TW conventions..
+        ///   Looks up a localized string similar to All method names should use TW conventions.
         /// </summary>
         internal static string MethodNameCheckerDescription {
             get {
@@ -232,7 +232,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method {0}  should be renamed as {1}..
+        ///   Looks up a localized string similar to Method {0}  should be renamed as {1}.
         /// </summary>
         internal static string MethodNameCheckerMessageFormat {
             get {
@@ -241,7 +241,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All method names should use TW conventions..
+        ///   Looks up a localized string similar to All method names should use TW conventions.
         /// </summary>
         internal static string MethodNameCheckerTitle {
             get {
@@ -250,7 +250,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters should use &quot;camelCase&quot;..
+        ///   Looks up a localized string similar to Parameters should use &quot;camelCase&quot;.
         /// </summary>
         internal static string ParameterNameCheckerDescription {
             get {
@@ -259,7 +259,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter {0} should be renamed as {1}..
+        ///   Looks up a localized string similar to Parameter {0} should be renamed as {1}.
         /// </summary>
         internal static string ParameterNameCheckerMessageFormat {
             get {
@@ -268,7 +268,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters should use &quot;camelCase&quot;..
+        ///   Looks up a localized string similar to Parameters should use &quot;camelCase&quot;.
         /// </summary>
         internal static string ParameterNameCheckerTitle {
             get {
@@ -277,7 +277,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All property names sholud use TW conventions..
+        ///   Looks up a localized string similar to All property names sholud use TW conventions.
         /// </summary>
         internal static string PropertyNameCheckerDescription {
             get {
@@ -286,7 +286,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property {0} should be renamed as {1}..
+        ///   Looks up a localized string similar to Property {0} should be renamed as {1}.
         /// </summary>
         internal static string PropertyNameCheckerMessageFormat {
             get {
@@ -295,7 +295,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All property names should use TW conventions..
+        ///   Looks up a localized string similar to All property names should use TW conventions.
         /// </summary>
         internal static string PropertyNameCheckerTitle {
             get {
@@ -304,7 +304,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Template parameters should use &quot;TPascalCase&quot;..
+        ///   Looks up a localized string similar to Template parameters should use &quot;TPascalCase&quot;.
         /// </summary>
         internal static string TemplateParameterNameCheckerDescription {
             get {
@@ -313,7 +313,7 @@ namespace TaleworldsCodeAnalysis.NameChecker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Template parameter {0} should be renamed as {1}..
+        ///   Looks up a localized string similar to Template parameter {0} should be renamed as {1}.
         /// </summary>
         internal static string TemplateParameterNameCheckerMessageFormat {
             get {

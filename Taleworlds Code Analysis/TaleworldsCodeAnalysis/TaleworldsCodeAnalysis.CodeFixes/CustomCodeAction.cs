@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace TaleworldsCodeAnalysis
 {
-    internal class CustomCodeAction : CodeAction
+    public class CustomCodeAction : CodeAction
     {
 
         public override string Title { get; }
@@ -27,7 +27,7 @@ namespace TaleworldsCodeAnalysis
             return new CustomCodeAction(title, createChangedSolution, equivalenceKey);
         }
 
-        protected override async Task<IEnumerable<CodeActionOperation>> ComputePreviewOperationsAsync(CancellationToken cancellationToken)
+        protected sealed override async Task<IEnumerable<CodeActionOperation>> ComputePreviewOperationsAsync(CancellationToken cancellationToken)
         {
             const bool isPreview = true;
             // Content copied from http://sourceroslyn.io/#Microsoft.CodeAnalysis.Workspaces/CodeActions/CodeAction.cs,81b0a0866b894b0e,references
@@ -38,7 +38,7 @@ namespace TaleworldsCodeAnalysis
             return new CodeActionOperation[] { new ApplyChangesOperation(changedSolution) };
         }
 
-        protected override Task<Solution> GetChangedSolutionAsync(CancellationToken cancellationToken)
+        protected sealed override Task<Solution> GetChangedSolutionAsync(CancellationToken cancellationToken)
         {
             const bool isPreview = false;
             return GetChangedSolutionWithPreviewAsync(cancellationToken, isPreview);

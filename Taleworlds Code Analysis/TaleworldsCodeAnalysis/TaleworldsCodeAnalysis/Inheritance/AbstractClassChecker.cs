@@ -13,21 +13,22 @@ namespace TaleworldsCodeAnalysis.Inheritance
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AbstractClassChecker : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "TW2100";
-        internal static readonly LocalizableString _title = "Abstract classes should not have any method that has a body.";
-        internal static readonly LocalizableString _messageFormat = "Abstract classes should not have any method that has a body.";
-        internal const string _category = "Inheritance";
+        public static string DiagnosticId => _diagnosticId;
 
-        internal static DiagnosticDescriptor _rule = new DiagnosticDescriptor(DiagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, true);
+        private const string _diagnosticId = "TW2100";
+        private static readonly LocalizableString _title = "Abstract classes should not have any method that has a body";
+        private static readonly LocalizableString _messageFormat = "Abstract classes should not have any method that has a body";
+        private const string _category = "Inheritance";
+
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
 
-        public override void Initialize(AnalysisContext context)
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(_analyzer, SyntaxKind.ClassDeclaration);
-
         }
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
@@ -37,7 +38,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
             var classDec = (ClassDeclarationSyntax) context.Node;
 
-            bool isAbstract = false;
+            var isAbstract = false;
 
             foreach (var item in classDec.Modifiers)
             {
@@ -75,7 +76,7 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
                     if(member.IsKind(SyntaxKind.MethodDeclaration))
                     {
-                        MethodDeclarationSyntax method = (MethodDeclarationSyntax)member;
+                        var method = (MethodDeclarationSyntax)member;
                         if (!isItSuitable)
                         {
                             context.ReportDiagnostic(Diagnostic.Create(_rule, method.Identifier.GetLocation()));

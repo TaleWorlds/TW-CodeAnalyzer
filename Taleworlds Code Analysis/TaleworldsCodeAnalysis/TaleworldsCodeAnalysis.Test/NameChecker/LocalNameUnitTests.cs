@@ -28,6 +28,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }
             ";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -46,10 +47,11 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }
             ";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("LocalNameChecker").WithLocation(0).WithArguments("Value","value"),
-                VerifyCS.Diagnostic("LocalNameChecker").WithLocation(1).WithArguments("_value2","value2")
+                VerifyCS.Diagnostic("TW2004").WithLocation(0).WithArguments("Value","value"),
+                VerifyCS.Diagnostic("TW2004").WithLocation(1).WithArguments("_value2","value2")
             };
 
             

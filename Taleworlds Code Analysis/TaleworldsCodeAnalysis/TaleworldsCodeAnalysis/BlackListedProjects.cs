@@ -1,4 +1,4 @@
-﻿using System;
+﻿  using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,32 +19,32 @@ namespace TaleworldsCodeAnalysis
             }
         }
 
-        private string localAppDataPath;
-        private const string pathAfterLocalAppData = "Microsoft\\VisualStudio\\BlackListedProjects.xml";
-        private string fullPath;
+        private string _localAppDataPath;
+        private const string _pathAfterLocalAppData = "Microsoft\\VisualStudio\\BlackListedProjects.xml";
+        private string _fullPath;
 
         private BlackListedProjects() {
-            localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            fullPath = Path.Combine(localAppDataPath, pathAfterLocalAppData);
+            _localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            _fullPath = Path.Combine(_localAppDataPath, _pathAfterLocalAppData);
         }
 
-        public bool isBlackListedProjectFromCodePath(string codePath) {
-            var projectName = findProjectNameFromCodeFilePath(codePath);
-            return isBlackListedProject(projectName);
+        public bool IsBlackListedProjectFromCodePath(string codePath) {
+            var projectName = FindProjectNameFromCodeFilePath(codePath);
+            return IsBlackListedProject(projectName);
         }
 
-        public bool isBlackListedProject(string projectName)
+        public bool IsBlackListedProject(string projectName)
         {
             XDocument doc;
 
             try
             {
-                doc = XDocument.Load(fullPath);
+                doc = XDocument.Load(_fullPath);
             }
             catch (FileNotFoundException)
             {
                 doc = new XDocument(new XElement("BlackListRoot", new XElement("Project", "ExampleProjectName")));
-                doc.Save(fullPath);
+                doc.Save(_fullPath);
             }
 
             var projectXElements = doc.Descendants("Project");
@@ -57,7 +57,7 @@ namespace TaleworldsCodeAnalysis
             return false;
         }
 
-        public string findProjectNameFromCodeFilePath(string codeFilePath)
+        public string FindProjectNameFromCodeFilePath(string codeFilePath)
         {
             var folderNames = codeFilePath.Split('\\');
             for (int i = folderNames.Length - 2; i >= 0; i--) {

@@ -22,12 +22,12 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
 
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
             get { return ImmutableArray.Create(_nameRule); }
         }
 
-        public override void Initialize(AnalysisContext context)
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();

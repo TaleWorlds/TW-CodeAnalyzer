@@ -22,6 +22,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             {
             }";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -37,11 +38,12 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             public interface {|#2:_test|} : IBase{}
             ";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(0).WithArguments("iTest","ITest"),
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(1).WithArguments("Test","ITest"),
-                VerifyCS.Diagnostic("InterfaceNameChecker").WithLocation(2).WithArguments("_test","ITest")
+                VerifyCS.Diagnostic("TW2003").WithLocation(0).WithArguments("iTest","ITest"),
+                VerifyCS.Diagnostic("TW2003").WithLocation(1).WithArguments("Test","ITest"),
+                VerifyCS.Diagnostic("TW2003").WithLocation(2).WithArguments("_test","ITest")
             };
             
 

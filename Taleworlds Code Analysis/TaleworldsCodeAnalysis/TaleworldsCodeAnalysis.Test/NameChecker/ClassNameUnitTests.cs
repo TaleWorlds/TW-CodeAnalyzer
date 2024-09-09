@@ -39,6 +39,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }
             ";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -61,13 +62,14 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 }
             }
             ";
+            PreAnalyzerConditions.Instance.EnableTest();
             WhiteListParser.Instance.EnableTesting();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("TestClassPriv","_testClassPriv"),
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPriv", "_testClassPriv"),
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(2).WithArguments("TestClassInt", "_testClassInt"),
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(3).WithArguments("testClassInt", "_testClassInt")
+                VerifyCS.Diagnostic("TW2000").WithLocation(0).WithArguments("TestClassPriv","_testClassPriv"),
+                VerifyCS.Diagnostic("TW2000").WithLocation(1).WithArguments("testClassPriv", "_testClassPriv"),
+                VerifyCS.Diagnostic("TW2000").WithLocation(2).WithArguments("TestClassInt", "_testClassInt"),
+                VerifyCS.Diagnostic("TW2000").WithLocation(3).WithArguments("testClassInt", "_testClassInt")
             };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
@@ -94,12 +96,11 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }
             ";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(0).WithArguments("_testClassPub","TestClassPub"),
-                VerifyCS.Diagnostic("ClassNameChecker").WithLocation(1).WithArguments("testClassPub","TestClassPub"),
-                VerifyCS.Diagnostic("ClassModifierChecker").WithLocation(2).WithArguments("TestClassPro"),
-                VerifyCS.Diagnostic("ClassModifierChecker").WithLocation(3).WithArguments("testClassPro")
+                VerifyCS.Diagnostic("TW2000").WithLocation(0).WithArguments("_testClassPub","TestClassPub"),
+                VerifyCS.Diagnostic("TW2000").WithLocation(1).WithArguments("testClassPub","TestClassPub"),
             };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);

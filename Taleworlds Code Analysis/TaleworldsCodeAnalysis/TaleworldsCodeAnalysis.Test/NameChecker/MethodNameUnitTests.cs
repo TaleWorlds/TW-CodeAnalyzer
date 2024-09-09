@@ -25,6 +25,7 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 public void Foo3(){}
             }";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
@@ -43,12 +44,13 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
             }"
             ;
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPriv","_fooPriv"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPriv","_fooPriv"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooInt","_fooInt"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooInt","_fooInt")
+                VerifyCS.Diagnostic("TW2005").WithLocation(0).WithArguments("fooPriv","_fooPriv"),
+                VerifyCS.Diagnostic("TW2005").WithLocation(1).WithArguments("_FooPriv","_fooPriv"),
+                VerifyCS.Diagnostic("TW2005").WithLocation(2).WithArguments("fooInt","_fooInt"),
+                VerifyCS.Diagnostic("TW2005").WithLocation(3).WithArguments("_FooInt","_fooInt")
             };
             
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
@@ -67,12 +69,13 @@ namespace TaleworldsCodeAnalysis.Test.NameChecker
                 protected void {|#3:_FooPro|}(){}
             }";
             WhiteListParser.Instance.EnableTesting();
+            PreAnalyzerConditions.Instance.EnableTest();
             var expectedResults = new DiagnosticResult[]
             {
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(0).WithArguments("fooPub","FooPub"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(1).WithArguments("_FooPub","FooPub"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(2).WithArguments("fooPro", "FooPro"),
-                VerifyCS.Diagnostic("MethodNameChecker").WithLocation(3).WithArguments("_FooPro", "FooPro")
+                VerifyCS.Diagnostic("TW2005").WithLocation(0).WithArguments("fooPub","FooPub"),
+                VerifyCS.Diagnostic("TW2005").WithLocation(1).WithArguments("_FooPub","FooPub"),
+                VerifyCS.Diagnostic("TW2005").WithLocation(2).WithArguments("fooPro", "FooPro"),
+                VerifyCS.Diagnostic("TW2005").WithLocation(3).WithArguments("_FooPro", "FooPro")
         };
 
             await VerifyCS.VerifyAnalyzerAsync(test, expectedResults);
