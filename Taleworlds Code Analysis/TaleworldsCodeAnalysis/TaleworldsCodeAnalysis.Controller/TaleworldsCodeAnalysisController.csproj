@@ -54,6 +54,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="ToolWindows\Components\SeverityController.xaml.cs">
+      <DependentUpon>SeverityController.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ToolWindows\SettingsParser.cs" />
     <Compile Include="VSCommandTable.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -87,6 +91,10 @@
     <Compile Include="ToolWindows\ControllerWindowController.xaml.cs">
       <DependentUpon>ControllerWindowController.xaml</DependentUpon>
     </Compile>
+    <Page Include="ToolWindows\Components\SeverityController.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

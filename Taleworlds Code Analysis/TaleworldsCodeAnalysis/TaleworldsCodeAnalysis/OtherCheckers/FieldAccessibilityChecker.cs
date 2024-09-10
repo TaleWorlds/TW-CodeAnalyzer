@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Data;
 using TaleworldsCodeAnalysis.NameChecker;
 
 namespace TaleworldsCodeAnalysis.OtherCheckers
@@ -18,7 +19,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
         private static readonly LocalizableString _accessibilityDescription = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private const string _accessibilityCategory = "Accessibility";
 
-        private static readonly DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _accessibilityDescription);
+        private static DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _accessibilityDescription);
 
 
 
@@ -56,6 +57,8 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
             if (!accessibility.IsKind(SyntaxKind.PrivateKeyword))
             {
+                var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _accessibilityRule.DefaultSeverity);
+                _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, severity, isEnabledByDefault: true, description: _accessibilityDescription);
                 var diagnostic = Diagnostic.Create(_accessibilityRule, location, properties.ToImmutableDictionary(), nameString);
                 context.ReportDiagnostic(diagnostic);
             }

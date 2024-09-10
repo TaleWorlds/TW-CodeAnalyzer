@@ -31,7 +31,7 @@ namespace TaleworldsCodeAnalysis
         public bool IsAnalysisEnabled(string diagnosticID, string contextPath)
         {
             var document = GetSettingsFile(GetSettingsFilePath(contextPath));
-            return document.Root.Element(diagnosticID).Value == "True";
+            return document.Root.Element(diagnosticID).Value != "0";
         }
 
         public string GetSettingsFilePath(string contextPath)
@@ -67,26 +67,49 @@ namespace TaleworldsCodeAnalysis
             catch
             {
                 xDocument = new XDocument(new XElement("Settings",
-                    new XElement("TW2200","True"),
-                    new XElement("TW2001","True"),
-                    new XElement("TW2002", "True"),
-                    new XElement("TW2005", "True"),
-                    new XElement("TW2000", "True"),
-                    new XElement("TW2003", "True"),
-                    new XElement("TW2004", "True"),
-                    new XElement("TW2006", "True"),
-                    new XElement("TW2007", "True"),
-                    new XElement("TW2008", "True"),
-                    new XElement("TW2100", "True"),
-                    new XElement("TW2101", "True"),
-                    new XElement("TW2102", "True"),
-                    new XElement("TW2202","True"),
-                    new XElement("TW2204", "True"),
-                    new XElement("TW2201", "True")
+                    new XElement("TW2200","2"),
+                    new XElement("TW2001","2"),
+                    new XElement("TW2002", "2"),
+                    new XElement("TW2005", "2"),
+                    new XElement("TW2000", "2"),
+                    new XElement("TW2003", "2"),
+                    new XElement("TW2004", "2"),
+                    new XElement("TW2006", "2"),
+                    new XElement("TW2007", "2"),
+                    new XElement("TW2008", "2"),
+                    new XElement("TW2100", "2"),
+                    new XElement("TW2101", "2"),
+                    new XElement("TW2102", "2"),
+                    new XElement("TW2202","2"),
+                    new XElement("TW2204", "2"),
+                    new XElement("TW2201", "2"),
+                    new XElement("TW2205","2"),
+                    new XElement("OverAll", "2")
                     ));
                 xDocument.Save(settingPath);
             }
             return xDocument;
         }
+
+        public DiagnosticSeverity GetDiagnosticSeverity(string diagnosticId, string contextPath, DiagnosticSeverity defaultSeverity) 
+        {
+            if (PreAnalyzerConditions.Instance.TestMod)
+            {
+                return defaultSeverity;
+            }
+
+            var document = GetSettingsFile(GetSettingsFilePath(contextPath));
+            switch(document.Root.Element(diagnosticId).Value)
+            {
+                case "0":
+                    return DiagnosticSeverity.Hidden;
+                case "1":
+                    return DiagnosticSeverity.Warning;
+                case "2":
+                    return DiagnosticSeverity.Error;
+            }
+            return DiagnosticSeverity.Hidden;
+        }
+
     }
 }

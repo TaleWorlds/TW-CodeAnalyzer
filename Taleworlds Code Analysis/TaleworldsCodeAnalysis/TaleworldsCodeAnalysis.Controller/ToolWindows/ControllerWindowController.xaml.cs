@@ -1,20 +1,21 @@
 ﻿using Community.VisualStudio.Toolkit;
 using EnvDTE;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Xml.Linq;
-using Path = System.IO.Path;
-using Solution = EnvDTE.Solution;
+using TaleworldsCodeAnalysis.Controller.ToolWindows;
+using TaleworldsCodeAnalysis.Controller.ToolWindows.Components;
+
 
 namespace TaleworldsCodeAnalysis.Controller
 {
     public partial class ControllerWindowController
     {
         private DTE _dte;
-        private const string _pathOfSettingsFile = "TaleworldsCodeAnalysisSettings.xml";
-        private string _fullPath;
+        private List<SeverityController> severityControllers;
 
         public ControllerWindowController()
         {
@@ -22,6 +23,12 @@ namespace TaleworldsCodeAnalysis.Controller
             InitializeComponent();
             _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             _dte.Events.WindowEvents.WindowActivated += WindowActivated;
+            severityControllers = new List<SeverityController>()
+            {
+                TW2002, TW2000, TW2005, TW2003,TW2004, TW2006, TW2007,TW2008,
+                TW2001,TW2200, TW2100,TW2101,TW2102,TW2201,TW2202, TW2204, TW2205 
+            };
+            
         }
 
         ~ControllerWindowController()
@@ -34,56 +41,18 @@ namespace TaleworldsCodeAnalysis.Controller
             Init();
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Dispatcher.VerifyAccess();
-            CheckBox source = (CheckBox)e.OriginalSource;
-
-            var path = GetSettingsFilePath();
-            var xDocument = SettingsChecker.Instance.GetSettingsFile(path);
-            string name = source.Name;
-            var node = xDocument.Root.Element(name);
-            node.ReplaceNodes(source.IsChecked.ToString());
-            xDocument.Save(path);
-          
-        }
-
-        private string GetSettingsFilePath()
-        {
-            Dispatcher.VerifyAccess();
-            Solution solution = _dte.Solution;
-            string directoryPath = new FileInfo(solution.FullName).FullName;
-            string settingPath = Path.Combine(Path.GetDirectoryName(directoryPath), _pathOfSettingsFile);
-            return settingPath;
-        }
-
-
-
         public void Init()
         {
             Dispatcher.VerifyAccess();
             try
             {
-                var document = SettingsChecker.Instance.GetSettingsFile(GetSettingsFilePath());
-
-                //Name Checkers
-                TW2002.IsChecked = _isTrue("TW2002", document);
-                TW2005.IsChecked = _isTrue("TW2005", document);
-                TW2000.IsChecked = _isTrue("TW2000", document);
-                TW2003.IsChecked = _isTrue("TW2003", document);
-                TW2004.IsChecked = _isTrue("TW2004", document);
-                TW2006.IsChecked = _isTrue("TW2006", document);
-                TW2007.IsChecked = _isTrue("TW2007", document);
-                TW2008.IsChecked = _isTrue("TW2008", document);
-
-                //Accesibility Checkers
-                TW2001.IsChecked = _isTrue("TW2001", document);
-                TW2200.IsChecked = _isTrue("TW2200", document);
-
-                //Inheritance Checkers
-                TW2100.IsChecked = _isTrue("TW2100", document);
-                TW2101.IsChecked = _isTrue("TW2101", document);
-                TW2102.IsChecked = _isTrue("TW2102", document);
+                var document = SettingsChecker.Instance.GetSettingsFile(SettingsParser.Instance.GetSettingsFilePath());
+                OverAll.SelectedIndex = _getSeverityIndex("OverAll", document);
+                foreach (var item in severityControllers)
+                {
+                    item.SetSelectedIndex(_getSeverityIndex(item.Code, document),false);
+                }
+                
             }
             catch 
             {
@@ -91,14 +60,49 @@ namespace TaleworldsCodeAnalysis.Controller
             }
         }
 
-        private bool _isTrue(string name, XDocument document)
-        {
-            return document.Root.Element(name).Value == "True";
+        private int _getSeverityIndex(string name, XDocument document)
+        { 
+            return Int32.Parse(document.Root.Element(name).Value);
         }
 
         private void UserControl_GotFocus(object sender, RoutedEventArgs e)
         {
             Init();
+        }
+
+        private void OverAll_Selected(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                foreach (var item in severityControllers)
+                {
+                    item.SetSelectedIndex(OverAll.SelectedIndex,true);
+                    item.ResetSkipAction();
+                }
+                Dispatcher.VerifyAccess();
+
+                var path = SettingsParser.Instance.GetSettingsFilePath();
+                var xDocument = SettingsChecker.Instance.GetSettingsFile(path);
+                var node = xDocument.Root.Element("OverAll");
+                node.ReplaceNodes(OverAll.SelectedIndex);
+                xDocument.Save(path);
+            }
+            catch (Exception exception){
+                return;
+            }
+        }
+
+        private void IndividualSeverityChanged()
+        {
+            var selectedIndex = OverAll.SelectedIndex;
+            foreach (var item in severityControllers)
+            {
+                if (item.GetSelectedIndex()!=selectedIndex)
+                {
+                    OverAll.SelectedIndex = 3;
+                    return;
+                }
+            }
         }
     }
 }

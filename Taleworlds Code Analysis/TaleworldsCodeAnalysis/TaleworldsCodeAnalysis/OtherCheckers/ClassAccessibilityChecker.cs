@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Data;
 using TaleworldsCodeAnalysis.NameChecker.Conventions;
 
 namespace TaleworldsCodeAnalysis.NameChecker
@@ -21,7 +22,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private const string _category = "Accessibility";
 
-        private static readonly DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static  DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_modifierRule);
 
@@ -49,6 +50,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
             if (accessibility.IsKind(SyntaxKind.ProtectedKeyword))
             {
+                var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _modifierRule.DefaultSeverity);
+                _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, severity, isEnabledByDefault: true, description: _description);
                 context.ReportDiagnostic(Diagnostic.Create(_modifierRule, location, properties.ToImmutableDictionary(), nameString));
             }
         }
