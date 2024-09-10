@@ -54,7 +54,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
                     if (accesibilityFound)
                     {
                         var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true, description: _description);
+                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
                         context.ReportDiagnostic(Diagnostic.Create(_rule, item.GetLocation()));
                         return;
                     }
