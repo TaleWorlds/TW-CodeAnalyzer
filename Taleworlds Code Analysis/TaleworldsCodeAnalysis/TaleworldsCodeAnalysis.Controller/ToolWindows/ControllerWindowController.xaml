@@ -50,48 +50,56 @@
                  x:Name="TW2000"
                  Title="Class Name Checker Enabled"
                  Code="TW2000"
+                 IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Field Name Checker Enabled"
                  Code="TW2002"
                  x:Name="TW2002"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Interface Name Checker Enabled"
                  Code="TW2003"
                 x:Name="TW2003"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Local Name Checker Enabled"
                  Code="TW2004"
                 x:Name="TW2004"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Method Name Checker Enabled"
                  Code="TW2005"
                 x:Name="TW2005"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Parameter Name Checker Enabled"
                  Code="TW2006"
                 x:Name="TW2006"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Property Name Checker Enabled"
                  Code="TW2007"
                 x:Name="TW2007"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Template Parameter Name Checker Enabled"
                  Code="TW2008"
                 x:Name="TW2008"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <Label Content="Inheritance Checkers" FontSize="15"/>
@@ -100,18 +108,21 @@
                  Title="Abstract Class Checker Enabled"
                  Code="TW2100"
                 x:Name="TW2100"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Depth of Inheritance Checker Enabled"
                  Code="TW2101"
                 x:Name="TW2101"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Sealed Override Checker Enabled"
                  Code="TW2102"
                 x:Name="TW2102"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <Label Content="Accesibility Checkers" FontSize="15"/>
@@ -120,12 +131,14 @@
                  Title="Class Accesibility Checker Enabled"
                  Code="TW2001"
                 x:Name="TW2001"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Class Accesibility Checker Enabled"
                  Code="TW2200"
                 x:Name="TW2200"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <Label Content="Other Checkers" FontSize="15"/>
@@ -133,24 +146,28 @@
                  Title="Named Parameter Checker Enabled"
                  Code="TW2201"
                 x:Name="TW2201"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Named Parameter Checker Enabled"
                  Code="TW2202"
                  x:Name="TW2202"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Var Keyword Checker Enabled"
                  Code="TW2204"
                  x:Name="TW2204"
+                IndividualChanged="IndividualSeverityChanged"
                  />
 
                 <components:SeverityController 
                  Title="Immutable Structs Checker Enabled"
                  Code="TW2205"
                  x:Name="TW2205"
+                IndividualChanged="IndividualSeverityChanged"
                  />
             </StackPanel>
 

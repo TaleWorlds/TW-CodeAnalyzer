@@ -39,10 +39,20 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
             set { SetValue(CodeProperty, value); }
         }
 
+        public Action IndividualChanged
+        {
+            get { return (Action)GetValue(IndividualChangedProperty); }
+            set { SetValue(IndividualChangedProperty, value); }
+        }
+
         public SeverityController()
         {
             InitializeComponent();
         }
+
+        public static readonly DependencyProperty IndividualChangedProperty =
+            DependencyProperty.Register("IndividualChanged", typeof(Action), typeof(SeverityController), new PropertyMetadata());
+
 
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register("Title", typeof(string), typeof(SeverityController), new PropertyMetadata(string.Empty));
@@ -51,9 +61,17 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
         public static readonly DependencyProperty AdditionalChoiceProperty =
             DependencyProperty.Register("AdditionalChoice", typeof(string), typeof(SeverityController), new PropertyMetadata(string.Empty));
 
-        internal void SetSelectedIndex(int index)
+        private bool _skipAction;
+
+        internal void SetSelectedIndex(int index,bool byOverAll)
         {
+            _skipAction = byOverAll;
             ComboBox.SelectedIndex = index;
+        }
+
+        internal void ResetSkipAction()
+        {
+            _skipAction = false;
         }
 
         private void ComboBox_Selected(object sender, RoutedEventArgs e)
@@ -68,6 +86,10 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
                 var node = xDocument.Root.Element(Code);
                 node.ReplaceNodes(source.SelectedIndex);
                 xDocument.Save(path);
+                if (!_skipAction)
+                {
+                    IndividualChanged.Invoke();
+                }
             }
             catch (Exception ex)
             {
@@ -76,5 +98,9 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
             
         }
 
+        internal int GetSelectedIndex()
+        {
+            return ComboBox.SelectedIndex;
+        }
     }
 }

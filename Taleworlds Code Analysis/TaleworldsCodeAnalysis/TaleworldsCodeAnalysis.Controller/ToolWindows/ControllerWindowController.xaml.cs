@@ -1,11 +1,13 @@
 ﻿using Community.VisualStudio.Toolkit;
 using EnvDTE;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Xml.Linq;
 using TaleworldsCodeAnalysis.Controller.ToolWindows;
+using TaleworldsCodeAnalysis.Controller.ToolWindows.Components;
 
 
 namespace TaleworldsCodeAnalysis.Controller
@@ -13,7 +15,7 @@ namespace TaleworldsCodeAnalysis.Controller
     public partial class ControllerWindowController
     {
         private DTE _dte;
-        
+        private List<SeverityController> severityControllers;
 
         public ControllerWindowController()
         {
@@ -21,6 +23,12 @@ namespace TaleworldsCodeAnalysis.Controller
             InitializeComponent();
             _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             _dte.Events.WindowEvents.WindowActivated += WindowActivated;
+            severityControllers = new List<SeverityController>()
+            {
+                TW2002, TW2000, TW2005, TW2003,TW2004, TW2006, TW2007,TW2008,
+                TW2001,TW2200, TW2100,TW2101,TW2102,TW2201,TW2202, TW2204, TW2205 
+            };
+            
         }
 
         ~ControllerWindowController()
@@ -39,30 +47,11 @@ namespace TaleworldsCodeAnalysis.Controller
             try
             {
                 var document = SettingsChecker.Instance.GetSettingsFile(SettingsParser.Instance.GetSettingsFilePath());
-
-                //Name Checkers
                 OverAll.SelectedIndex = _getSeverityIndex("OverAll", document);
-                TW2002.SetSelectedIndex(_getSeverityIndex("TW2002", document));
-                TW2000.SetSelectedIndex(_getSeverityIndex("TW2000", document));
-                TW2005.SetSelectedIndex(_getSeverityIndex("TW2005", document));
-                TW2003.SetSelectedIndex(_getSeverityIndex("TW2003", document));
-                TW2004.SetSelectedIndex(_getSeverityIndex("TW2004", document));
-                TW2006.SetSelectedIndex(_getSeverityIndex("TW2006", document));
-                TW2007.SetSelectedIndex(_getSeverityIndex("TW2007", document));
-                TW2008.SetSelectedIndex(_getSeverityIndex("TW2008", document));
-
-                //Accesibility Checkers
-                TW2001.SetSelectedIndex(_getSeverityIndex("TW2001", document));
-                TW2200.SetSelectedIndex(_getSeverityIndex("TW2200", document));
-
-                //Inheritance Checkers
-                TW2100.SetSelectedIndex(_getSeverityIndex("TW2100", document));
-                TW2101.SetSelectedIndex(_getSeverityIndex("TW2101", document));
-                TW2102.SetSelectedIndex(_getSeverityIndex("TW2102", document));
-                TW2201.SetSelectedIndex(_getSeverityIndex("TW2201", document));
-                TW2202.SetSelectedIndex(_getSeverityIndex("TW2202", document));
-                TW2204.SetSelectedIndex(_getSeverityIndex("TW2204", document));
-                TW2205.SetSelectedIndex(_getSeverityIndex("TW2205", document));
+                foreach (var item in severityControllers)
+                {
+                    item.SetSelectedIndex(_getSeverityIndex(item.Code, document),false);
+                }
                 
             }
             catch 
@@ -85,27 +74,11 @@ namespace TaleworldsCodeAnalysis.Controller
         {
             try
             {
-                TW2002.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2000.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2005.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2003.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2004.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2006.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2007.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2008.SetSelectedIndex(OverAll.SelectedIndex);
-
-                //Accesibility Checkers
-                TW2001.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2200.SetSelectedIndex(OverAll.SelectedIndex);
-
-                //Inheritance Checkers
-                TW2100.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2101.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2102.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2201.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2202.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2204.SetSelectedIndex(OverAll.SelectedIndex);
-                TW2205.SetSelectedIndex(OverAll.SelectedIndex);
+                foreach (var item in severityControllers)
+                {
+                    item.SetSelectedIndex(OverAll.SelectedIndex,true);
+                    item.ResetSkipAction();
+                }
                 Dispatcher.VerifyAccess();
 
                 var path = SettingsParser.Instance.GetSettingsFilePath();
@@ -116,6 +89,19 @@ namespace TaleworldsCodeAnalysis.Controller
             }
             catch (Exception exception){
                 return;
+            }
+        }
+
+        private void IndividualSeverityChanged()
+        {
+            var selectedIndex = OverAll.SelectedIndex;
+            foreach (var item in severityControllers)
+            {
+                if (item.GetSelectedIndex()!=selectedIndex)
+                {
+                    OverAll.SelectedIndex = 3;
+                    return;
+                }
             }
         }
     }
