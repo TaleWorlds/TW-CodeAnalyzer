@@ -47,6 +47,8 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
             {
                 if (item.NameColon==null)
                 {
+                    var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
+                    _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true, description: _description);
                     context.ReportDiagnostic(Diagnostic.Create(_rule, invocationExpr.GetLocation()));
                 }
             }

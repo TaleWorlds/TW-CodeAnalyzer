@@ -31,7 +31,7 @@ namespace TaleworldsCodeAnalysis
         public bool IsAnalysisEnabled(string diagnosticID, string contextPath)
         {
             var document = GetSettingsFile(GetSettingsFilePath(contextPath));
-            return document.Root.Element(diagnosticID).Value == "True";
+            return document.Root.Element(diagnosticID).Value != "0";
         }
 
         public string GetSettingsFilePath(string contextPath)
@@ -90,5 +90,26 @@ namespace TaleworldsCodeAnalysis
             }
             return xDocument;
         }
+
+        public DiagnosticSeverity GetDiagnosticSeverity(string diagnosticId, string contextPath, DiagnosticSeverity defaultSeverity) 
+        {
+            if (PreAnalyzerConditions.Instance.TestMod)
+            {
+                return defaultSeverity;
+            }
+
+            var document = GetSettingsFile(GetSettingsFilePath(contextPath));
+            switch(document.Root.Element(diagnosticId).Value)
+            {
+                case "0":
+                    return DiagnosticSeverity.Hidden;
+                case "1":
+                    return DiagnosticSeverity.Warning;
+                case "2":
+                    return DiagnosticSeverity.Error;
+            }
+            return DiagnosticSeverity.Hidden;
+        }
+
     }
 }

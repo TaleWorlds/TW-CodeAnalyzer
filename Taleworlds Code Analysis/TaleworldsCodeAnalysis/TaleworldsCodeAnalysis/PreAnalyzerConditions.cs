@@ -21,6 +21,7 @@ namespace TaleworldsCodeAnalysis
                 return _instance;
             }
         }
+        public bool TestMod => _testMod;
         private bool _testMod=false;
 
         private PreAnalyzerConditions() { }

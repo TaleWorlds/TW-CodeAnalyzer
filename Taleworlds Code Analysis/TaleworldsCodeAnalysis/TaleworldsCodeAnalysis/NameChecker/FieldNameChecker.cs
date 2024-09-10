@@ -18,9 +18,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private static readonly LocalizableString _nameDescription = new LocalizableResourceString(nameof(NameCheckerResources.FieldNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private const string _namingCategory = "Naming";
 
-        private static readonly DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_diagnosticId, _nameTitle, _nameMessageFormat, _namingCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _nameDescription);
-
-
+        private static DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_diagnosticId, _nameTitle, _nameMessageFormat, _namingCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _nameDescription);
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
         {
@@ -41,6 +39,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
             if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
+            
 
             if (nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
             {
@@ -56,6 +55,8 @@ namespace TaleworldsCodeAnalysis.NameChecker
             {
                 if (!UnderScoreCaseBehaviour.Instance.IsMatching(nameString))
                 {
+                    var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _nameRule.DefaultSeverity);
+                    _nameRule = new DiagnosticDescriptor(_diagnosticId, _nameTitle, _nameMessageFormat, _namingCategory, severity, isEnabledByDefault: true, description: _nameDescription);
                     properties["NamingConvention"] = "_uscoreCase";
                     var diagnostic = Diagnostic.Create(_nameRule, location, properties.ToImmutableDictionary(), nameString, 
                         UnderScoreCaseBehaviour.Instance.FixThis(nameString));
