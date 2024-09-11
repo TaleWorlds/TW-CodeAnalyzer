@@ -101,9 +101,6 @@ namespace TaleworldsCodeAnalysis.Commands
         /// <param name="e">Event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-
-            
-
             ThreadHelper.ThrowIfNotOnUIThread();
 
             DTE dte = (DTE)Package.GetGlobalService(typeof(DTE));
