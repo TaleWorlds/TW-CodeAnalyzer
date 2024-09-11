@@ -53,8 +53,8 @@ namespace TaleworldsCodeAnalysis.Controller
         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
         ThreadHelper.CheckAccess();
         DTE dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
-            dte.ExecuteCommand("Analyze.OnSolution");
-            //dte.ExecuteCommand("Analyze.ForSolution");
+            //dte.ExecuteCommand("Analyze.OnSolution");
+            dte.ExecuteCommand("Analyze.ForSolution");
     }
 
     private string GetSettingsFilePath()
