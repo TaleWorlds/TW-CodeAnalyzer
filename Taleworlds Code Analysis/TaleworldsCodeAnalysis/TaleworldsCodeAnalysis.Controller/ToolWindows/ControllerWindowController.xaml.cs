@@ -90,6 +90,7 @@ namespace TaleworldsCodeAnalysis.Controller
             catch (Exception exception){
                 return;
             }
+
         }
 
         private void IndividualSeverityChanged()
@@ -103,6 +104,7 @@ namespace TaleworldsCodeAnalysis.Controller
                     return;
                 }
             }
+           
         }
     }
 }
