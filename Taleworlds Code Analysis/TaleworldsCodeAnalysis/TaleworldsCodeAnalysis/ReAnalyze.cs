@@ -29,7 +29,10 @@ namespace TaleworldsCodeAnalysis
         public void ForceReanalyze()
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            if (_dte==null)
+            {
+                _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            }
             _dte.ExecuteCommand("Build.BuildSolution");
         }
     }
