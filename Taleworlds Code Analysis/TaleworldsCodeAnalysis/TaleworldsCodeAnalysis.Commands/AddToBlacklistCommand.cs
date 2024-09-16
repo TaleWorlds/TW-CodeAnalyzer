@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using Task = System.Threading.Tasks.Task;
 using EnvDTE;
 using EnvDTE80;
+using System.Windows.Threading;
 
 
 namespace TaleworldsCodeAnalysis.Commands
@@ -134,7 +135,7 @@ namespace TaleworldsCodeAnalysis.Commands
                 }
                 doc.Save(fullPath);
             }
-
+            ReAnalyze.Instance.ForceReanalyze();
             string message = string.Format("Added {0} to the blacklist", projectName);
             string title = "Add to Blacklist";
 

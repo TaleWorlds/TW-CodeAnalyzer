@@ -78,14 +78,11 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
         {
             try
             {
-                Dispatcher.VerifyAccess();
-                ComboBox source = (ComboBox)e.OriginalSource;
-
-                var path = SettingsParser.Instance.GetSettingsFilePath();
-                var xDocument = SettingsChecker.Instance.GetSettingsFile(path);
-                var node = xDocument.Root.Element(Code);
-                node.ReplaceNodes(source.SelectedIndex);
-                xDocument.Save(path);
+                Console.WriteLine(ComboBox.SelectedIndex);
+                if (IndividualChanged==null)
+                {
+                    return;
+                }
                 if (!_skipAction)
                 {
                     IndividualChanged.Invoke();

@@ -89,7 +89,7 @@ namespace TaleworldsCodeAnalysis
             var newRoot = root.ReplaceNode(targetNode, newTargetNode);
 
             var newDocument = context.Document.WithSyntaxRoot(newRoot);
-
+            ReAnalyze.Instance.ForceReanalyze();
             return newDocument.Project.Solution;
         }
 

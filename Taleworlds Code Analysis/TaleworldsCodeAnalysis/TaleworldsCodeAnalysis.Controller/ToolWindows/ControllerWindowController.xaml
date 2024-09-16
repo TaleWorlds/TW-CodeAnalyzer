@@ -12,8 +12,7 @@
              toolkit:Themes.UseVsTheme="True"
              mc:Ignorable="d"
              Name="ControllerWindow"
-             LostFocus="UserControl_GotFocus"
-             GotFocus="UserControl_GotFocus" ClipToBounds="True"
+             ClipToBounds="True"
             >
 
     <StackPanel VerticalAlignment="Stretch">

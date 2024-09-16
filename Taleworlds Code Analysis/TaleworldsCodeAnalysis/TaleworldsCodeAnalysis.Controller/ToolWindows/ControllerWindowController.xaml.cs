@@ -1,5 +1,6 @@
 ﻿using Community.VisualStudio.Toolkit;
 using EnvDTE;
+using Microsoft.VisualStudio.Package;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -16,6 +17,7 @@ namespace TaleworldsCodeAnalysis.Controller
     {
         private DTE _dte;
         private List<SeverityController> severityControllers;
+        private bool _hasInitialized;
 
         public ControllerWindowController()
         {
@@ -52,7 +54,8 @@ namespace TaleworldsCodeAnalysis.Controller
                 {
                     item.SetSelectedIndex(_getSeverityIndex(item.Code, document),false);
                 }
-                
+                _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
+                _hasInitialized = true;
             }
             catch 
             {
@@ -67,6 +70,10 @@ namespace TaleworldsCodeAnalysis.Controller
 
         private void UserControl_GotFocus(object sender, RoutedEventArgs e)
         {
+            if (_hasInitialized)
+            {
+                return ;
+            }
             Init();
         }
 
@@ -74,18 +81,15 @@ namespace TaleworldsCodeAnalysis.Controller
         {
             try
             {
+                if (((ComboBox)e.OriginalSource).SelectedIndex==3)
+                {
+                    return ;
+                }
                 foreach (var item in severityControllers)
                 {
                     item.SetSelectedIndex(OverAll.SelectedIndex,true);
                     item.ResetSkipAction();
                 }
-                Dispatcher.VerifyAccess();
-
-                var path = SettingsParser.Instance.GetSettingsFilePath();
-                var xDocument = SettingsChecker.Instance.GetSettingsFile(path);
-                var node = xDocument.Root.Element("OverAll");
-                node.ReplaceNodes(OverAll.SelectedIndex);
-                xDocument.Save(path);
             }
             catch (Exception exception){
                 return;
@@ -107,15 +111,27 @@ namespace TaleworldsCodeAnalysis.Controller
            
         }
 
-        private void Refresh()
+        private void Save()
         {
             Dispatcher.VerifyAccess();
-            _dte.ExecuteCommand("Build.RebuildSolution");
+            var path = SettingsParser.Instance.GetSettingsFilePath();
+            var xDocument = SettingsChecker.Instance.GetSettingsFile(path);
+            var node = xDocument.Root.Element("OverAll");
+            node.ReplaceNodes(OverAll.SelectedIndex);
+
+            foreach (var item in severityControllers)
+            {
+                node = xDocument.Root.Element(item.Code);
+                node.ReplaceNodes(item.ComboBox.SelectedIndex);
+            }
+
+            xDocument.Save(path);
+            ReAnalyze.Instance.ForceReanalyze();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Refresh();
+            Save();
         }
     }
 }
