@@ -169,6 +169,7 @@
                  x:Name="TW2205"
                 IndividualChanged="IndividualSeverityChanged"
                  />
+                <Button Content="Save" Click="Button_Click"/>
             </StackPanel>
 
         </Grid>

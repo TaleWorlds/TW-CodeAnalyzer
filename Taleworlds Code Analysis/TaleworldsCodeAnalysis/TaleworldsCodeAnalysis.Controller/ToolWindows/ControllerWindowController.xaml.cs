@@ -106,5 +106,16 @@ namespace TaleworldsCodeAnalysis.Controller
             }
            
         }
+
+        private void Refresh()
+        {
+            Dispatcher.VerifyAccess();
+            _dte.ExecuteCommand("Build.RebuildSolution");
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
     }
 }

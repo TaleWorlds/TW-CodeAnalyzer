@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
+using CommonServiceLocator;
 
 namespace TaleworldsCodeAnalysis
 {
@@ -26,18 +27,11 @@ namespace TaleworldsCodeAnalysis
                     
                 }
                 if (featureAssembly == null) return;
-                var diagnosticServiceType = featureAssembly.GetType("Microsoft.CodeAnalysis.Diagnostics.IDiagnosticsRefresher");
-
-                if (diagnosticServiceType == null)
-                {
-                    throw new InvalidOperationException("Failed to find DiagnosticAnalyzerService in Microsoft.CodeAnalysis.Features.");
-                }
-
-                // Get the DiagnosticAnalyzerService instance from the workspace using reflection
+                Type diagnosticServiceType = featureAssembly.GetType("Microsoft.CodeAnalysis.Diagnostics.IDiagnosticsRefresher");
                 var workspace = project.Solution.Workspace;
 
 
-                // Get the Reanalyze method
+
                 var reanalyzeMethod = diagnosticServiceType.GetMethod("RequestWorkspaceRefresh", BindingFlags.Instance | BindingFlags.Public);
 
                 if (reanalyzeMethod == null)
@@ -45,8 +39,6 @@ namespace TaleworldsCodeAnalysis
                     throw new InvalidOperationException("Failed to find the Reanalyze method.");
                 }
                 reanalyzeMethod.Invoke(diagnosticServiceType, new object[] { project });
-                // Invoke Reanalyze on the project to force reanalysis
-                //reanalyzeMethod.Invoke();
             });
         }
     }
