@@ -50,19 +50,23 @@ namespace TaleworldsCodeAnalysis
                 return Task.CompletedTask;
             }
 
-            
-
             foreach (var item in listOfWords)
             {
                 context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to shared whitelist.",
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item, WhiteListType.Shared),
+                createChangedSolution: (c, isPreview) =>
+                {
+                    return _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Shared);
+                } ,
                 equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item+WhiteListType.Shared), diagnostic);
             }
 
             foreach (var item in listOfWords)
             {
                 context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to local whitelist.",
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Local),
+                createChangedSolution: (c, isPreview) =>
+                {
+                    return _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Local);
+                },
                 equivalenceKey: nameof(CodeFixResources.CodeFixTitle) + item+WhiteListType.Local), diagnostic);
             }
 
@@ -75,12 +79,11 @@ namespace TaleworldsCodeAnalysis
             {
                 return document.Project.Solution;
             }
-            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            
+            await ReAnalyze.Instance.PlaceDummySpaceFromGlobalAsync(document);
             var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
             var solution = document.Project.Solution;
             WhiteListParser.Instance.AddStringToWhiteList(path, word);
-            ReAnalyze.Instance.ForceReanalyze();
+            await ReAnalyze.Instance.RemoveDummySpaceFromGlobalAsync(document);
             return document.Project.Solution;
         }
 

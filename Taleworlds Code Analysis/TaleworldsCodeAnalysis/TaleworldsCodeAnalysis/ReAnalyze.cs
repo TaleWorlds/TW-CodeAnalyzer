@@ -1,13 +1,16 @@
-﻿using System;
-using System.Reflection;
+﻿
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using Microsoft.VisualStudio.Shell;
-using CommonServiceLocator;
 using EnvDTE;
 using System.Windows.Threading;
+using Microsoft.VisualStudio.RpcContracts.DiagnosticManagement;
+using System.Reflection.Metadata;
+using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Threading;
+using System.Threading.Tasks;
+using System;
+using System.Xml.Linq;
 
 namespace TaleworldsCodeAnalysis
 {
@@ -26,14 +29,39 @@ namespace TaleworldsCodeAnalysis
         }
         private static ReAnalyze _instance;
         private DTE _dte;
-        public void ForceReanalyze()
+        public async Task ForceReanalyzeAsync()
         {
-            Dispatcher.CurrentDispatcher.VerifyAccess();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             if (_dte==null)
             {
                 _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             }
-            _dte.ExecuteCommand("Build.BuildSolution");
+            await PlaceDummySpaceFromGlobalAsync((Microsoft.CodeAnalysis.Document)(_dte.Documents.Item(0)));
+            await RemoveDummySpaceFromGlobalAsync((Microsoft.CodeAnalysis.Document)(_dte.Documents.Item(0)));
+        }
+
+        public async Task RemoveDummySpaceFromGlobalAsync(Microsoft.CodeAnalysis.Document document)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            SyntaxNode root = null;
+            document.TryGetSyntaxRoot(out root);
+            var originalDeclaration = root.ReplaceNode(
+                root, root.WithoutTrailingTrivia());
+            var newRoot = root.ReplaceNode(root, originalDeclaration);
+            var changesOperation = new ApplyChangesOperation(document.WithSyntaxRoot(newRoot).Project.Solution);
+            changesOperation.Apply(document.Project.Solution.Workspace, new CancellationToken());
+        }
+
+        public async Task PlaceDummySpaceFromGlobalAsync(Microsoft.CodeAnalysis.Document document)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(); ;
+            SyntaxNode root = null;
+            document.TryGetSyntaxRoot(out root);
+            var spacedDeclaration = root.ReplaceNode(
+                root, root.WithTrailingTrivia(SyntaxFactory.Space));
+            var newRoot = root.ReplaceNode(root, spacedDeclaration);
+            var changesOperation = new ApplyChangesOperation(document.WithSyntaxRoot(newRoot).Project.Solution);
+            changesOperation.Apply(document.Project.Solution.Workspace, new CancellationToken());
         }
     }
 }

@@ -134,13 +134,13 @@ namespace TaleworldsCodeAnalysis.Controller
         private void SaveButton(object sender, RoutedEventArgs e)
         {
             Save();
-            ReAnalyze.Instance.ForceReanalyze();
+            ReAnalyze.Instance.ForceReanalyzeAsync();
         }
 
         private void RefreshButton(object sender, RoutedEventArgs e)
         {
             Init();
-            ReAnalyze.Instance.ForceReanalyze();
+            ReAnalyze.Instance.ForceReanalyzeAsync();
         }
 
         private void AddToWhiteList(object sender, RoutedEventArgs e)
