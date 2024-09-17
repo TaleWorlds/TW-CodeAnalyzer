@@ -22,6 +22,7 @@
                     <Label x:Name="lblHeadline"
                HorizontalAlignment="Center" Content="Taleworlds Code Analysis Settings"
                FontSize="17"/>
+                    <Button Content="Refresh" Click="RefreshButton"/>
                     <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
                             <Grid>
@@ -169,13 +170,37 @@
              x:Name="TW2205"
             IndividualChanged="IndividualSeverityChanged"
              />
-                    <Button Content="Save" Click="Button_Click"/>
+                    <Button Content="Save" Click="SaveButton" Margin="10"/>
+                    <Label Content="White List" FontSize="15"/>
+                    <ListBox Name="WhiteList" Height="100"/>
+                    <Button Content="Remove Selected Item" VerticalAlignment="Center" Click="RemoveItem"/>
+
+                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <TextBox Name ="NewWhiteListItem" TextWrapping="Wrap" Text="[Insert New Item Here]" Width="200" Padding="5,0,0,0" FontSize="12" />
+                            </Grid>
+                            <Grid>
+                                <ComboBox Name="WhiteListScope" Width="100" FontSize="12" HorizontalAlignment="Right" SelectedIndex="0" Padding="5,0,0,0">
+                                    <ComboBoxItem Content="Local" FontSize="12"/>
+                                    <ComboBoxItem Content="Shared" FontSize="12"/>
+                                </ComboBox>
+                            </Grid>
+                            <Grid HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <Button Content="Add to WhiteList" HorizontalAlignment="Right" FontSize="12" Width="150" Click="AddToWhiteList"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    
                 </StackPanel>
 
             </Grid>
+            
+
 
         </StackPanel>
     </ScrollViewer>
-    
+
 
 </UserControl>

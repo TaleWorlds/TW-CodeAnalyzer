@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.Xml.Linq;
 using TaleworldsCodeAnalysis.Controller.ToolWindows;
 using TaleworldsCodeAnalysis.Controller.ToolWindows.Components;
+using TaleworldsCodeAnalysis.NameChecker;
 
 
 namespace TaleworldsCodeAnalysis.Controller
@@ -54,6 +55,8 @@ namespace TaleworldsCodeAnalysis.Controller
                 {
                     item.SetSelectedIndex(_getSeverityIndex(item.Code, document),false);
                 }
+                WhiteListParser.Instance.ReadGlobalWhiteListPath(_dte.ActiveDocument.Path);
+                WhiteList.ItemsSource = WhiteListParser.Instance.WhiteListWords;
                 _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
                 _hasInitialized = true;
             }
@@ -126,12 +129,34 @@ namespace TaleworldsCodeAnalysis.Controller
             }
 
             xDocument.Save(path);
+        }
+
+        private void SaveButton(object sender, RoutedEventArgs e)
+        {
+            Save();
             ReAnalyze.Instance.ForceReanalyze();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void RefreshButton(object sender, RoutedEventArgs e)
         {
-            Save();
+            Init();
+            ReAnalyze.Instance.ForceReanalyze();
+        }
+
+        private void AddToWhiteList(object sender, RoutedEventArgs e)
+        {
+            var path = WhiteListScope.SelectedIndex==0 ? 
+                WhiteListParser.Instance.LocalPathXml : 
+                WhiteListParser.Instance.SharedPathXml;
+            WhiteListParser.Instance.AddStringToWhiteList(path, NewWhiteListItem.Text.Trim());
+            NewWhiteListItem.Text = "[Insert New Item Here]";
+            RefreshButton(sender, e);
+        }
+
+        private void RemoveItem(object sender, RoutedEventArgs e)
+        {
+            WhiteListParser.Instance.RemoveWord(WhiteList.SelectedItems);
+            RefreshButton(sender, e);
         }
     }
 }

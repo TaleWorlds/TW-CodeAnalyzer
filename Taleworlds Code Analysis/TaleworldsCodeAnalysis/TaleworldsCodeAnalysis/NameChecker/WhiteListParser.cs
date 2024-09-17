@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
 using Microsoft.Build.Tasks;
+using System.Collections;
 
 namespace TaleworldsCodeAnalysis.NameChecker
 {
@@ -118,6 +119,52 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var testPathXML = "C:\\develop\\TW-CodeAnalyzer\\Taleworlds Code Analysis\\" +
             "TaleworldsCodeAnalysis\\WhiteList.xml";
             _sharedWhiteListPath= testPathXML;
+        }
+
+        public void AddStringToWhiteList(string filePath, string wordToAdd)
+        {
+            try
+            {
+                var doc = XDocument.Load(filePath);
+                var root = doc.Element("WhiteListRoot");
+                if (root != null)
+                {
+                    var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(wordToAdd));
+                    if (existingWord == null)
+                    {
+                        root.Add(new XElement("Word", wordToAdd));
+                    }
+                    doc.Save(filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public void RemoveWord(IList selectedItems)
+        {
+            void RemoveFormXML(string path)
+            {
+                var doc = XDocument.Load(path);
+                var root = doc.Element("WhiteListRoot");
+                if (root != null)
+                {
+                    foreach (var item in selectedItems)
+                    {
+                        var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(item.ToString()));
+                        if (existingWord != null)
+                        {
+                            existingWord.Remove();
+                        }
+                    }
+                }
+                doc.Save(path);
+            }
+            RemoveFormXML(SharedPathXml);
+            RemoveFormXML(LocalPathXml);
+            
         }
     }
 }

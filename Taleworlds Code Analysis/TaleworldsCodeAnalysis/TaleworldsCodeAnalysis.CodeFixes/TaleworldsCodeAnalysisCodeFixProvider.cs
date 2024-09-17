@@ -79,7 +79,7 @@ namespace TaleworldsCodeAnalysis
             
             var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
             var solution = document.Project.Solution;
-            _addStringToWhiteList(path, word);
+            WhiteListParser.Instance.AddStringToWhiteList(path, word);
             ReAnalyze.Instance.ForceReanalyze();
             return document.Project.Solution;
         }
@@ -119,30 +119,5 @@ namespace TaleworldsCodeAnalysis
                     return new List<string>();
             }
         }
-
-        private void _addStringToWhiteList(string filePath, string wordToAdd)
-        {
-            try
-            {
-                var doc = XDocument.Load(filePath);
-                var root = doc.Element("WhiteListRoot");
-                if (root != null)
-                {
-                    var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(wordToAdd, StringComparison.OrdinalIgnoreCase));
-                    if (existingWord == null)
-                    {
-                        root.Add(new XElement("Word", wordToAdd));
-                    }
-                    doc.Save(filePath);
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            
-        }
-
     }
 }
