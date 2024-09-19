@@ -25,15 +25,15 @@ namespace TaleworldsCodeAnalysis
             }
         }
         private static ReAnalyze _instance;
-        private DTE _dte;
+        private DTE _developmentToolsEnvironment;
         public void ForceReanalyze()
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            if (_dte==null)
+            if (_developmentToolsEnvironment==null)
             {
-                _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+                _developmentToolsEnvironment = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             }
-            _dte.ExecuteCommand("Build.BuildSolution");
+            _developmentToolsEnvironment.ExecuteCommand("Build.BuildSolution");
         }
     }
 }

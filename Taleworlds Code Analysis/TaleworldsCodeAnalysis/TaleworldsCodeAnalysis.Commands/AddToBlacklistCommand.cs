@@ -104,8 +104,8 @@ namespace TaleworldsCodeAnalysis.Commands
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            DTE dte = (DTE)Package.GetGlobalService(typeof(DTE));
-            SelectedItems selectedItems = dte.SelectedItems;
+            DTE developmentToolsEnvironment = (DTE)Package.GetGlobalService(typeof(DTE));
+            SelectedItems selectedItems = developmentToolsEnvironment.SelectedItems;
             if (selectedItems == null || selectedItems.Count != 1) return;
             SelectedItem item = selectedItems.Item(1);
             String projectName = item.Project.Name;

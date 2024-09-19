@@ -16,7 +16,11 @@ namespace TaleworldsCodeAnalysis
         {
             get 
             {
-                if (_instance == null) _instance = new BlackListedProjects();
+                if (_instance == null) 
+                {
+                    _instance = new BlackListedProjects();
+                }
+                
                 return _instance;
             }
         }
@@ -55,7 +59,10 @@ namespace TaleworldsCodeAnalysis
 
             foreach (var node in projectXElements)
             {
-                if (node.Value == projectName) return true;
+                if (node.Value == projectName)
+                {
+                    return true;
+                }
             }
 
             return false;

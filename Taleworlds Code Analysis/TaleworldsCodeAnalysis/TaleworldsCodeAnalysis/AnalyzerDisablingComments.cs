@@ -23,8 +23,6 @@ namespace TaleworldsCodeAnalysis
             }
         }
 
-        private AnalyzerDisablingComments() { }
-
         public bool IsInDisablingComments(SyntaxNode node, String diagnosticId) //TODO: enable/disable this line
         {
             var root = node.SyntaxTree.GetRoot();
@@ -51,23 +49,41 @@ namespace TaleworldsCodeAnalysis
             {
                 if (comment.Line < nodeLine)
                 {
-                    if (closestCommentBeforeNode == null) closestCommentBeforeNode = comment;
-                    else if (comment.Line > closestCommentBeforeNode.Line) closestCommentBeforeNode = comment;
+                    if (closestCommentBeforeNode == null)
+                    {
+                        closestCommentBeforeNode = comment;
+                    }
+                    else if (comment.Line > closestCommentBeforeNode.Line)
+                    {
+                        closestCommentBeforeNode = comment;
+                    }
                 }
             }
-
+            bool disabled = false;
             if (closestCommentBeforeNode == null || closestCommentBeforeNode.Type == CommentType.OnComment)
             {
-                return false;
+                disabled = false;
             }
-            else return true;
+            else
+            {
+                disabled = true;
+            }
 
+            return disabled;
         }
 
         private class _comment
         {
-            public int Line { get; private set; }
-            public CommentType Type { get; private set; }
+            public int Line 
+            { 
+                get; 
+                private set; 
+            }
+            public CommentType Type 
+            { 
+                get; 
+                private set; 
+            }
 
             public _comment(int line, CommentType type)
             {
@@ -78,7 +94,8 @@ namespace TaleworldsCodeAnalysis
         }
         private enum CommentType
         {
-            OnComment, OffComment
+            OnComment, 
+            OffComment
         }
     }
 

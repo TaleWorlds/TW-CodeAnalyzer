@@ -25,7 +25,16 @@ namespace TaleworldsCodeAnalysis
         {
             get
             {
-                List<string> fixableDiagnosticIds = new List<string> {ClassNameChecker.DiagnosticId, FieldNameChecker.DiagnosticId, InterfaceNameChecker.DiagnosticId, LocalNameChecker.DiagnosticId, MethodNameChecker.DiagnosticId, ParameterNameChecker.DiagnosticId, PropertyNameChecker.DiagnosticId, TemplateParameterNameChecker.DiagnosticId };
+                List<string> fixableDiagnosticIds = new List<string> {
+                    ClassNameChecker.DiagnosticId, 
+                    FieldNameChecker.DiagnosticId, 
+                    InterfaceNameChecker.DiagnosticId, 
+                    LocalNameChecker.DiagnosticId, 
+                    MethodNameChecker.DiagnosticId, 
+                    ParameterNameChecker.DiagnosticId, 
+                    PropertyNameChecker.DiagnosticId, 
+                    TemplateParameterNameChecker.DiagnosticId 
+                };
                 return ImmutableArray.Create(fixableDiagnosticIds.ToArray());
             }
         }
@@ -45,25 +54,21 @@ namespace TaleworldsCodeAnalysis
 
             var document = context.Document;
             var listOfWords = _getWordsToAddToWhitelist(document, diagnostic);
-            if (listOfWords.Count== 0)
+            if (listOfWords.Count!= 0)
             {
-                return Task.CompletedTask;
-            }
+                foreach (var item in listOfWords)
+                {
+                    context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to shared whitelist.",
+                    createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Shared),
+                    equivalenceKey: nameof(CodeFixResources.CodeFixTitle) + item + WhiteListType.Shared), diagnostic);
+                }
 
-            
-
-            foreach (var item in listOfWords)
-            {
-                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to shared whitelist.",
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview,item, WhiteListType.Shared),
-                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)+item+WhiteListType.Shared), diagnostic);
-            }
-
-            foreach (var item in listOfWords)
-            {
-                context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to local whitelist.",
-                createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Local),
-                equivalenceKey: nameof(CodeFixResources.CodeFixTitle) + item+WhiteListType.Local), diagnostic);
+                foreach (var item in listOfWords)
+                {
+                    context.RegisterCodeFix(CustomCodeAction.Create(title: "Add " + item + " to local whitelist.",
+                    createChangedSolution: (c, isPreview) => _addToWhitelistAsync(document, c, diagnostic, isPreview, item, WhiteListType.Local),
+                    equivalenceKey: nameof(CodeFixResources.CodeFixTitle) + item + WhiteListType.Local), diagnostic);
+                }
             }
 
             return Task.CompletedTask;
@@ -71,16 +76,16 @@ namespace TaleworldsCodeAnalysis
 
         private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word, WhiteListType whiteListType)
         {
-            if (isPreview)
+            if (!isPreview)
             {
-                return document.Project.Solution;
+                SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+
+                var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
+                var solution = document.Project.Solution;
+                _addStringToWhiteList(path, word);
+                ReAnalyze.Instance.ForceReanalyze();
             }
-            SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
             
-            var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
-            var solution = document.Project.Solution;
-            _addStringToWhiteList(path, word);
-            ReAnalyze.Instance.ForceReanalyze();
             return document.Project.Solution;
         }
 
@@ -103,21 +108,26 @@ namespace TaleworldsCodeAnalysis
 
         private IReadOnlyList<string> _getNewWhiteListItemsToFix(string identifier, ConventionType conventionEnum)
         {
+            IReadOnlyList<string> items = new List<string>();
             switch(conventionEnum)
             {
                 case ConventionType.CamelCase:
-                    return CamelCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    items = CamelCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    break;
                 case ConventionType.UnderScoreCase:
-                    return UnderScoreCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    items = UnderScoreCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    break;
                 case ConventionType.PascalCase:
-                    return PascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
-                case ConventionType.IpascalCase:
-                    return IPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
-                case ConventionType.TpascalCase:
-                    return TPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
-                default:
-                    return new List<string>();
+                    items = PascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    break;
+                case ConventionType.IPascalCase:
+                    items = IPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    break;
+                case ConventionType.TPascalCase:
+                    items = TPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    break;
             }
+            return items;
         }
 
         private void _addStringToWhiteList(string filePath, string wordToAdd)
@@ -141,7 +151,6 @@ namespace TaleworldsCodeAnalysis
             {
                 Console.WriteLine(ex.ToString());
             }
-            
         }
 
     }

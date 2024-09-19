@@ -45,7 +45,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
                 if (!IPascalCaseBehaviour.Instance.IsMatching(nameString))
                 {
-                    properties["NamingConvention"] = nameof(ConventionType.IpascalCase);
+                    properties["NamingConvention"] = nameof(ConventionType.IPascalCase);
                     var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
                     _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
                     context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,

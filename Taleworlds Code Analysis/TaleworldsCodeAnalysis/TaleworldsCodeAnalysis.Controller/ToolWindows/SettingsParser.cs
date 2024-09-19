@@ -26,20 +26,20 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows
         }
 
         private static SettingsParser _instance;
-        private DTE _dte; //TODO: uzun yaz
+        private DTE _developmentToolsEnvironment; //TODO: uzun yaz
         private const string _pathOfSettingsFile = "TaleworldsCodeAnalysisSettings.xml";
         private string _fullPath;
 
         public SettingsParser()
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            _developmentToolsEnvironment = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
         }
 
         public string GetSettingsFilePath()
         {
             Dispatcher.CurrentDispatcher.VerifyAccess();
-            Solution solution = _dte.Solution;
+            Solution solution = _developmentToolsEnvironment.Solution;
             string directoryPath = new FileInfo(solution.FullName).FullName;
             string settingPath = Path.Combine(Path.GetDirectoryName(directoryPath), _pathOfSettingsFile);
             return settingPath;

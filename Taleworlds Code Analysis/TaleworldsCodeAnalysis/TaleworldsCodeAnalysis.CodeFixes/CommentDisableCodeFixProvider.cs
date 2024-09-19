@@ -27,7 +27,21 @@ namespace TaleworldsCodeAnalysis
         {
             get
             {
-                List<string> fixableDiagnosticIds = new List<string> { ClassNameChecker.DiagnosticId, FieldNameChecker.DiagnosticId, InterfaceNameChecker.DiagnosticId, LocalNameChecker.DiagnosticId, MethodNameChecker.DiagnosticId, ParameterNameChecker.DiagnosticId, PropertyNameChecker.DiagnosticId, TemplateParameterNameChecker.DiagnosticId, ClassAccessibilityChecker.DiagnosticId, FieldAccessibilityChecker.DiagnosticId, AbstractClassChecker.DiagnosticId, DepthOfInheritanceChecker.DiagnosticId, SealedOverrideChecker.DiagnosticId};
+                List<string> fixableDiagnosticIds = new List<string> { 
+                    ClassNameChecker.DiagnosticId, 
+                    FieldNameChecker.DiagnosticId, 
+                    InterfaceNameChecker.DiagnosticId, 
+                    LocalNameChecker.DiagnosticId, 
+                    MethodNameChecker.DiagnosticId, 
+                    ParameterNameChecker.DiagnosticId, 
+                    PropertyNameChecker.DiagnosticId, 
+                    TemplateParameterNameChecker.DiagnosticId,
+                    ClassAccessibilityChecker.DiagnosticId, 
+                    FieldAccessibilityChecker.DiagnosticId, 
+                    AbstractClassChecker.DiagnosticId, 
+                    DepthOfInheritanceChecker.DiagnosticId, 
+                    SealedOverrideChecker.DiagnosticId
+                };
                 return ImmutableArray.Create(fixableDiagnosticIds.ToArray());
             }
         }
@@ -49,9 +63,6 @@ namespace TaleworldsCodeAnalysis
 
             context.RegisterCodeFix(CustomCodeAction.Create("Disable all warnings beginning from this line.",
                 createChangedSolution: (c, isPreview) => _addDisablingCommentAll(c, isPreview, context)), diagnostic);
-
-
-
         }
 
         private async Task<Solution> _addCommentBeforeDiagnostic(CancellationToken c, CodeFixContext context, String comment)
@@ -70,27 +81,32 @@ namespace TaleworldsCodeAnalysis
                 targetNode = targetNode.Parent;
             }
 
-            if (targetNode == null)
+            Solution changedSolution = context.Document.Project.Solution;
+
+            if (targetNode != null)
             {
-                return context.Document.Project.Solution;
+                var commentTrivia = SyntaxFactory.Comment(comment);
+
+                var newLineTrivia = SyntaxFactory.CarriageReturnLineFeed;
+
+                var leadingTrivia = targetNode.GetLeadingTrivia();
+                var lastTrivia = leadingTrivia.LastOrDefault();
+                leadingTrivia = leadingTrivia.Add(newLineTrivia).Add(commentTrivia).Add(newLineTrivia);
+
+                if (lastTrivia.IsKind(SyntaxKind.WhitespaceTrivia))
+                {
+                    leadingTrivia = leadingTrivia.Add(lastTrivia);
+                }
+
+                var newTargetNode = targetNode.WithLeadingTrivia(leadingTrivia);
+                var newRoot = root.ReplaceNode(targetNode, newTargetNode);
+
+                var newDocument = context.Document.WithSyntaxRoot(newRoot);
+                changedSolution = newDocument.Project.Solution;
+                ReAnalyze.Instance.ForceReanalyze();
             }
 
-            var commentTrivia = SyntaxFactory.Comment(comment);
-
-            var newLineTrivia = SyntaxFactory.CarriageReturnLineFeed;
-
-            var leadingTrivia = targetNode.GetLeadingTrivia();
-            var lastTrivia = leadingTrivia.LastOrDefault();
-            leadingTrivia = leadingTrivia.Add(newLineTrivia).Add(commentTrivia).Add(newLineTrivia);
-            if (lastTrivia.IsKind(SyntaxKind.WhitespaceTrivia)) leadingTrivia = leadingTrivia.Add(lastTrivia);
-
-
-            var newTargetNode = targetNode.WithLeadingTrivia(leadingTrivia);
-            var newRoot = root.ReplaceNode(targetNode, newTargetNode);
-
-            var newDocument = context.Document.WithSyntaxRoot(newRoot);
-            ReAnalyze.Instance.ForceReanalyze();
-            return newDocument.Project.Solution;
+            return changedSolution;
         }
 
         private async Task<Solution> _addDisablingCommentSpesific(CancellationToken c, bool isPreview, CodeFixContext context) 

@@ -12,16 +12,16 @@ namespace TaleworldsCodeAnalysis
     public class SettingsChecker
     {
         public static SettingsChecker Instance
+        {
+            get 
             {
-                get 
+                if (_instance == null)
                 {
-                    if (_instance == null)
-                    {
-                        _instance = new SettingsChecker();
-                    }
-                    return _instance;
+                    _instance = new SettingsChecker();
                 }
-            } 
+                return _instance;
+            }
+        } 
         private static SettingsChecker _instance;
 
         private const string _nameOfSettingsFile = "TaleworldsCodeAnalysisSettings.xml";
@@ -36,24 +36,23 @@ namespace TaleworldsCodeAnalysis
 
         public string GetSettingsFilePath(string contextPath)
         {
-            if (_settingsFilePath != null)
+            var solnFilePath = _settingsFilePath;
+            if (_settingsFilePath == null)
             {
-                return _settingsFilePath;
-            }
-            var folderNames = contextPath.Split('\\');
-            string solnFilePath = "";
-            for (int i = folderNames.Length - 2; i >= 0; i--)
-            {
-                solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), _nameOfSettingsFile);
-                if (File.Exists(solnFilePath))
-                {
-                    return solnFilePath;
-                }
-                else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length != 0)
-                {
-                    return solnFilePath;
-                }
+                var folderNames = contextPath.Split('\\');
 
+                for (int i = folderNames.Length - 2; i >= 0; i--)
+                {
+                    solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), _nameOfSettingsFile);
+                    if (File.Exists(solnFilePath))
+                    {
+                        return solnFilePath;
+                    }
+                    else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length != 0)
+                    {
+                        return solnFilePath;
+                    }
+                }
             }
             return solnFilePath;
         }
@@ -93,22 +92,24 @@ namespace TaleworldsCodeAnalysis
 
         public DiagnosticSeverity GetDiagnosticSeverity(string diagnosticId, string contextPath, DiagnosticSeverity defaultSeverity) 
         {
-            if (PreAnalyzerConditions.Instance.TestMod)
+            var severity = defaultSeverity;
+            if (!PreAnalyzerConditions.Instance.TestMod)
             {
-                return defaultSeverity;
+                var document = GetSettingsFile(GetSettingsFilePath(contextPath));
+                switch (document.Root.Element(diagnosticId).Value)
+                {
+                    case "0":
+                        severity = DiagnosticSeverity.Hidden;
+                        break;
+                    case "1":
+                        severity = DiagnosticSeverity.Warning;
+                        break;
+                    case "2":
+                        severity = DiagnosticSeverity.Error;
+                        break;
+                }
             }
-
-            var document = GetSettingsFile(GetSettingsFilePath(contextPath));
-            switch(document.Root.Element(diagnosticId).Value)
-            {
-                case "0":
-                    return DiagnosticSeverity.Hidden;
-                case "1":
-                    return DiagnosticSeverity.Warning;
-                case "2":
-                    return DiagnosticSeverity.Error;
-            }
-            return DiagnosticSeverity.Hidden;
+            return severity;
         }
 
     }

@@ -9,7 +9,7 @@ namespace TaleworldsCodeAnalysis
         CamelCase,
         UnderScoreCase,
         PascalCase,
-        IpascalCase,
-        TpascalCase
+        IPascalCase,
+        TPascalCase
     }   
 }
