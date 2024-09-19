@@ -13,20 +13,14 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     public class FieldAccessibilityChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;
-        private const string _diagnosticId = "TW2200";
+        private const string _diagnosticId = nameof(DiagnosticIDs.TW2200);
         private static readonly LocalizableString _accessibilityTitle = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _accessibilityMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private static readonly LocalizableString _accessibilityDescription = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private const string _accessibilityCategory = "Accessibility";
+        private const string _accessibilityCategory = nameof(DiagnosticCategories.Accessibility);
 
-        private static DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _accessibilityDescription);
+        private static DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, DiagnosticSeverity.Error, isEnabledByDefault: true);
 
-
-
-        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        {
-            get { return ImmutableArray.Create(_accessibilityRule); }
-        }
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_accessibilityRule);
 
         public sealed override void Initialize(AnalysisContext context)
         {
@@ -37,32 +31,30 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
-
-            var nameNode = (FieldDeclarationSyntax)context.Node;
-            var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
-
-            var accessibility = nameNode.Modifiers.First();
-            var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
-
-            if (nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
+            if (!PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId))
             {
-                return;
-            }
+                var nameNode = (FieldDeclarationSyntax)context.Node;
+                var nameString = nameNode.Declaration.Variables.First().Identifier.ToString();
 
-            var properties = new Dictionary<string, string>
-            {
-                { "Name", nameString },
-            };
+                var accessibility = nameNode.Modifiers.First();
+                var location = nameNode.Declaration.Variables.First().Identifier.GetLocation();
 
-            if (!accessibility.IsKind(SyntaxKind.PrivateKeyword))
-            {
-                var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _accessibilityRule.DefaultSeverity);
-                _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, severity, isEnabledByDefault: true, description: _accessibilityDescription);
-                var diagnostic = Diagnostic.Create(_accessibilityRule, location, properties.ToImmutableDictionary(), nameString);
-                context.ReportDiagnostic(diagnostic);
+                if (!nameNode.Parent.IsKind(SyntaxKind.EnumDeclaration))
+                {
+                    var properties = new Dictionary<string, string>
+                    {
+                        { "Name", nameString },
+                    };
+
+                    if (!accessibility.IsKind(SyntaxKind.PrivateKeyword))
+                    {
+                        var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _accessibilityRule.DefaultSeverity);
+                        _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, severity, isEnabledByDefault: true);
+                        var diagnostic = Diagnostic.Create(_accessibilityRule, location, properties.ToImmutableDictionary(), nameString);
+                        context.ReportDiagnostic(diagnostic);
+                    }
+                }
             }
         }
-
     }
 }

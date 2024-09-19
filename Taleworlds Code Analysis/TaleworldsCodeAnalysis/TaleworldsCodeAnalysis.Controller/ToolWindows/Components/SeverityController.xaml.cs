@@ -76,7 +76,7 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
 
         private void ComboBox_Selected(object sender, RoutedEventArgs e)
         {
-            try
+            try // Overhead i kötü, kullanma
             {
                 Console.WriteLine(ComboBox.SelectedIndex);
                 if (IndividualChanged==null)

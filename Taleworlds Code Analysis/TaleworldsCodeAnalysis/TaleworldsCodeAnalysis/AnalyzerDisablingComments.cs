@@ -11,7 +11,10 @@ namespace TaleworldsCodeAnalysis
     public class AnalyzerDisablingComments
     {
         private static AnalyzerDisablingComments _instance;
-        public static AnalyzerDisablingComments Instance { get {
+        public static AnalyzerDisablingComments Instance 
+        { 
+            get 
+            {
                 if (_instance == null)
                 {
                     _instance = new AnalyzerDisablingComments();
@@ -22,7 +25,8 @@ namespace TaleworldsCodeAnalysis
 
         private AnalyzerDisablingComments() { }
 
-        public bool IsInDisablingComments(SyntaxNode node, String diagnosticId) {
+        public bool IsInDisablingComments(SyntaxNode node, String diagnosticId) //TODO: enable/disable this line
+        {
             var root = node.SyntaxTree.GetRoot();
             var singleLineComments = root.DescendantTrivia().Where(trivia => trivia.IsKind(SyntaxKind.SingleLineCommentTrivia));
 
@@ -52,25 +56,31 @@ namespace TaleworldsCodeAnalysis
                 }
             }
 
-            if (closestCommentBeforeNode == null || closestCommentBeforeNode.Type == CommentType.OnComment) return false;
+            if (closestCommentBeforeNode == null || closestCommentBeforeNode.Type == CommentType.OnComment)
+            {
+                return false;
+            }
             else return true;
 
         }
-    }
 
-    internal class _comment
-    {
-        public int Line { get; private set; }
-        public CommentType Type { get; private set; }
+        private class _comment
+        {
+            public int Line { get; private set; }
+            public CommentType Type { get; private set; }
 
-        public _comment(int line, CommentType type) {
-            Line = line;
-            Type = type;
+            public _comment(int line, CommentType type)
+            {
+                Line = line;
+                Type = type;
+            }
+
         }
+        private enum CommentType
+        {
+            OnComment, OffComment
+        }
+    }
 
-    }
-    internal enum CommentType
-    {
-        OnComment, OffComment
-    }
+    
 }

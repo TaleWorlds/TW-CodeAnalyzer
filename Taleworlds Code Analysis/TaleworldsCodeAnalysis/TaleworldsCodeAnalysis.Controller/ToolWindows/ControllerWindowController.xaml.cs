@@ -25,7 +25,7 @@ namespace TaleworldsCodeAnalysis.Controller
             InitializeComponent();
             _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             _dte.Events.WindowEvents.WindowActivated += WindowActivated;
-            severityControllers = new List<SeverityController>()
+            severityControllers = new List<SeverityController>() //bütün severity controllerları ekle böyle yazma
             {
                 TW2002, TW2000, TW2005, TW2003,TW2004, TW2006, TW2007,TW2008,
                 TW2001,TW2200, TW2100,TW2101,TW2102,TW2201,TW2202, TW2204, TW2205 

@@ -12,7 +12,8 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows
 {
     public class SettingsParser
     {
-        public static SettingsParser Instance{
+        public static SettingsParser Instance
+        {
             get
             {
                 if (_instance == null)
@@ -25,7 +26,7 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows
         }
 
         private static SettingsParser _instance;
-        private DTE _dte;
+        private DTE _dte; //TODO: uzun yaz
         private const string _pathOfSettingsFile = "TaleworldsCodeAnalysisSettings.xml";
         private string _fullPath;
 

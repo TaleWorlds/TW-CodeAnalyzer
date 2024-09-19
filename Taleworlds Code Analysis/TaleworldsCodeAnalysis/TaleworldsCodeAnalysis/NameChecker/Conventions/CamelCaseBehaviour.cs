@@ -20,7 +20,7 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
         }
 
         private static CamelCaseBehaviour _instance;
-        private Regex _regexWhole = new Regex("^[a-z](([a-z0-9]*[A-Z]?)*)$");
+        private Regex _regexWhole = new Regex("^[a-z](([a-z0-9]*[A-Z]?)*)$"); //unit tests
 
         public sealed override string FixThis(string name)
         {

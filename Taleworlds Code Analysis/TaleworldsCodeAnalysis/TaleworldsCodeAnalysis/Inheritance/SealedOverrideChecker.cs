@@ -14,14 +14,17 @@ namespace TaleworldsCodeAnalysis.Inheritance
     public class SealedOverrideChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;
-        private const string _diagnosticId = "TW2102";
-        private static readonly LocalizableString _title = "Overridden methods should be sealed";
-        private static readonly LocalizableString _messageFormat = "Overridden methods should be sealed";
-        private const string _category = "Inheritance";
+        private const string _diagnosticId = nameof(DiagnosticIDs.TW2102);
+        private static readonly LocalizableString _title = 
+            new LocalizableResourceString(nameof(InheritanceResources.SealedOverrideCheckerTitle),InheritanceResources.ResourceManager,typeof(InheritanceResources));
+        private static readonly LocalizableString _messageFormat =
+            new LocalizableResourceString(nameof(InheritanceResources.SealedOverrideCheckerTitle), InheritanceResources.ResourceManager, typeof(InheritanceResources));
+        private const string _category = nameof(DiagnosticCategories.Inheritance);
 
         private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, true);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule); 
+
 
         public sealed override void Initialize(AnalysisContext context)
         {
@@ -32,34 +35,34 @@ namespace TaleworldsCodeAnalysis.Inheritance
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
-
-            var method = (MethodDeclarationSyntax) context.Node;
-            var modifiers = method.Modifiers;
-
-            var sealedFound = false;
-            var overrideFound = false;
-            Location overrideLocation = null;
-
-            foreach (var item in modifiers)
+            if (!PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId))
             {
-                if (item.IsKind(SyntaxKind.SealedKeyword))
+                var method = (MethodDeclarationSyntax)context.Node;
+                var modifiers = method.Modifiers;
+
+                var sealedFound = false;
+                var overrideFound = false;
+                Location overrideLocation = null;
+
+                foreach (var item in modifiers)
                 {
-                    sealedFound = true;
+                    if (item.IsKind(SyntaxKind.SealedKeyword))
+                    {
+                        sealedFound = true;
+                    }
+
+                    if (item.IsKind(SyntaxKind.OverrideKeyword))
+                    {
+                        overrideFound = true;
+                        overrideLocation = item.GetLocation();
+                    }
                 }
 
-                if(item.IsKind(SyntaxKind.OverrideKeyword))
+                if (!sealedFound && overrideFound)
                 {
-                    overrideFound = true;
-                    overrideLocation=item.GetLocation();
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, overrideLocation));
                 }
             }
-            
-            if(!sealedFound && overrideFound)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(_rule, overrideLocation));
-            }
-            
         }
     }
 }

@@ -26,7 +26,8 @@ namespace TaleworldsCodeAnalysis
 
         private PreAnalyzerConditions() { }
 
-        public bool IsNotAllowedToAnalyze(SyntaxNodeAnalysisContext context, String diagnosticId) {
+        public bool IsNotAllowedToAnalyze(SyntaxNodeAnalysisContext context, String diagnosticId) 
+        {
             if(_testMod) return false; ;
             var filePath = context.Node.GetLocation().SourceTree.FilePath;
             WhiteListParser.Instance.ReadGlobalWhiteListPath(filePath);

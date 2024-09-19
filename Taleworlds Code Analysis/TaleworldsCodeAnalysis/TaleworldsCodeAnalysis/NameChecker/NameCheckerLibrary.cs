@@ -11,24 +11,24 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static string GetWhiteListedIgnoreVersion(string name)
         {
-            if(WhiteListParser.Instance.WhiteListWords==null)
+            string whiteIgnoredName = name;
+            if(WhiteListParser.Instance.WhiteListWords!=null)
             {
-                return name;
-            }
-            string ignorePattern = "";
-            foreach (var item in WhiteListParser.Instance.WhiteListWords)
-            {
-                ignorePattern += "" + item + "+|";
-            }
-            ignorePattern = ignorePattern.TrimEnd('|');
-            Regex regex = new Regex(ignorePattern);
-            var matchCollection = regex.Matches(name);
-            var whiteIgnoredName = name;
-            foreach (Match match in matchCollection)
-            {
-                for (int i = 0; i < match.Length; i++)
+                string ignorePattern = "";
+                foreach (var item in WhiteListParser.Instance.WhiteListWords)
                 {
-                    whiteIgnoredName = whiteIgnoredName.Substring(0, match.Index) + new string('#', match.Length) + whiteIgnoredName.Substring(match.Index + match.Length);
+                    ignorePattern += "" + item + "+|";
+                }
+                ignorePattern = ignorePattern.TrimEnd('|');
+                Regex regex = new Regex(ignorePattern);
+                var matchCollection = regex.Matches(name);
+                whiteIgnoredName = name;
+                foreach (Match match in matchCollection)
+                {
+                    for (int i = 0; i < match.Length; i++)
+                    {
+                        whiteIgnoredName = whiteIgnoredName.Substring(0, match.Index) + new string('#', match.Length) + whiteIgnoredName.Substring(match.Index + match.Length);
+                    }
                 }
             }
             return whiteIgnoredName;

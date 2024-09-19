@@ -14,15 +14,13 @@ namespace TaleworldsCodeAnalysis.NameChecker
     {
         public static string DiagnosticId => _diagnosticId;
 
-        private const string _diagnosticId = "TW2001";
-
+        private const string _diagnosticId = nameof(DiagnosticIDs.TW2001);
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.ClassModifierCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.ClassModifierCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _modifierMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ClassModifierCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
 
-        private const string _category = "Accessibility";
+        private const string _category = nameof(DiagnosticCategories.Accessibility);
 
-        private static  DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static  DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true);
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_modifierRule);
 
@@ -36,24 +34,28 @@ namespace TaleworldsCodeAnalysis.NameChecker
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            var nameNode = (ClassDeclarationSyntax)context.Node;
-            var nameString = nameNode.Identifier.Text;
-            var accessibility = nameNode.Modifiers.First();
-            var location = nameNode.Identifier.GetLocation();
-
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
-
-            var properties = new Dictionary<string, string>
+            if (!PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId))
             {
-                { "Name", nameString},
-            };
+                var nameNode = (ClassDeclarationSyntax)context.Node;
+                var nameString = nameNode.Identifier.Text;
+                var accessibility = nameNode.Modifiers.First();
+                var location = nameNode.Identifier.GetLocation();
 
-            if (accessibility.IsKind(SyntaxKind.ProtectedKeyword))
-            {
-                var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _modifierRule.DefaultSeverity);
-                _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, severity, isEnabledByDefault: true, description: _description);
-                context.ReportDiagnostic(Diagnostic.Create(_modifierRule, location, properties.ToImmutableDictionary(), nameString));
+
+
+                var properties = new Dictionary<string, string>
+                {
+                    { "Name", nameString},
+                };
+
+                if (accessibility.IsKind(SyntaxKind.ProtectedKeyword))
+                {
+                    var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _modifierRule.DefaultSeverity);
+                    _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, severity, isEnabledByDefault: true);
+                    context.ReportDiagnostic(Diagnostic.Create(_modifierRule, location, properties.ToImmutableDictionary(), nameString));
+                }
             }
+            
         }
     }
 }

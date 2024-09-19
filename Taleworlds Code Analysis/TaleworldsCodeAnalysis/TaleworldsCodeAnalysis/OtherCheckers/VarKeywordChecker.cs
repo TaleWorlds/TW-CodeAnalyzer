@@ -15,10 +15,11 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     {
         public string DiagnosticId => _diagnosticId;
 
-        private const string _diagnosticId = "TW2204";
-        private static readonly LocalizableString _title = "You can use var instead of {0}";
-        private static readonly LocalizableString _messageFormat = "You can use var instead of {0}";
-        private const string _category = "LocalType";
+        private const string _diagnosticId = nameof(DiagnosticIDs.TW2204);
+        private static readonly LocalizableString _title = 
+            new LocalizableResourceString(nameof(OtherCheckerResource.VarKeywordCheckerTitle),OtherCheckerResource.ResourceManager, typeof(OtherCheckerResource));
+        private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(OtherCheckerResource.VarKeywordCheckerMessage), OtherCheckerResource.ResourceManager, typeof(OtherCheckerResource));
+        private const string _category = nameof(DiagnosticCategories.TypeCheck);
 
         private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
 
@@ -34,16 +35,19 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
-
-            var localDec = (LocalDeclarationStatementSyntax) context.Node;
-
-            if(!localDec.Declaration.Type.IsVar)
+            if (!PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId))
             {
-                var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
-                context.ReportDiagnostic(Diagnostic.Create(_rule, localDec.Declaration.Type.GetLocation(),localDec.Declaration.Type));
+                var localDec = (LocalDeclarationStatementSyntax)context.Node;
+
+                if (!localDec.Declaration.Type.IsVar)
+                {
+                    var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
+                    _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
+                    context.ReportDiagnostic(Diagnostic.Create(_rule, localDec.Declaration.Type.GetLocation(), localDec.Declaration.Type));
+                }
             }
+
+            
         }
     }
 }

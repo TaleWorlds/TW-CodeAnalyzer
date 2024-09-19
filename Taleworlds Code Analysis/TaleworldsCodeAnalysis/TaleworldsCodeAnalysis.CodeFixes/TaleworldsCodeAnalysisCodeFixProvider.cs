@@ -105,15 +105,15 @@ namespace TaleworldsCodeAnalysis
         {
             switch(conventionEnum)
             {
-                case ConventionType.camelCase:
+                case ConventionType.CamelCase:
                     return CamelCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
-                case ConventionType._uscoreCase:
+                case ConventionType.UnderScoreCase:
                     return UnderScoreCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 case ConventionType.PascalCase:
                     return PascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
-                case ConventionType.IPascalCase:
+                case ConventionType.IpascalCase:
                     return IpascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
-                case ConventionType.TPascalCase:
+                case ConventionType.TpascalCase:
                     return TpascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 default:
                     return new List<string>();

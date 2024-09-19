@@ -14,14 +14,16 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
     public class ImmutableStructChecker : DiagnosticAnalyzer
     {
         public string DiagnosticId => _diagnosticId;
-        private const string _diagnosticId = "TW2205";
-        private static readonly LocalizableString _title = "";
-        private static readonly LocalizableString _messageFormat = "Structs that has only one field should be immutable (Place readonly modifier on the field)";
-        private const string _category = "Immutable Structs";
+        private const string _diagnosticId = nameof(DiagnosticIDs.TW2205);
+        private static readonly LocalizableString _title = 
+            new LocalizableResourceString(nameof(OtherCheckerResource.ImmutableStructCheckerTitle),OtherCheckerResource.ResourceManager,typeof(OtherCheckerResource));
+        private static readonly LocalizableString _messageFormat =
+            new LocalizableResourceString(nameof(OtherCheckerResource.ImmutableStructCheckerMessage), OtherCheckerResource.ResourceManager, typeof(OtherCheckerResource));
+        private const string _category = nameof(DiagnosticCategories.Immutable);
 
         private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
 
-        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule);
 
         public sealed override void Initialize(AnalysisContext context)
         {
@@ -32,48 +34,52 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _analyzer(SyntaxNodeAnalysisContext context)
         {
-            var declarationNode = (StructDeclarationSyntax)context.Node;
-            var members = declarationNode.Members;
-
-            int fieldCount = 0;
-            FieldDeclarationSyntax field = null; ;
-
-            foreach (var member in members)
+            if(!PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId))
             {
-                if (fieldCount > 1)
-                {
-                    break;
-                }
-                if (member.IsKind(SyntaxKind.FieldDeclaration))
-                {
-                    fieldCount++;
-                    field = (FieldDeclarationSyntax)member;
-                }
-            }
+                var declarationNode = (StructDeclarationSyntax)context.Node;
+                var members = declarationNode.Members;
 
-            if (fieldCount==1)
-            {
-                var modifiers = field.Modifiers;
-                var readOnly = false;
-                foreach (var modifier in modifiers)
+                int fieldCount = 0;
+                FieldDeclarationSyntax field = null; ;
+
+                foreach (var member in members)
                 {
-                    //Immutable check
-                    if(readOnly)
+                    if (fieldCount > 1)
                     {
-                        return;
+                        break;
                     }
-                    if (modifier.IsKind(SyntaxKind.ReadOnlyKeyword))
+                    if (member.IsKind(SyntaxKind.FieldDeclaration))
                     {
-                        readOnly = true;
+                        fieldCount++;
+                        field = (FieldDeclarationSyntax)member;
                     }
                 }
 
-                if(!readOnly)
+                if (fieldCount == 1)
                 {
-                    var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                    _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, declarationNode.Identifier.GetLocation()));
+                    var modifiers = field.Modifiers;
+                    var readOnly = false;
+                    foreach (var modifier in modifiers)
+                    {
+                        //Immutable check
+                        if (readOnly)
+                        {
+                            return;
+                        }
+                        if (modifier.IsKind(SyntaxKind.ReadOnlyKeyword))
+                        {
+                            readOnly = true;
+                        }
+                    }
+
+                    if (!readOnly)
+                    {
+                        var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
+                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
+                        context.ReportDiagnostic(Diagnostic.Create(_rule, declarationNode.Identifier.GetLocation()));
+                    }
                 }
+
             }
 
 
