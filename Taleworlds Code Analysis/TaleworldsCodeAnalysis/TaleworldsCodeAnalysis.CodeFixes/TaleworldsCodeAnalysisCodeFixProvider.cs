@@ -112,9 +112,9 @@ namespace TaleworldsCodeAnalysis
                 case ConventionType.PascalCase:
                     return PascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 case ConventionType.IpascalCase:
-                    return IpascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    return IPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 case ConventionType.TpascalCase:
-                    return TpascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
+                    return TPascalCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
                 default:
                     return new List<string>();
             }

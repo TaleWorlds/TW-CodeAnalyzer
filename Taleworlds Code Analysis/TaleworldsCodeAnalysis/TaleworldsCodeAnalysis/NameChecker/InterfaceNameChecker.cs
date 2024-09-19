@@ -43,13 +43,13 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     { "Name", nameString },
                 };
 
-                if (!IpascalCaseBehaviour.Instance.IsMatching(nameString))
+                if (!IPascalCaseBehaviour.Instance.IsMatching(nameString))
                 {
                     properties["NamingConvention"] = nameof(ConventionType.IpascalCase);
                     var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
                     _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
                     context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
-                        IpascalCaseBehaviour.Instance.FixThis(nameString)));
+                        IPascalCaseBehaviour.Instance.FixThis(nameString)));
                 }
             }
 

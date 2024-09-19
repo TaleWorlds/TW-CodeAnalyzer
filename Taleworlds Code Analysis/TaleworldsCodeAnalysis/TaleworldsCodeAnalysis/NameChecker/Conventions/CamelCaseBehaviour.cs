@@ -87,30 +87,29 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public sealed override string FixListedItems(string name,HashSet<string> list)
         {
-            if (list==null)
+            if (list!=null)
             {
-                return name;
-            }
-            foreach (var item in list)
-            {
-                Regex regex = new Regex(item);
-                var matches=regex.Matches(name);
-                foreach (Match match in matches)
+                foreach (var item in list)
                 {
-                    var firstLetterIndex = match.Index;
-                    var lastLetterIndex = match.Index + match.Length-1;
-                    if (firstLetterIndex != 0)
+                    Regex regex = new Regex(item);
+                    var matches = regex.Matches(name);
+                    foreach (Match match in matches)
                     {
-                        name = name.Substring(0, firstLetterIndex) + char.ToUpper(name[firstLetterIndex]) + name.Substring(firstLetterIndex + 1);
-                    }
-                    else
-                    {
-                        name = char.ToLower(name[0])+name.Substring(1);
-                    }
+                        var firstLetterIndex = match.Index;
+                        var lastLetterIndex = match.Index + match.Length - 1;
+                        if (firstLetterIndex != 0)
+                        {
+                            name = name.Substring(0, firstLetterIndex) + char.ToUpper(name[firstLetterIndex]) + name.Substring(firstLetterIndex + 1);
+                        }
+                        else
+                        {
+                            name = char.ToLower(name[0]) + name.Substring(1);
+                        }
 
-                    for (int i = firstLetterIndex; i < lastLetterIndex+1; i++)
-                    {
-                        name = name.Substring(0, i) + char.ToLower(name[i]) + name.Substring(i + 1);
+                        for (int i = firstLetterIndex; i < lastLetterIndex + 1; i++)
+                        {
+                            name = name.Substring(0, i) + char.ToLower(name[i]) + name.Substring(i + 1);
+                        }
                     }
                 }
             }
