@@ -23,26 +23,50 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
 
         public string Title
         {
-            get { return (string)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
+            get 
+            { 
+                return (string)GetValue(TitleProperty); 
+            }
+            set 
+            {
+                SetValue(TitleProperty, value); 
+            }
         }
 
         public string AdditionalChoice
         {
-            get { return (string)GetValue(AdditionalChoiceProperty); }
-            set { SetValue(AdditionalChoiceProperty, value); }
+            get 
+            { 
+                return (string)GetValue(AdditionalChoiceProperty); 
+            }
+            set 
+            { 
+                SetValue(AdditionalChoiceProperty, value); 
+            }
         }
 
         public string Code
         {
-            get { return (string)GetValue(CodeProperty); }
-            set { SetValue(CodeProperty, value); }
+            get 
+            { 
+                return (string)GetValue(CodeProperty); 
+            }
+            set 
+            { 
+                SetValue(CodeProperty, value); 
+            }
         }
 
         public Action IndividualChanged
         {
-            get { return (Action)GetValue(IndividualChangedProperty); }
-            set { SetValue(IndividualChangedProperty, value); }
+            get 
+            { 
+                return (Action)GetValue(IndividualChangedProperty); 
+            }
+            set 
+            { 
+                SetValue(IndividualChangedProperty, value); 
+            }
         }
 
         public SeverityController()

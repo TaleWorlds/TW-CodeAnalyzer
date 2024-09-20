@@ -12,6 +12,7 @@ using TaleworldsCodeAnalysis.NameChecker;
 namespace TaleworldsCodeAnalysis.Inheritance
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("AbstractClassChecker",_diagnosticId)]
     public class AbstractClassChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;

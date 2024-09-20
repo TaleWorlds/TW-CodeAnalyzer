@@ -59,6 +59,7 @@ namespace TaleworldsCodeAnalysis
         public XDocument GetSettingsFile(string settingPath)
         {
             XDocument xDocument;
+            var instance=FindAnalyzers.Instance;
             try
             {
                 xDocument = XDocument.Load(settingPath);
