@@ -11,6 +11,7 @@ using System.Threading;
 namespace TaleworldsCodeAnalysis.Inheritance
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Depth of Inheritance Checker", _diagnosticId,title:"Inheritance Checker")]
     public class DepthOfInheritanceChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;

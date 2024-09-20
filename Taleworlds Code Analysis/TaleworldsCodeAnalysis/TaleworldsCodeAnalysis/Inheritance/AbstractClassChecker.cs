@@ -12,7 +12,7 @@ using TaleworldsCodeAnalysis.NameChecker;
 namespace TaleworldsCodeAnalysis.Inheritance
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    [TaleworldsAnalyzer("AbstractClassChecker",_diagnosticId)]
+    [TaleworldsAnalyzer(name:"Abstract Class Checker",code: _diagnosticId,title:"Inheritance Checker")]
     public class AbstractClassChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;
@@ -22,10 +22,11 @@ namespace TaleworldsCodeAnalysis.Inheritance
             new LocalizableResourceString(nameof(InheritanceResources.AbstractClassCheckerTitle), InheritanceResources.ResourceManager, typeof(InheritanceResources));
         private static readonly LocalizableString _messageFormat = 
             new LocalizableResourceString(nameof(InheritanceResources.AbstractClassCheckerTitle), InheritanceResources.ResourceManager, typeof(InheritanceResources));
-        private const string _category = nameof(DiagnosticCategories.Inheritance);
+        private const string _categoryString = nameof(DiagnosticCategories.Inheritance);
+
 
         private static DiagnosticDescriptor _rule = 
-            new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, true);
+            new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _categoryString, DiagnosticSeverity.Error, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule); 
 

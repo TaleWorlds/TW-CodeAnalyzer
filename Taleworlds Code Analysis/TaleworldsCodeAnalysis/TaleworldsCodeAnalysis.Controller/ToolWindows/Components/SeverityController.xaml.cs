@@ -69,10 +69,7 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
             }
         }
 
-        public SeverityController()
-        {
-            InitializeComponent();
-        }
+
 
         public static readonly DependencyProperty IndividualChangedProperty =
             DependencyProperty.Register("IndividualChanged", typeof(Action), typeof(SeverityController), new PropertyMetadata());
@@ -86,6 +83,20 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
             DependencyProperty.Register("AdditionalChoice", typeof(string), typeof(SeverityController), new PropertyMetadata(string.Empty));
 
         private bool _skipAction;
+
+        public SeverityController()
+        {
+            InitializeComponent();
+        }
+
+        public SeverityController(string name, string code, Action individualChanged)
+        {
+            InitializeComponent();
+            Name = code;
+            Title = name;
+            Code = code;
+            IndividualChanged = individualChanged;
+        }
 
         internal void SetSelectedIndex(int index,bool byOverAll)
         {

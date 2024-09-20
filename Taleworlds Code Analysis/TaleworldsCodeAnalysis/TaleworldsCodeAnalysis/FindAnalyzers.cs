@@ -23,10 +23,12 @@ namespace TaleworldsCodeAnalysis
         }
         private static FindAnalyzers _instance;
 
-        private List<AnalyzerInfo> taleworldsDiagnosticAnalyzers = new List<AnalyzerInfo>();
+        public IReadOnlyList<AnalyzerInfo> Analyzers => _taleworldsDiagnosticAnalyzers;
+
+        private List<AnalyzerInfo> _taleworldsDiagnosticAnalyzers = new List<AnalyzerInfo>();
 
         public FindAnalyzers() {
-            var analyzersAssembly = typeof(AbstractClassChecker).Assembly;
+            var analyzersAssembly = typeof(FindAnalyzers).Assembly;
             var types = analyzersAssembly.GetTypes().Where(
                     t=> t.IsClass
                 );
@@ -35,18 +37,20 @@ namespace TaleworldsCodeAnalysis
                 var attributes = item.GetCustomAttributes<TaleworldsAnalyzerAttribute>(false);
                 foreach (var attribute in attributes)
                 {
-                    taleworldsDiagnosticAnalyzers.Add(new AnalyzerInfo { 
+                    _taleworldsDiagnosticAnalyzers.Add(new AnalyzerInfo { 
                         Code= attribute.Code,
-                        Name=attribute.Name
+                        Name=attribute.Name,
+                        Category=attribute.Category,
                     });
                 }
             }
         }
 
-        private struct AnalyzerInfo
+        public struct AnalyzerInfo
         {
             public string Name;
             public string Code;
+            public string Category;
         }
     }
 }

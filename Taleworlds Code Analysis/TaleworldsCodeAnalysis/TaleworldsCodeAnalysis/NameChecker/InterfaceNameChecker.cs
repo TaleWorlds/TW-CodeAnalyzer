@@ -9,6 +9,7 @@ using TaleworldsCodeAnalysis.NameChecker.Conventions;
 namespace TaleworldsCodeAnalysis.NameChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Interface Name Checker", _diagnosticId, title: "Naming Checker")]
     public class InterfaceNameChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;

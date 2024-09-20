@@ -16,23 +16,42 @@ namespace TaleworldsCodeAnalysis.Controller
     public partial class ControllerWindowController
     {
         private DTE _dte;
-        private List<SeverityController> severityControllers;
+        private List<SeverityController> _severityControllers = new List<SeverityController>();
+        private Dictionary<string,Label> categoryTabs = new Dictionary<string,Label>();
         private bool _hasInitialized;
 
         public ControllerWindowController()
         {
             Dispatcher.VerifyAccess();
             InitializeComponent();
-
+            _setSeverityControllers();
             _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             _dte.Events.WindowEvents.WindowActivated += WindowActivated;
+        }
 
-            severityControllers = new List<SeverityController>() //bütün severity controllerları ekle böyle yazma
+        private void _setSeverityControllers()
+        {
+            var analyzers = FindAnalyzers.Instance.Analyzers;
+
+            for (int i = 0; i < analyzers.Count; i++)
             {
-                TW2002, TW2000, TW2005, TW2003,TW2004, TW2006, TW2007,TW2008,
-                TW2001,TW2200, TW2100,TW2101,TW2102,TW2201,TW2202, TW2204, TW2205 
-            };
-            
+                var controller = new SeverityController(
+                    analyzers[i].Name+" Enabled", 
+                    analyzers[i].Code,
+                    IndividualSeverityChanged
+                    );
+                if (!categoryTabs.ContainsKey(analyzers[i].Category))
+                {
+                    var label = new Label();
+                    var category = analyzers[i].Category;
+                    label.Content = category;
+                    SeveritiesPanel.Children.Insert(SeveritiesPanel.Children.Count-1,label);
+                    categoryTabs.Add(category, label);
+                }
+                var index = SeveritiesPanel.Children.IndexOf(categoryTabs[analyzers[i].Category]);
+                SeveritiesPanel.Children.Insert(index+1, controller);
+                _severityControllers.Add(controller);
+            }
         }
 
         ~ControllerWindowController()
@@ -52,7 +71,7 @@ namespace TaleworldsCodeAnalysis.Controller
             {
                 var document = SettingsChecker.Instance.GetSettingsFile(SettingsParser.Instance.GetSettingsFilePath());
                 OverAll.SelectedIndex = _getSeverityIndex("OverAll", document);
-                foreach (var item in severityControllers)
+                foreach (var item in _severityControllers)
                 {
                     item.SetSelectedIndex(_getSeverityIndex(item.Code, document),false);
                 }
@@ -87,7 +106,7 @@ namespace TaleworldsCodeAnalysis.Controller
                 {
                     return ;
                 }
-                foreach (var item in severityControllers)
+                foreach (var item in _severityControllers)
                 {
                     item.SetSelectedIndex(OverAll.SelectedIndex,true);
                     item.ResetSkipAction();
@@ -102,7 +121,7 @@ namespace TaleworldsCodeAnalysis.Controller
         private void IndividualSeverityChanged()
         {
             var selectedIndex = OverAll.SelectedIndex;
-            foreach (var item in severityControllers)
+            foreach (var item in _severityControllers)
             {
                 if (item.GetSelectedIndex()!=selectedIndex)
                 {
@@ -121,7 +140,7 @@ namespace TaleworldsCodeAnalysis.Controller
             var node = xDocument.Root.Element("OverAll");
             node.ReplaceNodes(OverAll.SelectedIndex);
 
-            foreach (var item in severityControllers)
+            foreach (var item in _severityControllers)
             {
                 node = xDocument.Root.Element(item.Code);
                 node.ReplaceNodes(item.ComboBox.SelectedIndex);
