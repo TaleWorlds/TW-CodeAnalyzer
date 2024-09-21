@@ -31,6 +31,12 @@ namespace TaleworldsCodeAnalysis
         public bool IsAnalysisEnabled(string diagnosticID, string contextPath)
         {
             var document = GetSettingsFile(GetSettingsFilePath(contextPath));
+            if(document.Root.Element(diagnosticID)==null)
+            {
+                document.Root.Add(new XElement(diagnosticID, "2"));
+                document.Save(GetSettingsFilePath(contextPath));
+            }
+            
             return document.Root.Element(diagnosticID).Value != "0";
         }
 
