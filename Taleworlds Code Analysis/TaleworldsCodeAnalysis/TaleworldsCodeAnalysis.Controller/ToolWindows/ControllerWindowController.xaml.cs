@@ -15,7 +15,7 @@ namespace TaleworldsCodeAnalysis.Controller
 {
     public partial class ControllerWindowController
     {
-        private DTE _dte;
+        private DTE _developmentToolsEnvironment;
         private List<SeverityController> _severityControllers = new List<SeverityController>();
         private Dictionary<string,Label> categoryTabs = new Dictionary<string,Label>();
         private bool _hasInitialized;
@@ -25,8 +25,8 @@ namespace TaleworldsCodeAnalysis.Controller
             Dispatcher.VerifyAccess();
             InitializeComponent();
             _setSeverityControllers();
-            _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
-            _dte.Events.WindowEvents.WindowActivated += WindowActivated;
+            _developmentToolsEnvironment = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            _developmentToolsEnvironment.Events.WindowEvents.WindowActivated += WindowActivated;
         }
 
         private void _setSeverityControllers()
@@ -56,7 +56,7 @@ namespace TaleworldsCodeAnalysis.Controller
 
         ~ControllerWindowController()
         {
-            _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
+            _developmentToolsEnvironment.Events.WindowEvents.WindowActivated -= WindowActivated;
         }
 
         private void WindowActivated(EnvDTE.Window GotFocus, EnvDTE.Window LostFocus)
@@ -67,15 +67,17 @@ namespace TaleworldsCodeAnalysis.Controller
         public void Init()
         {
             Dispatcher.VerifyAccess();
-
-            var document = SettingsChecker.Instance.GetSettingsFile(SettingsParser.Instance.GetSettingsFilePath());
-            OverAll.SelectedIndex = _getSeverityIndex("OverAll", document);
-            foreach (var item in _severityControllers)
+            if(_developmentToolsEnvironment.Solution.IsOpen)
             {
-                item.SetSelectedIndex(_getSeverityIndex(item.Code, document),false);
+                var document = SettingsChecker.Instance.GetSettingsFile(SettingsParser.Instance.GetSettingsFilePath());
+                OverAll.SelectedIndex = _getSeverityIndex("OverAll", document);
+                foreach (var item in _severityControllers)
+                {
+                    item.SetSelectedIndex(_getSeverityIndex(item.Code, document), false);
+                }
+                _developmentToolsEnvironment.Events.WindowEvents.WindowActivated -= WindowActivated;
+                _hasInitialized = true;
             }
-            _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
-            _hasInitialized = true;
         }
 
         private int _getSeverityIndex(string name, XDocument document)

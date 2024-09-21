@@ -10,6 +10,8 @@ namespace TaleworldsCodeAnalysis
         Naming,
         Accessibility,
         Immutable,
-        TypeCheck
+        TypeCheck,
+        Parameter,
+        Encapsulation
     }
 }

@@ -10,6 +10,7 @@ using TaleworldsCodeAnalysis.NameChecker;
 namespace TaleworldsCodeAnalysis.OtherCheckers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Field Accessibility Checker", _diagnosticId, title: "Other Checkers")]
     public class FieldAccessibilityChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;

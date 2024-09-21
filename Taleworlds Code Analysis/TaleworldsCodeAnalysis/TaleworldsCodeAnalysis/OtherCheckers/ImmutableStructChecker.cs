@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace TaleworldsCodeAnalysis.OtherCheckers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Immutable Struct Checker", _diagnosticId, title: "Other Checkers")]
     public class ImmutableStructChecker : DiagnosticAnalyzer
     {
         public string DiagnosticId => _diagnosticId;

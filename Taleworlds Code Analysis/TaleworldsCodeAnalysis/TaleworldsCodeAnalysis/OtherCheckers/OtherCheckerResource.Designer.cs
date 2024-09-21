@@ -97,6 +97,42 @@ namespace TaleworldsCodeAnalysis.OtherCheckers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You should not return a &quot;List&quot; that is a field. It can be modified outside.
+        /// </summary>
+        internal static string MutableFieldReturnCheckerMessage {
+            get {
+                return ResourceManager.GetString("MutableFieldReturnCheckerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You should not return a &quot;List&quot; that is a field. It can be modified outside.
+        /// </summary>
+        internal static string MutableFieldReturnCheckerTitle {
+            get {
+                return ResourceManager.GetString("MutableFieldReturnCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need to call method with its parameter names if it has more than .
+        /// </summary>
+        internal static string NamedParameterCheckerMessage {
+            get {
+                return ResourceManager.GetString("NamedParameterCheckerMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need to call method with its parameter names if it has more than .
+        /// </summary>
+        internal static string NamedParameterCheckerTitle {
+            get {
+                return ResourceManager.GetString("NamedParameterCheckerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can use var instead of {0}.
         /// </summary>
         internal static string VarKeywordCheckerMessage {

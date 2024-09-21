@@ -22,6 +22,7 @@ namespace TaleworldsCodeAnalysis
         TW2205,     // Immutable Structs
         TW2202,     // Mixed Access Modifier Checker
         TW2204,     // Var Keyword Checker
-    
+        TW2203,     // Mutable Field Return Checker
+        TW2201,     // Named Parameter Checker
     }
 }

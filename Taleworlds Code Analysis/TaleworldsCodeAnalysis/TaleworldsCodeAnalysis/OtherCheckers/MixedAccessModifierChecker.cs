@@ -11,6 +11,7 @@ using System.Threading;
 namespace TaleworldsCodeAnalysis.OtherCheckers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Mixed Access Modifier Checker", _diagnosticId, title: "Other Checkers")]
     public class MixedAccessModifierChecker : DiagnosticAnalyzer
     {
         public string DiagnosticId => _diagnosticId;

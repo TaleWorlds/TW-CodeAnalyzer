@@ -10,16 +10,18 @@ using TaleworldsCodeAnalysis.NameChecker;
 namespace TaleworldsCodeAnalysis.OtherCheckers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Mutable Field Return Checker", _diagnosticId, title: "Other Checkers")]
     public class MutebleFieldReturnChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId => _diagnosticId;
-        private const string _diagnosticId = "TW2204";
-        private static readonly string _title = "MutableFieldReturnChecker Title";
-        private static readonly string _messageFormat = "You should not return a 'List' that is a field. It can be modified outside.";
-        private static readonly string _description = "Description";
-        private const string _category = "Encapsulation";
+        private const string _diagnosticId = nameof(DiagnosticIDs.TW2203);
+        private static readonly LocalizableString _title = 
+            new LocalizableResourceString(nameof(OtherCheckerResource.MutableFieldReturnCheckerTitle),OtherCheckerResource.ResourceManager,typeof(OtherCheckerResource));
+        private static readonly LocalizableString _messageFormat = 
+            new LocalizableResourceString(nameof(OtherCheckerResource.MutableFieldReturnCheckerMessage), OtherCheckerResource.ResourceManager, typeof(OtherCheckerResource));
+        private const DiagnosticCategories _category = DiagnosticCategories.Encapsulation;
 
-        private static readonly DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static readonly DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), DiagnosticSeverity.Error, isEnabledByDefault: true);
 
 
 

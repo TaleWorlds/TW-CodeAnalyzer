@@ -11,6 +11,7 @@ using System.Threading;
 namespace TaleworldsCodeAnalysis.OtherCheckers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Var Keyword Checker", _diagnosticId, title: "Other Checkers")]
     public class VarKeywordChecker : DiagnosticAnalyzer
     {
         public string DiagnosticId => _diagnosticId;

@@ -135,4 +135,16 @@
   <data name="VarKeywordCheckerMessage" xml:space="preserve">
     <value>You can use var instead of {0}</value>
   </data>
+  <data name="NamedParameterCheckerTitle" xml:space="preserve">
+    <value>You need to call method with its parameter names if it has more than </value>
+  </data>
+  <data name="NamedParameterCheckerMessage" xml:space="preserve">
+    <value>You need to call method with its parameter names if it has more than </value>
+  </data>
+  <data name="MutableFieldReturnCheckerTitle" xml:space="preserve">
+    <value>You should not return a "List" that is a field. It can be modified outside</value>
+  </data>
+  <data name="MutableFieldReturnCheckerMessage" xml:space="preserve">
+    <value>You should not return a "List" that is a field. It can be modified outside</value>
+  </data>
 </root>
