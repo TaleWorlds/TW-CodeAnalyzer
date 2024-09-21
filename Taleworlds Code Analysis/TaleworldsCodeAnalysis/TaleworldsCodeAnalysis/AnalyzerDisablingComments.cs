@@ -29,7 +29,7 @@ namespace TaleworldsCodeAnalysis
             var singleLineComments = root.DescendantTrivia().Where(trivia => trivia.IsKind(SyntaxKind.SingleLineCommentTrivia));
 
             List<_comment> commentsList = new List<_comment>();
-
+            bool disabled = false;
             foreach (var commentSyntax in singleLineComments)
             {
                 if (commentSyntax.ToString().ToLower() == "//twcodeanalysis enable all" || commentSyntax.ToString().ToLower() == String.Format("//twcodeanalysis enable {0}", diagnosticId.ToLower()))
@@ -40,33 +40,48 @@ namespace TaleworldsCodeAnalysis
                 {
                     commentsList.Add(new _comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OffComment));
                 }
-            }
-
-
-            int nodeLine = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-            _comment closestCommentBeforeNode = null;
-            foreach (var comment in commentsList)
-            {
-                if (comment.Line < nodeLine)
+                else if (commentSyntax.ToString().ToLower() == "//twcodeanalysis disable next line all" || commentSyntax.ToString().ToLower() == String.Format("//twcodeanalysis disable next line {0}", diagnosticId.ToLower()))
                 {
-                    if (closestCommentBeforeNode == null)
+                    
+                    if (commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1 == node.GetLocation().GetLineSpan().StartLinePosition.Line)
                     {
-                        closestCommentBeforeNode = comment;
-                    }
-                    else if (comment.Line > closestCommentBeforeNode.Line)
-                    {
-                        closestCommentBeforeNode = comment;
+                        disabled = true;
                     }
                 }
             }
-            bool disabled = false;
-            if (closestCommentBeforeNode == null || closestCommentBeforeNode.Type == CommentType.OnComment)
+
+            if (!disabled)
             {
-                disabled = false;
-            }
-            else
-            {
-                disabled = true;
+                int nodeLine = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+                _comment closestCommentBeforeNode = null;
+                foreach (var comment in commentsList)
+                {
+                    if (comment.Type == CommentType.OffComment)
+                    {
+                        continue;
+                    }
+
+                    if (comment.Line < nodeLine)
+                    {
+                        if (closestCommentBeforeNode == null)
+                        {
+                            closestCommentBeforeNode = comment;
+                        }
+                        else if (comment.Line > closestCommentBeforeNode.Line)
+                        {
+                            closestCommentBeforeNode = comment;
+                        }
+                    }
+                }
+
+                if (closestCommentBeforeNode == null || closestCommentBeforeNode.Type == CommentType.OnComment)
+                {
+                    disabled = false;
+                }
+                else
+                {
+                    disabled = true;
+                }
             }
 
             return disabled;
@@ -95,7 +110,8 @@ namespace TaleworldsCodeAnalysis
         private enum CommentType
         {
             OnComment, 
-            OffComment
+            OffComment,
+            SingleOffComment
         }
     }
 

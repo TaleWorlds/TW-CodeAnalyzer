@@ -53,6 +53,12 @@ namespace TaleworldsCodeAnalysis
 
             context.RegisterCodeFix(CustomCodeAction.Create("Disable all warnings beginning from this line.",
                 createChangedSolution: (c, isPreview) => _addDisablingCommentAll(c, isPreview, context)), diagnostic);
+
+            context.RegisterCodeFix(CustomCodeAction.Create("Disable all warnings in this line.",
+                createChangedSolution: (c, isPreview) => _addDisablingCommentAllOneLine(c, isPreview, context)), diagnostic);
+
+            context.RegisterCodeFix(CustomCodeAction.Create("Disable specific warning in this line.",
+                createChangedSolution: (c, isPreview) => _addDisablingCommentSpecificOneLine(c, isPreview, context)), diagnostic);
         }
 
         private async Task<Solution> _addCommentBeforeDiagnostic(CancellationToken c, CodeFixContext context, String comment)
@@ -109,6 +115,15 @@ namespace TaleworldsCodeAnalysis
             return await _addCommentBeforeDiagnostic(c, context, "//TWCodeAnalysis disable all");
         }
 
+        private async Task<Solution> _addDisablingCommentAllOneLine(CancellationToken c, bool isPreview, CodeFixContext context)
+        {
+            return await _addCommentBeforeDiagnostic(c, context, "//TWCodeAnalysis disable next line all");
+        }
+
+        private async Task<Solution> _addDisablingCommentSpecificOneLine(CancellationToken c, bool isPreview, CodeFixContext context)
+        {
+            return await _addCommentBeforeDiagnostic(c, context, "//TWCodeAnalysis disable next line "+ context.Diagnostics.First().Id);
+        }
 
 
     }
