@@ -19,9 +19,9 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
         private static readonly LocalizableString _title = 
             new LocalizableResourceString(nameof(OtherCheckerResource.VarKeywordCheckerTitle),OtherCheckerResource.ResourceManager, typeof(OtherCheckerResource));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(OtherCheckerResource.VarKeywordCheckerMessage), OtherCheckerResource.ResourceManager, typeof(OtherCheckerResource));
-        private const string _category = nameof(DiagnosticCategories.TypeCheck);
+        private const DiagnosticCategories _category = DiagnosticCategories.TypeCheck;
 
-        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), DiagnosticSeverity.Warning, true);
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
 
@@ -42,7 +42,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
                 if (!localDec.Declaration.Type.IsVar)
                 {
                     var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                    _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
+                    _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
                     context.ReportDiagnostic(Diagnostic.Create(_rule, localDec.Declaration.Type.GetLocation(), localDec.Declaration.Type));
                 }
             }

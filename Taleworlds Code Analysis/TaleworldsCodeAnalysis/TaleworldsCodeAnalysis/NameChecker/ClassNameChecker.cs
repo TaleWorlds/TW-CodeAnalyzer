@@ -22,9 +22,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private static readonly LocalizableString _messageFormat = 
             new LocalizableResourceString(nameof(NameCheckerResources.ClassNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         
-        private const string _category = nameof(DiagnosticCategories.Naming);
+        private const DiagnosticCategories _category = DiagnosticCategories.Naming;
 
-        private static DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error,true);
+        private static DiagnosticDescriptor _nameRule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), DiagnosticSeverity.Error,true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_nameRule);
 
@@ -72,7 +72,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             properties["NamingConvention"] = nameof(conventionType);
             var nameString = properties["Name"];
             var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, filePath, _nameRule.DefaultSeverity);
-            _nameRule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
+            _nameRule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
             var stringAfterFix = "";
             var diagnostic = default(Diagnostic);
             switch (conventionType) 

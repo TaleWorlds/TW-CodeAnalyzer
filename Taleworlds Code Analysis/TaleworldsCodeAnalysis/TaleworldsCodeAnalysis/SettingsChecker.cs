@@ -59,11 +59,11 @@ namespace TaleworldsCodeAnalysis
         public XDocument GetSettingsFile(string settingPath)
         {
             XDocument xDocument;
-            try
+            if (File.Exists(settingPath))
             {
                 xDocument = XDocument.Load(settingPath);
             }
-            catch
+            else
             {
                 var root = new XElement("Settings");
                 xDocument = new XDocument(root);

@@ -111,23 +111,14 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
 
         private void ComboBox_Selected(object sender, RoutedEventArgs e)
         {
-            try // Overhead i kötü, kullanma
+
+            if (IndividualChanged!=null)
             {
-                Console.WriteLine(ComboBox.SelectedIndex);
-                if (IndividualChanged==null)
-                {
-                    return;
-                }
                 if (!_skipAction)
                 {
                     IndividualChanged.Invoke();
                 }
             }
-            catch (Exception ex)
-            {
-                return;
-            }
-            
         }
 
         internal int GetSelectedIndex()

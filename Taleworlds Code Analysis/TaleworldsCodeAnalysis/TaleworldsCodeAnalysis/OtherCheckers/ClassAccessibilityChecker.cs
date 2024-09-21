@@ -19,9 +19,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.ClassModifierCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _modifierMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.ClassModifierCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
 
-        private const string _category = nameof(DiagnosticCategories.Accessibility);
+        private const DiagnosticCategories _category = DiagnosticCategories.Accessibility;
 
-        private static  DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true);
+        private static  DiagnosticDescriptor _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, nameof(_category), DiagnosticSeverity.Error, isEnabledByDefault: true);
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_modifierRule);
 
@@ -52,7 +52,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 if (accessibility.IsKind(SyntaxKind.ProtectedKeyword))
                 {
                     var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _modifierRule.DefaultSeverity);
-                    _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, _category, severity, isEnabledByDefault: true);
+                    _modifierRule = new DiagnosticDescriptor(_diagnosticId, _title, _modifierMessageFormat, nameof(_category), severity, isEnabledByDefault: true);
                     context.ReportDiagnostic(Diagnostic.Create(_modifierRule, location, properties.ToImmutableDictionary(), nameString));
                 }
             }

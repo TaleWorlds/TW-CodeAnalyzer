@@ -58,13 +58,13 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private string _getFileText(string path)
         {
             XDocument document;
-            try // use if else rather than try catch
+            if (File.Exists(path))
             {
                 document = XDocument.Load(path);
             }
-            catch (FileNotFoundException)
+            else
             {
-                document = new XDocument(new XElement("WhiteListRoot",new XElement("Word", "ExampleWord")));
+                document = new XDocument(new XElement("WhiteListRoot", new XElement("Word", "ExampleWord")));
                 document.Save(path);
             }
 

@@ -16,9 +16,9 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
         private const string _diagnosticId = nameof(DiagnosticIDs.TW2200);
         private static readonly LocalizableString _accessibilityTitle = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _accessibilityMessageFormat = new LocalizableResourceString(nameof(NameCheckerResources.FieldAccessibilityCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private const string _accessibilityCategory = nameof(DiagnosticCategories.Accessibility);
+        private const DiagnosticCategories _category = DiagnosticCategories.Accessibility;
 
-        private static DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, DiagnosticSeverity.Error, isEnabledByDefault: true);
+        private static DiagnosticDescriptor _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, nameof(_category), DiagnosticSeverity.Error, isEnabledByDefault: true);
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_accessibilityRule);
 
@@ -49,7 +49,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
                     if (!accessibility.IsKind(SyntaxKind.PrivateKeyword))
                     {
                         var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _accessibilityRule.DefaultSeverity);
-                        _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, _accessibilityCategory, severity, isEnabledByDefault: true);
+                        _accessibilityRule = new DiagnosticDescriptor(_diagnosticId, _accessibilityTitle, _accessibilityMessageFormat, nameof(_category), severity, isEnabledByDefault: true);
                         var diagnostic = Diagnostic.Create(_accessibilityRule, location, properties.ToImmutableDictionary(), nameString);
                         context.ReportDiagnostic(diagnostic);
                     }

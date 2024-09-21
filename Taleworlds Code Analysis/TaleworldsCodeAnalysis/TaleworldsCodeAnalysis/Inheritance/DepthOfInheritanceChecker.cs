@@ -21,10 +21,10 @@ namespace TaleworldsCodeAnalysis.Inheritance
             new LocalizableResourceString(nameof(InheritanceResources.DepthOfInheritanceTitle), InheritanceResources.ResourceManager, typeof(InheritanceResources));
         private static readonly LocalizableString _messageFormat = 
             new LocalizableResourceString(nameof(InheritanceResources.DepthOfInheritanceMessageFormat),InheritanceResources.ResourceManager,typeof(InheritanceResources));
-        private const string _category = nameof(DiagnosticCategories.Inheritance);
+        private const DiagnosticCategories _category = DiagnosticCategories.Inheritance;
         private const int _maxAllowedDepth = 2;
 
-        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), DiagnosticSeverity.Warning, true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule); 
 

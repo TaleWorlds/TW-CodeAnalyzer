@@ -25,16 +25,14 @@ namespace TaleworldsCodeAnalysis
         {
             get
             {
-                List<string> fixableDiagnosticIds = new List<string> {
-                    ClassNameChecker.DiagnosticId, 
-                    FieldNameChecker.DiagnosticId, 
-                    InterfaceNameChecker.DiagnosticId, 
-                    LocalNameChecker.DiagnosticId, 
-                    MethodNameChecker.DiagnosticId, 
-                    ParameterNameChecker.DiagnosticId, 
-                    PropertyNameChecker.DiagnosticId, 
-                    TemplateParameterNameChecker.DiagnosticId 
-                };
+                List<string> fixableDiagnosticIds = new List<string>();
+                foreach (var item in FindAnalyzers.Instance.Analyzers)
+                {
+                    if (item.Category == DiagnosticCategories.Naming)
+                    {
+                        fixableDiagnosticIds.Add(item.Code);
+                    }
+                }
                 return ImmutableArray.Create(fixableDiagnosticIds.ToArray());
             }
         }
@@ -54,7 +52,7 @@ namespace TaleworldsCodeAnalysis
 
             var document = context.Document;
             var listOfWords = _getWordsToAddToWhitelist(document, diagnostic);
-            if (listOfWords.Count!= 0)
+            if (listOfWords.Count != 0)
             {
                 foreach (var item in listOfWords)
                 {
@@ -74,7 +72,7 @@ namespace TaleworldsCodeAnalysis
             return Task.CompletedTask;
         }
 
-        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken,Diagnostic diagnostic, bool isPreview, string word, WhiteListType whiteListType)
+        private async Task<Solution> _addToWhitelistAsync(Document document, CancellationToken cancellationToken, Diagnostic diagnostic, bool isPreview, string word, WhiteListType whiteListType)
         {
             if (!isPreview)
             {
@@ -85,7 +83,7 @@ namespace TaleworldsCodeAnalysis
                 _addStringToWhiteList(path, word);
                 ReAnalyze.Instance.ForceReanalyze();
             }
-            
+
             return document.Project.Solution;
         }
 
@@ -109,7 +107,7 @@ namespace TaleworldsCodeAnalysis
         private IReadOnlyList<string> _getNewWhiteListItemsToFix(string identifier, ConventionType conventionEnum)
         {
             IReadOnlyList<string> items = new List<string>();
-            switch(conventionEnum)
+            switch (conventionEnum)
             {
                 case ConventionType.CamelCase:
                     items = CamelCaseBehaviour.Instance.FindWhiteListCandidates(identifier);
@@ -132,26 +130,19 @@ namespace TaleworldsCodeAnalysis
 
         private void _addStringToWhiteList(string filePath, string wordToAdd)
         {
-            try
+            var doc = XDocument.Load(filePath);
+            var root = doc.Element("WhiteListRoot");
+            if (root != null)
             {
-                var doc = XDocument.Load(filePath);
-                var root = doc.Element("WhiteListRoot");
-                if (root != null)
+                var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(wordToAdd, StringComparison.OrdinalIgnoreCase));
+                if (existingWord == null)
                 {
-                    var existingWord = root.Elements("Word").FirstOrDefault(e => e.Value.Equals(wordToAdd, StringComparison.OrdinalIgnoreCase));
-                    if (existingWord == null)
-                    {
-                        root.Add(new XElement("Word", wordToAdd));
-                    }
-                    doc.Save(filePath);
+                    root.Add(new XElement("Word", wordToAdd));
                 }
-                
+                doc.Save(filePath);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-        }
 
+        }
     }
 }
+    

@@ -17,9 +17,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private const string _diagnosticId = nameof(DiagnosticIDs.TW2007);
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.PropertyNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.PropertyNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private const string _category = nameof(DiagnosticCategories.Naming);
+        private const DiagnosticCategories _category = DiagnosticCategories.Naming;
 
-        private static  DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true);
+        private static  DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), DiagnosticSeverity.Error, isEnabledByDefault: true);
 
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule);
@@ -52,7 +52,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     {
                         properties["NamingConvention"] = nameof(ConventionType.UnderScoreCase);
                         var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
+                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
                         context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
                             UnderScoreCaseBehaviour.Instance.FixThis(nameString)));
                     }
@@ -63,7 +63,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                     {
                         properties["NamingConvention"] = nameof(ConventionType.PascalCase);
                         var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
+                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
                         context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
                             PascalCaseBehaviour.Instance.FixThis(nameString)));
                     }

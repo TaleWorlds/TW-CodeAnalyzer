@@ -17,9 +17,9 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private const string _diagnosticId = nameof(DiagnosticIDs.TW2005);
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.MethodNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.MethodNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private const string _category = nameof(DiagnosticCategories.Naming);
+        private const DiagnosticCategories _category = DiagnosticCategories.Naming;
 
-        private static  DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true);
+        private static  DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), DiagnosticSeverity.Error, isEnabledByDefault: true);
 
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule);
@@ -67,8 +67,10 @@ namespace TaleworldsCodeAnalysis.NameChecker
                             diagnostic =_createDiagnostic(ConventionType.PascalCase, properties, location, filePath);
                         }
                     }
-
-                    context.ReportDiagnostic(diagnostic);
+                    if (diagnostic != null)
+                    {
+                        context.ReportDiagnostic(diagnostic);
+                    }  
                 } 
             } 
         }
@@ -77,7 +79,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             properties["NamingConvention"] = nameof(conventionType);
             var nameString = properties["Name"];
             var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, filePath, _rule.DefaultSeverity);
-            _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
+            _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
             var stringAfterFix = "";
             var diagnostic = default(Diagnostic);
             switch (conventionType)

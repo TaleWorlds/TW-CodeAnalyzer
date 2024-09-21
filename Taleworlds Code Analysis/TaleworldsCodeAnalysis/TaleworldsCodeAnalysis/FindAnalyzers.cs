@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Elfie.Model.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,10 +38,15 @@ namespace TaleworldsCodeAnalysis
                 var attributes = item.GetCustomAttributes<TaleworldsAnalyzerAttribute>(false);
                 foreach (var attribute in attributes)
                 {
-                    _taleworldsDiagnosticAnalyzers.Add(new AnalyzerInfo { 
-                        Code= attribute.Code,
-                        Name=attribute.Name,
-                        Category=attribute.Category,
+                    var fields = item.GetFields(BindingFlags.NonPublic | BindingFlags.Static);
+                    var field = item.GetField("_category",BindingFlags.NonPublic | BindingFlags.Static);
+
+                    _taleworldsDiagnosticAnalyzers.Add(new AnalyzerInfo
+                    {
+                        Code = attribute.Code,
+                        Name = attribute.Name,
+                        Subtitle = attribute.Subtitle,
+                        Category = (DiagnosticCategories)field.GetRawConstantValue()
                     });
                 }
             }
@@ -50,7 +56,8 @@ namespace TaleworldsCodeAnalysis
         {
             public string Name;
             public string Code;
-            public string Category;
+            public string Subtitle;
+            public DiagnosticCategories Category;
         }
     }
 }

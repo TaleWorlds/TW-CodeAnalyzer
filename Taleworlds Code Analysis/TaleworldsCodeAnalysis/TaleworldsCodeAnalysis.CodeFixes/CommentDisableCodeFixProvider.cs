@@ -27,21 +27,11 @@ namespace TaleworldsCodeAnalysis
         {
             get
             {
-                List<string> fixableDiagnosticIds = new List<string> { 
-                    ClassNameChecker.DiagnosticId, 
-                    FieldNameChecker.DiagnosticId, 
-                    InterfaceNameChecker.DiagnosticId, 
-                    LocalNameChecker.DiagnosticId, 
-                    MethodNameChecker.DiagnosticId, 
-                    ParameterNameChecker.DiagnosticId, 
-                    PropertyNameChecker.DiagnosticId, 
-                    TemplateParameterNameChecker.DiagnosticId,
-                    ClassAccessibilityChecker.DiagnosticId, 
-                    FieldAccessibilityChecker.DiagnosticId, 
-                    AbstractClassChecker.DiagnosticId, 
-                    DepthOfInheritanceChecker.DiagnosticId, 
-                    SealedOverrideChecker.DiagnosticId
-                };
+                List<string> fixableDiagnosticIds = new List<string>();
+                foreach (var item in FindAnalyzers.Instance.Analyzers)
+                {
+                    fixableDiagnosticIds.Add(item.Code);
+                }
                 return ImmutableArray.Create(fixableDiagnosticIds.ToArray());
             }
         }

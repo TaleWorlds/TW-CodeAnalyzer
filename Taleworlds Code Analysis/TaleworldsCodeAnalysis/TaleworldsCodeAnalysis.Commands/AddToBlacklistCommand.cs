@@ -116,11 +116,12 @@ namespace TaleworldsCodeAnalysis.Commands
 
 
                 XDocument doc;
-                try
+
+                if (File.Exists(fullPath))
                 {
                     doc = XDocument.Load(fullPath);
                 }
-                catch (FileNotFoundException)
+                else
                 {
                     doc = new XDocument(new XElement("BlackListRoot", new XElement("Project", "ExampleProjectName")));
                     doc.Save(fullPath);

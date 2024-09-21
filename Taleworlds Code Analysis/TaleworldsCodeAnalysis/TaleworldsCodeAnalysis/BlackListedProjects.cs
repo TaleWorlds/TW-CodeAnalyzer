@@ -45,11 +45,11 @@ namespace TaleworldsCodeAnalysis
         {
             XDocument doc;
 
-            try
+            if (File.Exists(_fullPath))
             {
                 doc = XDocument.Load(_fullPath);
             }
-            catch (FileNotFoundException)
+            else
             {
                 doc = new XDocument(new XElement("BlackListRoot", new XElement("Project", "ExampleProjectName")));
                 doc.Save(_fullPath);
