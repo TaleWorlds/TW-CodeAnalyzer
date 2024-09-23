@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TaleworldsCodeAnalysis.NameChecker;
 
@@ -29,12 +30,11 @@ namespace TaleworldsCodeAnalysis
         public bool IsNotAllowedToAnalyze(SyntaxNodeAnalysisContext context, String diagnosticId) 
         {
             bool isNotAllowed = false;
-
             if (!_testMod)
             {
                 var filePath = context.Node.GetLocation().SourceTree.FilePath;
                 WhiteListParser.Instance.ReadGlobalWhiteListPath(filePath);
-
+                
                 if (BlackListedProjects.Instance.IsBlackListedProjectFromCodePath(filePath))
                 {
                     isNotAllowed = true;

@@ -137,7 +137,7 @@ namespace TaleworldsCodeAnalysis.Commands
                     }
                     doc.Save(fullPath);
                 }
-                ReAnalyze.Instance.ForceReanalyzeAsync();
+                //ReAnalyze.Instance.ForceReanalyzeAsync(); Gives error for some reason
                 string message = string.Format("Added {0} to the blacklist", projectName);
                 string title = "Add to Blacklist";
 

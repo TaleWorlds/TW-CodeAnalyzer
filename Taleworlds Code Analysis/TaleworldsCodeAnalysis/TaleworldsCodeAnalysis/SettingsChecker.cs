@@ -30,37 +30,23 @@ namespace TaleworldsCodeAnalysis
 
         public bool IsAnalysisEnabled(string diagnosticID, string contextPath)
         {
-            var document = GetSettingsFile(GetSettingsFilePath(contextPath));
+            var document = GetSettingsFile(GetSettingsFilePath());
             if(document.Root.Element(diagnosticID)==null)
             {
                 document.Root.Add(new XElement(diagnosticID, "2"));
-                document.Save(GetSettingsFilePath(contextPath));
+                document.Save(GetSettingsFilePath());
             }
             
             return document.Root.Element(diagnosticID).Value != "0";
         }
 
-        public string GetSettingsFilePath(string contextPath)
+        public string GetSettingsFilePath()
         {
-            var solnFilePath = _settingsFilePath;
-            if (_settingsFilePath == null)
-            {
-                var folderNames = contextPath.Split('\\');
+            var solnFilePath = ProjectAndSolutionFinder.Instance.GetSolutionPath();
+            var directory = Path.GetDirectoryName(solnFilePath);
+            var settingsFilePath = directory+"\\"+_nameOfSettingsFile;
 
-                for (int i = folderNames.Length - 2; i >= 0; i--)
-                {
-                    solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), _nameOfSettingsFile);
-                    if (File.Exists(solnFilePath))
-                    {
-                        return solnFilePath;
-                    }
-                    else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length != 0)
-                    {
-                        return solnFilePath;
-                    }
-                }
-            }
-            return solnFilePath;
+            return settingsFilePath;
         }
         public XDocument GetSettingsFile(string settingPath)
         {
@@ -88,7 +74,7 @@ namespace TaleworldsCodeAnalysis
             var severity = defaultSeverity;
             if (!PreAnalyzerConditions.Instance.TestMod)
             {
-                var document = GetSettingsFile(GetSettingsFilePath(contextPath));
+                var document = GetSettingsFile(GetSettingsFilePath());
                 switch (document.Root.Element(diagnosticId).Value)
                 {
                     case "0":

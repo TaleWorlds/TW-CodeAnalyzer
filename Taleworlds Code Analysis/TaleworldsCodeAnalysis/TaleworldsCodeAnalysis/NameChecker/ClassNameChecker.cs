@@ -44,6 +44,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
                 var accessibility = nameNode.Modifiers.First();
                 var location = nameNode.Identifier.GetLocation();
                 var filePath = context.Node.GetLocation().SourceTree.FilePath;
+                
                 var properties = new Dictionary<string, string>
                 {
                     { "Name", nameString},
