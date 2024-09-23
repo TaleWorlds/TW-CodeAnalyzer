@@ -76,9 +76,9 @@ namespace TaleworldsCodeAnalysis.Controller
                 {
                     item.SetSelectedIndex(_getSeverityIndex(item.Code, document), false);
                 }
-                WhiteListParser.Instance.ReadGlobalWhiteListPath(_dte.ActiveDocument.Path);
+                WhiteListParser.Instance.ReadGlobalWhiteListPath(_developmentToolsEnvironment.ActiveDocument.Path);
                 WhiteList.ItemsSource = WhiteListParser.Instance.WhiteListWords;
-                _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
+                _developmentToolsEnvironment.Events.WindowEvents.WindowActivated -= WindowActivated;
                 _hasInitialized = true;
             }
         }

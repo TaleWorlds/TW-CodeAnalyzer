@@ -26,7 +26,7 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows
         }
 
         private static SettingsParser _instance;
-        private DTE _developmentToolsEnvironment; //TODO: uzun yaz
+        private DTE _developmentToolsEnvironment;
         private const string _pathOfSettingsFile = "TaleworldsCodeAnalysisSettings.xml";
         private string _fullPath;
 

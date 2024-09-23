@@ -81,7 +81,7 @@ namespace TaleworldsCodeAnalysis
                 var path = whiteListType == WhiteListType.Shared ? WhiteListParser.Instance.SharedPathXml : WhiteListParser.Instance.LocalPathXml;
                 var solution = document.Project.Solution;
                 _addStringToWhiteList(path, word);
-                ReAnalyze.Instance.ForceReanalyze();
+                ReAnalyze.Instance.ForceReanalyzeAsync();
             }
 
             return document.Project.Solution;

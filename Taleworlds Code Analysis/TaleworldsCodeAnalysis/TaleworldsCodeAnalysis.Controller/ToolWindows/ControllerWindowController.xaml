@@ -40,15 +40,14 @@
                         </StackPanel>
                     </Border>
                 </StackPanel>
-
             </Grid>
-
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                    <Label Content="Name Checkers" FontSize="15"/>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Name="SeveritiesPanel">
 
-            
-                    <Button Content="Save" Click="SaveButton" Margin="10"/>
+                        <Button Content="Save" Click="SaveButton" Margin="10"/>
+                    </StackPanel>
+
                     <Label Content="White List" FontSize="15"/>
                     <ListBox Name="WhiteList" Height="100"/>
                     <Button Content="Remove Selected Item" VerticalAlignment="Center" Click="RemoveItem"/>
@@ -70,16 +69,10 @@
                         </StackPanel>
                     </Border>
 
-                   
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Name="SeveritiesPanel">
 
-                        <Button Content="Save" Click="Button_Click"/>
-                    </StackPanel>
-
+                    
+                </StackPanel>
             </Grid>
-            
-
-
         </StackPanel>
     </ScrollViewer>
 

@@ -99,7 +99,7 @@ namespace TaleworldsCodeAnalysis
 
                 var newDocument = context.Document.WithSyntaxRoot(newRoot);
                 changedSolution = newDocument.Project.Solution;
-                ReAnalyze.Instance.ForceReanalyze();
+                ReAnalyze.Instance.ForceReanalyzeAsync();
             }
 
             return changedSolution;
