@@ -5,23 +5,23 @@ using System.Text.RegularExpressions;
 
 namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 {
-    public class TpascalCaseBehaviour: ConventionBehaviour
+    public class TPascalCaseBehaviour: ConventionBehaviour
     {
 
-        public static TpascalCaseBehaviour Instance
+        public static TPascalCaseBehaviour Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new TpascalCaseBehaviour();
+                    _instance = new TPascalCaseBehaviour();
                 }
                 return _instance;
             }
 
         }
 
-        private static TpascalCaseBehaviour _instance;
+        private static TPascalCaseBehaviour _instance;
         Regex _regexWhole = new Regex("^[T][A-Z](([a-z0-9]+[A-Z]?)*)$");
 
         public sealed override IReadOnlyList<string> FindWhiteListCandidates(string name)
@@ -33,11 +33,10 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public sealed override string FixListedItems(string name, HashSet<string> list)
         {
-            if (list == null)
+            if (list != null)
             {
-                return name;
+                name = name[0] + PascalCaseBehaviour.Instance.FixListedItems(name.Substring(1), list);
             }
-            name = name[0] + PascalCaseBehaviour.Instance.FixListedItems(name.Substring(1), list);
             return name;
         }
 

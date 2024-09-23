@@ -12,16 +12,16 @@ namespace TaleworldsCodeAnalysis
     public class SettingsChecker
     {
         public static SettingsChecker Instance
+        {
+            get 
             {
-                get 
+                if (_instance == null)
                 {
-                    if (_instance == null)
-                    {
-                        _instance = new SettingsChecker();
-                    }
-                    return _instance;
+                    _instance = new SettingsChecker();
                 }
-            } 
+                return _instance;
+            }
+        } 
         private static SettingsChecker _instance;
 
         private const string _nameOfSettingsFile = "TaleworldsCodeAnalysisSettings.xml";
@@ -31,61 +31,53 @@ namespace TaleworldsCodeAnalysis
         public bool IsAnalysisEnabled(string diagnosticID, string contextPath)
         {
             var document = GetSettingsFile(GetSettingsFilePath(contextPath));
+            if(document.Root.Element(diagnosticID)==null)
+            {
+                document.Root.Add(new XElement(diagnosticID, "2"));
+                document.Save(GetSettingsFilePath(contextPath));
+            }
+            
             return document.Root.Element(diagnosticID).Value != "0";
         }
 
         public string GetSettingsFilePath(string contextPath)
         {
-            if (_settingsFilePath != null)
+            var solnFilePath = _settingsFilePath;
+            if (_settingsFilePath == null)
             {
-                return _settingsFilePath;
-            }
-            var folderNames = contextPath.Split('\\');
-            string solnFilePath = "";
-            for (int i = folderNames.Length - 2; i >= 0; i--)
-            {
-                solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), _nameOfSettingsFile);
-                if (File.Exists(solnFilePath))
-                {
-                    return solnFilePath;
-                }
-                else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length != 0)
-                {
-                    return solnFilePath;
-                }
+                var folderNames = contextPath.Split('\\');
 
+                for (int i = folderNames.Length - 2; i >= 0; i--)
+                {
+                    solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), _nameOfSettingsFile);
+                    if (File.Exists(solnFilePath))
+                    {
+                        return solnFilePath;
+                    }
+                    else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length != 0)
+                    {
+                        return solnFilePath;
+                    }
+                }
             }
             return solnFilePath;
         }
         public XDocument GetSettingsFile(string settingPath)
         {
             XDocument xDocument;
-            try
+            if (File.Exists(settingPath))
             {
                 xDocument = XDocument.Load(settingPath);
             }
-            catch
+            else
             {
-                xDocument = new XDocument(new XElement("Settings",
-                    new XElement("TW2200","2"),
-                    new XElement("TW2001","2"),
-                    new XElement("TW2002", "2"),
-                    new XElement("TW2005", "2"),
-                    new XElement("TW2000", "2"),
-                    new XElement("TW2003", "2"),
-                    new XElement("TW2004", "2"),
-                    new XElement("TW2006", "2"),
-                    new XElement("TW2007", "2"),
-                    new XElement("TW2008", "2"),
-                    new XElement("TW2100", "2"),
-                    new XElement("TW2101", "2"),
-                    new XElement("TW2102", "2"),
-                    new XElement("TW2202","2"),
-                    new XElement("TW2204", "2"),
-                    new XElement("TW2201", "2"),
-                    new XElement("TW2205","2"),
-                    new XElement("OverAll", "2")
-                    ));
+                var root = new XElement("Settings");
+                xDocument = new XDocument(root);
+                foreach (var item in FindAnalyzers.Instance.Analyzers)
+                {
+                    xDocument.Root.Add(new XElement(item.Code, "2"));
+                }
+                xDocument.Root.Add(new XElement("OverAll", "2"));
                 xDocument.Save(settingPath);
             }
             return xDocument;
@@ -93,22 +85,24 @@ namespace TaleworldsCodeAnalysis
 
         public DiagnosticSeverity GetDiagnosticSeverity(string diagnosticId, string contextPath, DiagnosticSeverity defaultSeverity) 
         {
-            if (PreAnalyzerConditions.Instance.TestMod)
+            var severity = defaultSeverity;
+            if (!PreAnalyzerConditions.Instance.TestMod)
             {
-                return defaultSeverity;
+                var document = GetSettingsFile(GetSettingsFilePath(contextPath));
+                switch (document.Root.Element(diagnosticId).Value)
+                {
+                    case "0":
+                        severity = DiagnosticSeverity.Hidden;
+                        break;
+                    case "1":
+                        severity = DiagnosticSeverity.Warning;
+                        break;
+                    case "2":
+                        severity = DiagnosticSeverity.Error;
+                        break;
+                }
             }
-
-            var document = GetSettingsFile(GetSettingsFilePath(contextPath));
-            switch(document.Root.Element(diagnosticId).Value)
-            {
-                case "0":
-                    return DiagnosticSeverity.Hidden;
-                case "1":
-                    return DiagnosticSeverity.Warning;
-                case "2":
-                    return DiagnosticSeverity.Error;
-            }
-            return DiagnosticSeverity.Hidden;
+            return severity;
         }
 
     }

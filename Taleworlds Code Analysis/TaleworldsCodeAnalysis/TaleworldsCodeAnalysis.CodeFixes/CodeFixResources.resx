@@ -121,4 +121,10 @@
     <value>Add to whitelist</value>
     <comment>The title of the code fix.</comment>
   </data>
+  <data name="NamedParameterCheckerTitle" xml:space="preserve">
+    <value>You need to call method with its parameter names if it has more than </value>
+  </data>
+  <data name="NamedParameterCheckerMessage" xml:space="preserve">
+    <value>You need to call method with its parameter names if it has more than </value>
+  </data>
 </root>

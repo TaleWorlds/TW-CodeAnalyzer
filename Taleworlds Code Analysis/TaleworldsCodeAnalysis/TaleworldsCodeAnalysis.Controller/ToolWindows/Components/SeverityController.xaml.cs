@@ -23,32 +23,53 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
 
         public string Title
         {
-            get { return (string)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
+            get 
+            { 
+                return (string)GetValue(TitleProperty); 
+            }
+            set 
+            {
+                SetValue(TitleProperty, value); 
+            }
         }
 
         public string AdditionalChoice
         {
-            get { return (string)GetValue(AdditionalChoiceProperty); }
-            set { SetValue(AdditionalChoiceProperty, value); }
+            get 
+            { 
+                return (string)GetValue(AdditionalChoiceProperty); 
+            }
+            set 
+            { 
+                SetValue(AdditionalChoiceProperty, value); 
+            }
         }
 
         public string Code
         {
-            get { return (string)GetValue(CodeProperty); }
-            set { SetValue(CodeProperty, value); }
+            get 
+            { 
+                return (string)GetValue(CodeProperty); 
+            }
+            set 
+            { 
+                SetValue(CodeProperty, value); 
+            }
         }
 
         public Action IndividualChanged
         {
-            get { return (Action)GetValue(IndividualChangedProperty); }
-            set { SetValue(IndividualChangedProperty, value); }
+            get 
+            { 
+                return (Action)GetValue(IndividualChangedProperty); 
+            }
+            set 
+            { 
+                SetValue(IndividualChangedProperty, value); 
+            }
         }
 
-        public SeverityController()
-        {
-            InitializeComponent();
-        }
+
 
         public static readonly DependencyProperty IndividualChangedProperty =
             DependencyProperty.Register("IndividualChanged", typeof(Action), typeof(SeverityController), new PropertyMetadata());
@@ -63,6 +84,20 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
 
         private bool _skipAction;
 
+        public SeverityController()
+        {
+            InitializeComponent();
+        }
+
+        public SeverityController(string name, string code, Action individualChanged)
+        {
+            InitializeComponent();
+            Name = code;
+            Title = name;
+            Code = code;
+            IndividualChanged = individualChanged;
+        }
+
         internal void SetSelectedIndex(int index,bool byOverAll)
         {
             _skipAction = byOverAll;
@@ -76,23 +111,14 @@ namespace TaleworldsCodeAnalysis.Controller.ToolWindows.Components
 
         private void ComboBox_Selected(object sender, RoutedEventArgs e)
         {
-            try
+
+            if (IndividualChanged!=null)
             {
-                Console.WriteLine(ComboBox.SelectedIndex);
-                if (IndividualChanged==null)
-                {
-                    return;
-                }
                 if (!_skipAction)
                 {
                     IndividualChanged.Invoke();
                 }
             }
-            catch (Exception ex)
-            {
-                return;
-            }
-            
         }
 
         internal int GetSelectedIndex()

@@ -120,17 +120,11 @@
   <data name="ClassModifierCheckerMessageFormat" xml:space="preserve">
     <value>Class {0} cannot be "Protected" by TW conventions</value>
   </data>
-  <data name="ClassNameCheckerDescription" xml:space="preserve">
-    <value>All class names should use TW conventions</value>
-  </data>
   <data name="ClassNameCheckerMessageFormat" xml:space="preserve">
     <value>Class {0} should be renamed as {1}</value>
   </data>
   <data name="ClassNameCheckerTitle" xml:space="preserve">
     <value>All class names should use TW  conventions</value>
-  </data>
-  <data name="FieldAccessibilityCheckerDescription" xml:space="preserve">
-    <value>All fields should be private</value>
   </data>
   <data name="FieldAccessibilityCheckerMessageFormat" xml:space="preserve">
     <value>Field '{0}' should be private</value>
@@ -138,17 +132,11 @@
   <data name="FieldAccessibilityCheckerTitle" xml:space="preserve">
     <value>All fields should be private</value>
   </data>
-  <data name="FieldNameCheckerDescription" xml:space="preserve">
-    <value>All private fields should use "_uscoreCase"</value>
-  </data>
   <data name="FieldNameCheckerMessageFormat" xml:space="preserve">
     <value>Field {0} should be renamed as {1}</value>
   </data>
   <data name="FieldNameCheckerTitle" xml:space="preserve">
     <value>All fields should be private and use "_uscoreCase"</value>
-  </data>
-  <data name="InterfaceNameCheckerDescription" xml:space="preserve">
-    <value>Interfaces should use "IPascalCase"</value>
   </data>
   <data name="InterfaceNameCheckerMessageFormat" xml:space="preserve">
     <value>Interface {0} be renamed as {1}</value>
@@ -156,17 +144,11 @@
   <data name="InterfaceNameCheckerTitle" xml:space="preserve">
     <value>Interfaces should use "IPascalCase"</value>
   </data>
-  <data name="LocalNameCheckerDescription" xml:space="preserve">
-    <value>Locals should use "camelCase"</value>
-  </data>
   <data name="LocalNameCheckerMessageFormat" xml:space="preserve">
     <value>Local {0} should be renamed as {1}</value>
   </data>
   <data name="LocalNameCheckerTitle" xml:space="preserve">
     <value>Locals should use "camelCase"</value>
-  </data>
-  <data name="MethodNameCheckerDescription" xml:space="preserve">
-    <value>All method names should use TW conventions</value>
   </data>
   <data name="MethodNameCheckerMessageFormat" xml:space="preserve">
     <value>Method {0}  should be renamed as {1}</value>
@@ -174,17 +156,11 @@
   <data name="MethodNameCheckerTitle" xml:space="preserve">
     <value>All method names should use TW conventions</value>
   </data>
-  <data name="ParameterNameCheckerDescription" xml:space="preserve">
-    <value>Parameters should use "camelCase"</value>
-  </data>
   <data name="ParameterNameCheckerMessageFormat" xml:space="preserve">
     <value>Parameter {0} should be renamed as {1}</value>
   </data>
   <data name="ParameterNameCheckerTitle" xml:space="preserve">
     <value>Parameters should use "camelCase"</value>
-  </data>
-  <data name="PropertyNameCheckerDescription" xml:space="preserve">
-    <value>All property names sholud use TW conventions</value>
   </data>
   <data name="PropertyNameCheckerMessageFormat" xml:space="preserve">
     <value>Property {0} should be renamed as {1}</value>
@@ -192,17 +168,11 @@
   <data name="PropertyNameCheckerTitle" xml:space="preserve">
     <value>All property names should use TW conventions</value>
   </data>
-  <data name="TemplateParameterNameCheckerDescription" xml:space="preserve">
-    <value>Template parameters should use "TPascalCase"</value>
-  </data>
   <data name="TemplateParameterNameCheckerMessageFormat" xml:space="preserve">
     <value>Template parameter {0} should be renamed as {1}</value>
   </data>
   <data name="TemplateParameterNameCheckerTitle" xml:space="preserve">
     <value>Template parameters should use "TPascalCase".</value>
-  </data>
-  <data name="ClassModifierCheckerDescription" xml:space="preserve">
-    <value>Classes cannot be "Protected" by TW conventions</value>
   </data>
   <data name="ClassModifierCheckerTitle" xml:space="preserve">
     <value>Classes cannot be "Protected" by TW conventions</value>

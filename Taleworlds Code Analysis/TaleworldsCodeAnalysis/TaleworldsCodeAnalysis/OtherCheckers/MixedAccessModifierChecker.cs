@@ -11,18 +11,21 @@ using System.Threading;
 namespace TaleworldsCodeAnalysis.OtherCheckers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Mixed Access Modifier Checker", _diagnosticId, title: "Other Checkers")]
     public class MixedAccessModifierChecker : DiagnosticAnalyzer
     {
         public string DiagnosticId => _diagnosticId;
 
-        private const string _diagnosticId = "TW2202";
-        private static readonly LocalizableString _title = "MixedAccessModifierChecker Title";
-        private static readonly LocalizableString _messageFormat = "MixedAccessModifierChecker '{0}'";
-        private const string _category = "MixedAccessModifierChecker Category";
+        private const string _diagnosticId = nameof(DiagnosticIDs.TW2202);
+        private static readonly LocalizableString _title =
+            new LocalizableResourceString(nameof(OtherCheckerResource.MixedAccessModifierCheckerTitle),OtherCheckerResource.ResourceManager,typeof(OtherCheckerResource));
+        private static readonly LocalizableString _messageFormat = 
+            new LocalizableResourceString(nameof(OtherCheckerResource.MixedAccessModifierCheckerMessage),OtherCheckerResource.ResourceManager,typeof(OtherCheckerResource));
+        private const DiagnosticCategories _category = DiagnosticCategories.Accessibility;
 
-        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Warning, true);
+        private static DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), DiagnosticSeverity.Warning, true);
 
-        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(_rule); } }
+        public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule);
 
         public sealed override void Initialize(AnalysisContext context)
         {
@@ -34,11 +37,11 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _methodAnalyzer(SyntaxNodeAnalysisContext context)
         {
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
-
-            var methodNode = (MethodDeclarationSyntax)context.Node;
-            _checkMixedAccessibility(methodNode.Modifiers,context);
-            
+            if (!PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId))
+            {
+                var methodNode = (MethodDeclarationSyntax)context.Node;
+                _checkMixedAccessibility(methodNode.Modifiers, context);
+            }
         }
 
         private void _checkMixedAccessibility(SyntaxTokenList modifiers, SyntaxNodeAnalysisContext context)
@@ -54,7 +57,7 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
                     if (accesibilityFound)
                     {
                         var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true);
+                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
                         context.ReportDiagnostic(Diagnostic.Create(_rule, item.GetLocation()));
                         return;
                     }
@@ -65,10 +68,11 @@ namespace TaleworldsCodeAnalysis.OtherCheckers
 
         private void _propertyAnalyzer(SyntaxNodeAnalysisContext context)
         {
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
-
-            var propertyNode = (PropertyDeclarationSyntax)context.Node;
-            _checkMixedAccessibility(propertyNode.Modifiers, context);
+            if (!PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId))
+            {
+                var propertyNode = (PropertyDeclarationSyntax)context.Node;
+                _checkMixedAccessibility(propertyNode.Modifiers, context);
+            }
         }
     }
 }

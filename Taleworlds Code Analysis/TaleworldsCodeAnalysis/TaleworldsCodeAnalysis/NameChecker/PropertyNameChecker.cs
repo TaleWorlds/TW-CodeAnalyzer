@@ -9,17 +9,17 @@ using TaleworldsCodeAnalysis.NameChecker.Conventions;
 namespace TaleworldsCodeAnalysis.NameChecker
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [TaleworldsAnalyzer("Property Name Checker", _diagnosticId, title: "Naming Checker")]
     public class PropertyNameChecker : DiagnosticAnalyzer
     {
         public static string DiagnosticId =>_diagnosticId;
 
-        private const string _diagnosticId = "TW2007";
+        private const string _diagnosticId = nameof(DiagnosticIDs.TW2007);
         private static readonly LocalizableString _title = new LocalizableResourceString(nameof(NameCheckerResources.PropertyNameCheckerTitle), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
         private static readonly LocalizableString _messageFormat = new LocalizableResourceString(nameof(NameCheckerResources.PropertyNameCheckerMessageFormat), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private static readonly LocalizableString _description = new LocalizableResourceString(nameof(NameCheckerResources.PropertyNameCheckerDescription), NameCheckerResources.ResourceManager, typeof(NameCheckerResources));
-        private const string _category = "Naming";
+        private const DiagnosticCategories _category = DiagnosticCategories.Naming;
 
-        private static  DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _description);
+        private static  DiagnosticDescriptor _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), DiagnosticSeverity.Error, isEnabledByDefault: true);
 
 
         public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_rule);
@@ -38,36 +38,38 @@ namespace TaleworldsCodeAnalysis.NameChecker
             var accessibility = nameNode.Modifiers.First();
             var location = nameNode.Identifier.GetLocation();
 
-            if (PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId)) return;
-
-            var properties = new Dictionary<string, string>
+            if (!PreAnalyzerConditions.Instance.IsNotAllowedToAnalyze(context, DiagnosticId))
             {
-                { "Name", nameString },
-            };
-
-            if (accessibility.IsKind(SyntaxKind.PrivateKeyword) ||
-                 accessibility.IsKind(SyntaxKind.InternalKeyword))
-            {
-                if (!UnderScoreCaseBehaviour.Instance.IsMatching(nameString))
+                var properties = new Dictionary<string, string>
                 {
-                    properties["NamingConvention"] = "_uscoreCase";
-                    var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                    _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true, description: _description);
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
-                        UnderScoreCaseBehaviour.Instance.FixThis(nameString)));
+                    { "Name", nameString },
+                };
+
+                if (accessibility.IsKind(SyntaxKind.PrivateKeyword) ||
+                     accessibility.IsKind(SyntaxKind.InternalKeyword))
+                {
+                    if (!UnderScoreCaseBehaviour.Instance.IsMatching(nameString))
+                    {
+                        properties["NamingConvention"] = nameof(ConventionType.UnderScoreCase);
+                        var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
+                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
+                        context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
+                            UnderScoreCaseBehaviour.Instance.FixThis(nameString)));
+                    }
+                }
+                else
+                {
+                    if (!PascalCaseBehaviour.Instance.IsMatching(nameString))
+                    {
+                        properties["NamingConvention"] = nameof(ConventionType.PascalCase);
+                        var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
+                        _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
+                        context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
+                            PascalCaseBehaviour.Instance.FixThis(nameString)));
+                    }
                 }
             }
-            else
-            {
-                if (!PascalCaseBehaviour.Instance.IsMatching(nameString))
-                {
-                    properties["NamingConvention"] = "PascalCase";
-                    var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, context.Node.GetLocation().SourceTree.FilePath, _rule.DefaultSeverity);
-                    _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, _category, severity, isEnabledByDefault: true, description: _description);
-                    context.ReportDiagnostic(Diagnostic.Create(_rule, location, properties.ToImmutableDictionary(), nameString,
-                        PascalCaseBehaviour.Instance.FixThis(nameString)));
-                }
-            }
+            
         }
     }
 }

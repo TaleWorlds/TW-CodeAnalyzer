@@ -16,27 +16,48 @@ namespace TaleworldsCodeAnalysis.Controller
 {
     public partial class ControllerWindowController
     {
-        private DTE _dte;
-        private List<SeverityController> severityControllers;
+        private DTE _developmentToolsEnvironment;
+        private List<SeverityController> _severityControllers = new List<SeverityController>();
+        private Dictionary<string,Label> categoryTabs = new Dictionary<string,Label>();
         private bool _hasInitialized;
 
         public ControllerWindowController()
         {
             Dispatcher.VerifyAccess();
             InitializeComponent();
-            _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
-            _dte.Events.WindowEvents.WindowActivated += WindowActivated;
-            severityControllers = new List<SeverityController>()
+            _setSeverityControllers();
+            _developmentToolsEnvironment = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            _developmentToolsEnvironment.Events.WindowEvents.WindowActivated += WindowActivated;
+        }
+
+        private void _setSeverityControllers()
+        {
+            var analyzers = FindAnalyzers.Instance.Analyzers;
+
+            for (int i = 0; i < analyzers.Count; i++)
             {
-                TW2002, TW2000, TW2005, TW2003,TW2004, TW2006, TW2007,TW2008,
-                TW2001,TW2200, TW2100,TW2101,TW2102,TW2201,TW2202, TW2204, TW2205 
-            };
-            
+                var controller = new SeverityController(
+                    analyzers[i].Name+" Enabled", 
+                    analyzers[i].Code,
+                    IndividualSeverityChanged
+                    );
+                if (!categoryTabs.ContainsKey(analyzers[i].Subtitle))
+                {
+                    var label = new Label();
+                    var category = analyzers[i].Subtitle;
+                    label.Content = category;
+                    SeveritiesPanel.Children.Insert(SeveritiesPanel.Children.Count-1,label);
+                    categoryTabs.Add(category, label);
+                }
+                var index = SeveritiesPanel.Children.IndexOf(categoryTabs[analyzers[i].Subtitle]);
+                SeveritiesPanel.Children.Insert(index+1, controller);
+                _severityControllers.Add(controller);
+            }
         }
 
         ~ControllerWindowController()
         {
-            _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
+            _developmentToolsEnvironment.Events.WindowEvents.WindowActivated -= WindowActivated;
         }
 
         private void WindowActivated(EnvDTE.Window GotFocus, EnvDTE.Window LostFocus)
@@ -47,22 +68,18 @@ namespace TaleworldsCodeAnalysis.Controller
         public void Init()
         {
             Dispatcher.VerifyAccess();
-            try
+            if(_developmentToolsEnvironment.Solution.IsOpen)
             {
                 var document = SettingsChecker.Instance.GetSettingsFile(SettingsParser.Instance.GetSettingsFilePath());
                 OverAll.SelectedIndex = _getSeverityIndex("OverAll", document);
-                foreach (var item in severityControllers)
+                foreach (var item in _severityControllers)
                 {
-                    item.SetSelectedIndex(_getSeverityIndex(item.Code, document),false);
+                    item.SetSelectedIndex(_getSeverityIndex(item.Code, document), false);
                 }
                 WhiteListParser.Instance.ReadGlobalWhiteListPath(_dte.ActiveDocument.Path);
                 WhiteList.ItemsSource = WhiteListParser.Instance.WhiteListWords;
                 _dte.Events.WindowEvents.WindowActivated -= WindowActivated;
                 _hasInitialized = true;
-            }
-            catch 
-            {
-                return;
             }
         }
 
@@ -82,28 +99,20 @@ namespace TaleworldsCodeAnalysis.Controller
 
         private void OverAll_Selected(object sender, RoutedEventArgs e)
         {
-            try
+            if (((ComboBox)e.OriginalSource).SelectedIndex!=3)
             {
-                if (((ComboBox)e.OriginalSource).SelectedIndex==3)
+                foreach (var item in _severityControllers)
                 {
-                    return ;
-                }
-                foreach (var item in severityControllers)
-                {
-                    item.SetSelectedIndex(OverAll.SelectedIndex,true);
+                    item.SetSelectedIndex(OverAll.SelectedIndex, true);
                     item.ResetSkipAction();
                 }
             }
-            catch (Exception exception){
-                return;
-            }
-
         }
 
         private void IndividualSeverityChanged()
         {
             var selectedIndex = OverAll.SelectedIndex;
-            foreach (var item in severityControllers)
+            foreach (var item in _severityControllers)
             {
                 if (item.GetSelectedIndex()!=selectedIndex)
                 {
@@ -122,7 +131,7 @@ namespace TaleworldsCodeAnalysis.Controller
             var node = xDocument.Root.Element("OverAll");
             node.ReplaceNodes(OverAll.SelectedIndex);
 
-            foreach (var item in severityControllers)
+            foreach (var item in _severityControllers)
             {
                 node = xDocument.Root.Element(item.Code);
                 node.ReplaceNodes(item.ComboBox.SelectedIndex);

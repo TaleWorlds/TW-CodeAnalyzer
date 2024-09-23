@@ -12,9 +12,15 @@ namespace TaleworldsCodeAnalysis
     {
         private static BlackListedProjects _instance;
 
-        public static BlackListedProjects Instance {
-            get {
-                if (_instance == null) _instance = new BlackListedProjects();
+        public static BlackListedProjects Instance 
+        {
+            get 
+            {
+                if (_instance == null) 
+                {
+                    _instance = new BlackListedProjects();
+                }
+                
                 return _instance;
             }
         }
@@ -23,12 +29,14 @@ namespace TaleworldsCodeAnalysis
         private const string _pathAfterLocalAppData = "Microsoft\\VisualStudio\\BlackListedProjects.xml";
         private string _fullPath;
 
-        private BlackListedProjects() {
+        private BlackListedProjects() 
+        {
             _localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             _fullPath = Path.Combine(_localAppDataPath, _pathAfterLocalAppData);
         }
 
-        public bool IsBlackListedProjectFromCodePath(string codePath) {
+        public bool IsBlackListedProjectFromCodePath(string codePath) 
+        {
             var projectName = FindProjectNameFromCodeFilePath(codePath);
             return IsBlackListedProject(projectName);
         }
@@ -37,11 +45,11 @@ namespace TaleworldsCodeAnalysis
         {
             XDocument doc;
 
-            try
+            if (File.Exists(_fullPath))
             {
                 doc = XDocument.Load(_fullPath);
             }
-            catch (FileNotFoundException)
+            else
             {
                 doc = new XDocument(new XElement("BlackListRoot", new XElement("Project", "ExampleProjectName")));
                 doc.Save(_fullPath);
@@ -51,7 +59,10 @@ namespace TaleworldsCodeAnalysis
 
             foreach (var node in projectXElements)
             {
-                if (node.Value == projectName) return true;
+                if (node.Value == projectName)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -60,9 +71,11 @@ namespace TaleworldsCodeAnalysis
         public string FindProjectNameFromCodeFilePath(string codeFilePath)
         {
             var folderNames = codeFilePath.Split('\\');
-            for (int i = folderNames.Length - 2; i >= 0; i--) {
+            for (int i = folderNames.Length - 2; i >= 0; i--) 
+            {
                 var csprojFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), folderNames[i] + ".csproj");
-                if (File.Exists(csprojFilePath)) { 
+                if (File.Exists(csprojFilePath)) 
+                { 
                     return folderNames[i];
                 }
             }

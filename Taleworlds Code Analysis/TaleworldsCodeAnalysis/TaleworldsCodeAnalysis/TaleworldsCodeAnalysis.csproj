@@ -24,14 +24,32 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Inheritance\InheritanceResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InheritanceResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="NameChecker\NameCheckerResources.Designer.cs">
       <DependentUpon>NameCheckerResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="OtherCheckers\OtherCheckerResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OtherCheckerResource.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Inheritance\InheritanceResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InheritanceResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="NameChecker\NameCheckerResources.resx">
       <LastGenOutput>NameCheckerResources.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="OtherCheckers\OtherCheckerResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OtherCheckerResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

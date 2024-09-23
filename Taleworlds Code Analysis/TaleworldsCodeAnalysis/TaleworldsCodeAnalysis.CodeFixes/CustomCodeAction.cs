@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.VisualStudio.RpcContracts.DiagnosticManagement;
 
 namespace TaleworldsCodeAnalysis
 {
@@ -25,7 +23,8 @@ namespace TaleworldsCodeAnalysis
             _createChangedSolution = createChangedSolution;
         }
 
-        public static CustomCodeAction Create(string title, Func<CancellationToken, bool, Task<Solution>> createChangedSolution, string equivalenceKey = null) { 
+        public static CustomCodeAction Create(string title, Func<CancellationToken, bool, Task<Solution>> createChangedSolution, string equivalenceKey = null) 
+        { 
             return new CustomCodeAction(title, createChangedSolution, equivalenceKey);
         }
 
@@ -34,8 +33,12 @@ namespace TaleworldsCodeAnalysis
             const bool isPreview = true;
             // Content copied from http://sourceroslyn.io/#Microsoft.CodeAnalysis.Workspaces/CodeActions/CodeAction.cs,81b0a0866b894b0e,references
             var changedSolution = await GetChangedSolutionWithPreviewAsync(cancellationToken, isPreview).ConfigureAwait(false);
-            
-            return new CodeActionOperation[] { new ApplyChangesOperation(changedSolution)};
+            CodeActionOperation[] codeActionOperations = null;
+            if (changedSolution != null)
+            {
+                codeActionOperations =  new CodeActionOperation[] { new ApplyChangesOperation(changedSolution) };
+            }
+            return codeActionOperations;
         }
 
         protected sealed override Task<Solution> GetChangedSolutionAsync(CancellationToken cancellationToken)

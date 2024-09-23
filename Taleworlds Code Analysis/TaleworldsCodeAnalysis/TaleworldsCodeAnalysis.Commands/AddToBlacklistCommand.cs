@@ -104,49 +104,53 @@ namespace TaleworldsCodeAnalysis.Commands
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            DTE dte = (DTE)Package.GetGlobalService(typeof(DTE));
-            SelectedItems selectedItems = dte.SelectedItems;
-            if (selectedItems == null || selectedItems.Count != 1) return;
-            SelectedItem item = selectedItems.Item(1);
-            String projectName = item.Project.Name;
-
-            localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            fullPath = Path.Combine(localAppDataPath, pathAfterLocalAppData);
-
-
-            XDocument doc;
-            try
+            DTE developmentToolsEnvironment = (DTE)Package.GetGlobalService(typeof(DTE));
+            SelectedItems selectedItems = developmentToolsEnvironment.SelectedItems;
+            if (selectedItems != null && selectedItems.Count == 1)
             {
-                doc = XDocument.Load(fullPath);
-            }
-            catch (FileNotFoundException)
-            {
-                doc = new XDocument(new XElement("BlackListRoot", new XElement("Project", "ExampleProjectName")));
-                doc.Save(fullPath);
-            }
+                SelectedItem item = selectedItems.Item(1);
+                String projectName = item.Project.Name;
 
-            var root = doc.Element("BlackListRoot");
-            if (root != null)
-            {
-                var existingProject = root.Elements("Project").FirstOrDefault(elem => elem.Value.Equals(projectName, StringComparison.OrdinalIgnoreCase));
-                if (existingProject == null)
+                localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                fullPath = Path.Combine(localAppDataPath, pathAfterLocalAppData);
+
+
+                XDocument doc;
+
+                if (File.Exists(fullPath))
                 {
-                    root.Add(new XElement("Project", projectName));
+                    doc = XDocument.Load(fullPath);
                 }
-                doc.Save(fullPath);
-            }
-            ReAnalyze.Instance.ForceReanalyzeAsync();
-            string message = string.Format("Added {0} to the blacklist", projectName);
-            string title = "Add to Blacklist";
+                else
+                {
+                    doc = new XDocument(new XElement("BlackListRoot", new XElement("Project", "ExampleProjectName")));
+                    doc.Save(fullPath);
+                }
 
-            // Show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.package,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                var root = doc.Element("BlackListRoot");
+                if (root != null)
+                {
+                    var existingProject = root.Elements("Project").FirstOrDefault(elem => elem.Value.Equals(projectName, StringComparison.OrdinalIgnoreCase));
+                    if (existingProject == null)
+                    {
+                        root.Add(new XElement("Project", projectName));
+                    }
+                    doc.Save(fullPath);
+                }
+                ReAnalyze.Instance.ForceReanalyze();
+                string message = string.Format("Added {0} to the blacklist", projectName);
+                string title = "Add to Blacklist";
+
+                // Show a message box to prove we were here
+                VsShellUtilities.ShowMessageBox(
+                    this.package,
+                    message,
+                    title,
+                    OLEMSGICON.OLEMSGICON_INFO,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            }
         }
+            
     }
 }

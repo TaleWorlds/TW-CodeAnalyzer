@@ -11,7 +11,10 @@ namespace TaleworldsCodeAnalysis
     public class AnalyzerDisablingComments
     {
         private static AnalyzerDisablingComments _instance;
-        public static AnalyzerDisablingComments Instance { get {
+        public static AnalyzerDisablingComments Instance 
+        { 
+            get 
+            {
                 if (_instance == null)
                 {
                     _instance = new AnalyzerDisablingComments();
@@ -20,14 +23,13 @@ namespace TaleworldsCodeAnalysis
             }
         }
 
-        private AnalyzerDisablingComments() { }
-
-        public bool IsInDisablingComments(SyntaxNode node, String diagnosticId) {
+        public bool IsInDisablingComments(SyntaxNode node, String diagnosticId) //TODO: enable/disable this line
+        {
             var root = node.SyntaxTree.GetRoot();
             var singleLineComments = root.DescendantTrivia().Where(trivia => trivia.IsKind(SyntaxKind.SingleLineCommentTrivia));
 
             List<_comment> commentsList = new List<_comment>();
-
+            bool disabled = false;
             foreach (var commentSyntax in singleLineComments)
             {
                 if (commentSyntax.ToString().ToLower() == "//twcodeanalysis enable all" || commentSyntax.ToString().ToLower() == String.Format("//twcodeanalysis enable {0}", diagnosticId.ToLower()))
@@ -38,39 +40,80 @@ namespace TaleworldsCodeAnalysis
                 {
                     commentsList.Add(new _comment(commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1, CommentType.OffComment));
                 }
-            }
-
-
-            int nodeLine = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-            _comment closestCommentBeforeNode = null;
-            foreach (var comment in commentsList)
-            {
-                if (comment.Line < nodeLine)
+                else if (commentSyntax.ToString().ToLower() == "//twcodeanalysis disable next line all" || commentSyntax.ToString().ToLower() == String.Format("//twcodeanalysis disable next line {0}", diagnosticId.ToLower()))
                 {
-                    if (closestCommentBeforeNode == null) closestCommentBeforeNode = comment;
-                    else if (comment.Line > closestCommentBeforeNode.Line) closestCommentBeforeNode = comment;
+                    
+                    if (commentSyntax.GetLocation().GetLineSpan().StartLinePosition.Line + 1 == node.GetLocation().GetLineSpan().StartLinePosition.Line)
+                    {
+                        disabled = true;
+                    }
                 }
             }
 
-            if (closestCommentBeforeNode == null || closestCommentBeforeNode.Type == CommentType.OnComment) return false;
-            else return true;
+            if (!disabled)
+            {
+                int nodeLine = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+                _comment closestCommentBeforeNode = null;
+                foreach (var comment in commentsList)
+                {
+                    if (comment.Type == CommentType.OffComment)
+                    {
+                        continue;
+                    }
 
+                    if (comment.Line < nodeLine)
+                    {
+                        if (closestCommentBeforeNode == null)
+                        {
+                            closestCommentBeforeNode = comment;
+                        }
+                        else if (comment.Line > closestCommentBeforeNode.Line)
+                        {
+                            closestCommentBeforeNode = comment;
+                        }
+                    }
+                }
+
+                if (closestCommentBeforeNode == null || closestCommentBeforeNode.Type == CommentType.OnComment)
+                {
+                    disabled = false;
+                }
+                else
+                {
+                    disabled = true;
+                }
+            }
+
+            return disabled;
+        }
+
+        private class _comment
+        {
+            public int Line 
+            { 
+                get; 
+                private set; 
+            }
+            public CommentType Type 
+            { 
+                get; 
+                private set; 
+            }
+
+            public _comment(int line, CommentType type)
+            {
+                Line = line;
+                Type = type;
+            }
+
+        }
+        private enum CommentType
+        {
+            OnComment, 
+            OffComment,
+            SingleOffComment
         }
     }
 
-    internal class _comment
-    {
-        public int Line { get; private set; }
-        public CommentType Type { get; private set; }
-
-        public _comment(int line, CommentType type) {
-            Line = line;
-            Type = type;
-        }
-
-    }
-    internal enum CommentType
-    {
-        OnComment, OffComment
-    }
+    
 }

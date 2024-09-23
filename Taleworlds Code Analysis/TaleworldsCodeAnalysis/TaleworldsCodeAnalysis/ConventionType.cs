@@ -4,10 +4,10 @@ using System.Text;
 
 namespace TaleworldsCodeAnalysis
 {
-    public enum ConventionType
+    public enum ConventionType 
     {
-        camelCase,
-        _uscoreCase,
+        CamelCase,
+        UnderScoreCase,
         PascalCase,
         IPascalCase,
         TPascalCase

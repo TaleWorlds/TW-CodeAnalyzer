@@ -36,8 +36,6 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private HashSet<string> _whiteListedWords;
         private string _sharedWhiteListPath;
 
-        private WhiteListParser(){}
-
         private void _readWhiteList(string whiteListString)
         {
             var document =XDocument.Parse(whiteListString);
@@ -61,13 +59,13 @@ namespace TaleworldsCodeAnalysis.NameChecker
         private string _getFileText(string path)
         {
             XDocument document;
-            try
+            if (File.Exists(path))
             {
                 document = XDocument.Load(path);
             }
-            catch (FileNotFoundException)
+            else
             {
-                document = new XDocument(new XElement("WhiteListRoot",new XElement("Word", "ExampleWord")));
+                document = new XDocument(new XElement("WhiteListRoot", new XElement("Word", "ExampleWord")));
                 document.Save(path);
             }
 
@@ -83,7 +81,7 @@ namespace TaleworldsCodeAnalysis.NameChecker
             UpdateWhiteList();
         }
 
-        private string _findSharedXMLFilePath(string codeFilePath)
+        private string _findSharedXMLFilePath(string codeFilePath) // Handle without paths
         {
             if (_sharedWhiteListPath!=null)
             {

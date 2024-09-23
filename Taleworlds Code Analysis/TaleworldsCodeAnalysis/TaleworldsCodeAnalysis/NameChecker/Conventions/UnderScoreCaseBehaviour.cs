@@ -39,11 +39,10 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public sealed override string FixListedItems(string name,HashSet<string> list)
         {
-            if (list == null)
+            if (list != null)
             {
-                return name;
+                name = name[0] + CamelCaseBehaviour.Instance.FixListedItems(name.Substring(1), list);
             }
-            name = name[0]+CamelCaseBehaviour.Instance.FixListedItems(name.Substring(1),list);
             return name;
         }
 
@@ -55,10 +54,12 @@ namespace TaleworldsCodeAnalysis.NameChecker.Conventions
 
         public sealed override IReadOnlyList<string> FindWhiteListCandidates(string name)
         {
-            if (!name.StartsWith("_") || name == "_") return new List<string>();
-            var candidates = CamelCaseBehaviour.Instance.FindWhiteListCandidates(name.Substring(1));
-           return candidates;
-            
+            IReadOnlyList<string> candidates = new List<string>();
+            if (name.StartsWith("_") && name != "_")
+            {
+                candidates = CamelCaseBehaviour.Instance.FindWhiteListCandidates(name.Substring(1));
+            }
+            return candidates;
         }
     }
 }
