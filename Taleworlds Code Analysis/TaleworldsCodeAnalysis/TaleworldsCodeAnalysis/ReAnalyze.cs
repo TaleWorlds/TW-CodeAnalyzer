@@ -36,8 +36,10 @@ namespace TaleworldsCodeAnalysis
             {
                 _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             }
-            await PlaceDummySpaceFromGlobalAsync((Microsoft.CodeAnalysis.Document)(_dte.Documents.Item(0)));
-            await RemoveDummySpaceFromGlobalAsync((Microsoft.CodeAnalysis.Document)(_dte.Documents.Item(0)));
+            var activeDocument = _dte.ActiveDocument;
+            var text = (TextSelection)activeDocument.Selection;
+            text.DeleteLeft();
+            activeDocument.Undo();
         }
 
         public async Task RemoveDummySpaceFromGlobalAsync(Microsoft.CodeAnalysis.Document document)
