@@ -10,7 +10,7 @@ namespace TaleworldsCodeAnalysis
 {
     public class PreAnalyzerConditions
     {
-        public static PreAnalyzerConditions _instance;
+        private static PreAnalyzerConditions _instance;
         public static PreAnalyzerConditions Instance
         {
             get

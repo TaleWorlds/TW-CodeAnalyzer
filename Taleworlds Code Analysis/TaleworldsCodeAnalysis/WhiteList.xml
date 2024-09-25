@@ -1,8 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WhiteListRoot>
-  <Word>ExampleWord</Word>
   <Word>XML</Word>
-<Word>TW</Word>
-<Word>ASAP</Word>
-<Word>AI</Word>
 </WhiteListRoot>

@@ -26,6 +26,7 @@ namespace TaleworldsCodeAnalysis.Controller
             Dispatcher.VerifyAccess();
             InitializeComponent();
             _setSeverityControllers();
+            Init();
             _developmentToolsEnvironment = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             _developmentToolsEnvironment.Events.WindowEvents.WindowActivated += WindowActivated;
         }
@@ -68,6 +69,10 @@ namespace TaleworldsCodeAnalysis.Controller
         public void Init()
         {
             Dispatcher.VerifyAccess();
+            if(_developmentToolsEnvironment==null)
+            {
+                _developmentToolsEnvironment = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            }
             if(_developmentToolsEnvironment.Solution.IsOpen)
             {
                 var document = SettingsChecker.Instance.GetSettingsFile(SettingsParser.Instance.GetSettingsFilePath());
