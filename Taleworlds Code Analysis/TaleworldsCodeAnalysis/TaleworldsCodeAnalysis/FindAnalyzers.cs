@@ -50,14 +50,20 @@ namespace TaleworldsCodeAnalysis
                     });
                 }
             }
+            _taleworldsDiagnosticAnalyzers.Sort();
         }
 
-        public struct AnalyzerInfo
+        public struct AnalyzerInfo:IComparable<AnalyzerInfo>
         {
             public string Name;
             public string Code;
             public string Subtitle;
             public DiagnosticCategories Category;
+
+            public int CompareTo(AnalyzerInfo other)
+            {
+                return Category.CompareTo(other.Category);
+            }
         }
     }
 }

@@ -81,10 +81,13 @@ namespace TaleworldsCodeAnalysis.Controller
                 {
                     item.SetSelectedIndex(_getSeverityIndex(item.Code, document), false);
                 }
-                WhiteListParser.Instance.ReadGlobalWhiteListPath(_developmentToolsEnvironment.ActiveDocument.Path);
-                WhiteList.ItemsSource = WhiteListParser.Instance.WhiteListWords;
-                _developmentToolsEnvironment.Events.WindowEvents.WindowActivated -= WindowActivated;
-                _hasInitialized = true;
+                if (_developmentToolsEnvironment.ActiveDocument!=null)
+                {
+                    WhiteListParser.Instance.ReadGlobalWhiteListPath(_developmentToolsEnvironment.ActiveDocument.Path);
+                    WhiteList.ItemsSource = WhiteListParser.Instance.WhiteListWords;
+                    _developmentToolsEnvironment.Events.WindowEvents.WindowActivated -= WindowActivated;
+                    _hasInitialized = true;
+                }
             }
         }
 
