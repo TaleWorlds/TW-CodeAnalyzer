@@ -76,25 +76,33 @@ namespace TaleworldsCodeAnalysis.NameChecker
         {
             if(_sharedWhiteListPath==null)
             {
-                _sharedWhiteListPath = _findSharedXMLFilePath();
+                _sharedWhiteListPath = _findSharedXMLFilePath(codeFilePath);
             }
             UpdateWhiteList();
         }
 
-        private string _findSharedXMLFilePath()
+        private string _findSharedXMLFilePath(string codeFilePath) // Handle without paths
         {
-            var currentPath =ProjectAndSolutionFinder.Instance.GetCurrentProjectPath();
-
-            var currentDirectory = Path.GetDirectoryName(currentPath);
-            var expectedPath = currentDirectory + "\\WhiteList.xml";
-           
-            while (!File.Exists(expectedPath))
+            if (_sharedWhiteListPath != null)
             {
-                currentDirectory = Path.GetDirectoryName(currentDirectory);
-                expectedPath = currentDirectory + "\\WhiteList.xml";
+                return _sharedWhiteListPath;
+            }
+            var folderNames = codeFilePath.Split('\\');
+            string solnFilePath = "";
+            for (int i = folderNames.Length - 2; i >= 0; i--)
+            {
+                solnFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), "WhiteList.xml");
+                if (File.Exists(solnFilePath))
+                {
+                    return solnFilePath;
+                }
+                else if (Directory.GetFiles(Path.Combine(String.Join("\\", folderNames, 0, i + 1)), "*.sln").Length != 0)
+                {
+                    return solnFilePath;
+                }
             }
 
-            return expectedPath;
+            return solnFilePath;
         }
 
         private string _findLocalXMLFilePath()  

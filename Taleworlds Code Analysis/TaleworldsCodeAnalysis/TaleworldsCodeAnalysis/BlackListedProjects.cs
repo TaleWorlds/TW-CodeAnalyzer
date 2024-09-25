@@ -30,7 +30,7 @@ namespace TaleworldsCodeAnalysis
 
         private string _localAppDataPath;
         private const string _pathAfterLocalAppData = "Microsoft\\VisualStudio\\BlackListedProjects.xml";
-        private DTE _developmentToolsEnvironment;
+        
         private string _fullPath;
 
         private BlackListedProjects() 
@@ -41,7 +41,7 @@ namespace TaleworldsCodeAnalysis
 
         public bool IsBlackListedProjectFromCodePath(string codePath) 
         {
-            var projectName = ProjectAndSolutionFinder.Instance.GetCurrentProjectName();
+            var projectName = FindProjectNameFromCodeFilePath(codePath);
             return IsBlackListedProject(projectName);
         }
 
@@ -72,6 +72,20 @@ namespace TaleworldsCodeAnalysis
             return false;
         }
 
+        public string FindProjectNameFromCodeFilePath(string codeFilePath)
+        {
+            var folderNames = codeFilePath.Split('\\');
+            for (int i = folderNames.Length - 2; i >= 0; i--)
+            {
+                var csprojFilePath = Path.Combine(String.Join("\\", folderNames, 0, i + 1), folderNames[i] + ".csproj");
+                if (File.Exists(csprojFilePath))
+                {
+                    return folderNames[i];
+                }
+            }
+
+            throw new Exception("Could not find project from source code path");
+        }
 
     }
 }

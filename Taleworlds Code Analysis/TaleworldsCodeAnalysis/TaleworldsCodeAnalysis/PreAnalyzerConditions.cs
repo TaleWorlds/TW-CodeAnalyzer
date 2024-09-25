@@ -30,6 +30,7 @@ namespace TaleworldsCodeAnalysis
         public bool IsNotAllowedToAnalyze(SyntaxNodeAnalysisContext context, String diagnosticId) 
         {
             bool isNotAllowed = false;
+
             if (!_testMod)
             {
                 var filePath = context.Node.GetLocation().SourceTree.FilePath;
