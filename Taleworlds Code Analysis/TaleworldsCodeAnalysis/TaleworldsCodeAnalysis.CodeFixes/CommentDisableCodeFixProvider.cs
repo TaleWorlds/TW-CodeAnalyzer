@@ -107,21 +107,37 @@ namespace TaleworldsCodeAnalysis
 
         private async Task<Solution> _addDisablingCommentSpesific(CancellationToken c, bool isPreview, CodeFixContext context) 
         {
+            if (isPreview)
+            {
+                return context.Document.Project.Solution;
+            }
             return await _addCommentBeforeDiagnostic(c, context, "//TWCodeAnalysis disable " + context.Diagnostics.First().Id);
         }
 
         private async Task<Solution> _addDisablingCommentAll(CancellationToken c, bool isPreview, CodeFixContext context)
         {
+            if (isPreview)
+            {
+                return context.Document.Project.Solution;
+            }
             return await _addCommentBeforeDiagnostic(c, context, "//TWCodeAnalysis disable all");
         }
 
         private async Task<Solution> _addDisablingCommentAllOneLine(CancellationToken c, bool isPreview, CodeFixContext context)
         {
+            if (isPreview)
+            {
+                return context.Document.Project.Solution;
+            }
             return await _addCommentBeforeDiagnostic(c, context, "//TWCodeAnalysis disable next line all");
         }
 
         private async Task<Solution> _addDisablingCommentSpecificOneLine(CancellationToken c, bool isPreview, CodeFixContext context)
         {
+            if (isPreview)
+            {
+                return context.Document.Project.Solution;
+            }
             return await _addCommentBeforeDiagnostic(c, context, "//TWCodeAnalysis disable next line "+ context.Diagnostics.First().Id);
         }
 

@@ -76,7 +76,25 @@ namespace TaleworldsCodeAnalysis.NameChecker
         }
         private Diagnostic _createDiagnostic(ConventionType conventionType, Dictionary<string, string> properties, Location location, string filePath)
         {
-            properties["NamingConvention"] = nameof(conventionType);
+            switch(conventionType)
+            {
+                case ConventionType.UnderScoreCase:
+                    properties["NamingConvention"] = nameof(ConventionType.UnderScoreCase);
+                    break;
+                case ConventionType.PascalCase:
+                    properties["NamingConvention"] = nameof(ConventionType.PascalCase);
+                    break;
+                case ConventionType.CamelCase:
+                    properties["NamingConvention"] = nameof(ConventionType.CamelCase);
+                    break;
+                case ConventionType.IPascalCase:
+                    properties["NamingConvention"] = nameof(ConventionType.IPascalCase);
+                    break;
+                case ConventionType.TPascalCase:
+                    properties["NamingConvention"] = nameof(ConventionType.TPascalCase);
+                    break;
+            }
+            
             var nameString = properties["Name"];
             var severity = SettingsChecker.Instance.GetDiagnosticSeverity(_diagnosticId, filePath, _rule.DefaultSeverity);
             _rule = new DiagnosticDescriptor(_diagnosticId, _title, _messageFormat, nameof(_category), severity, isEnabledByDefault: true);
