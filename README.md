@@ -3,6 +3,7 @@
 This tool aims to enforce coding conventions determined by TaleWorlds Entertainment. In the main part of the code, the Roslyn API is used to analyze and assign a fixer to the diagnostics. The general structure of the code is based on a MVC-like pattern. As a base of the extension, we have used XML files and analyzers by using the XML files. On top of them, we have a controller and a command to control this extension.
 ## TO-DOs
 * The maximum allowed depth can be controlled from the controller window.
+* The code fixes and reanalyze has conflicted in the final test. Need to be fixed.
 ## Analyzers
 The analyzers have been designed to be as atomic as they should be. Their explanations can be found in the following.
 
