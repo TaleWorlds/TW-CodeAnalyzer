@@ -69,16 +69,49 @@ This analyzer reports diagnostic if any method call has more parameter than allo
 
 
 ### Test Cases
-##TaleworldsAnalyzer Attribute
+In the project there are unit tests fors analyzers and behviours. The external controllers hasn't been tested as unit test, yet.
+
+## TaleworldsAnalyzer Attribute
+The analyzers should have TaleworldsAnalyzer Attribute. Thanks to this attrbiute, the new analyzers can be added without any changes. The analyzers that have this attribute is found by FindAnalyzers class. This class uses reflection to find all Taleworlds Analyzers.
+
 ## Analyzing Pipeline and Helper Classes
+The analyzing pipeline has several steps, you can find specific informations regarding to the steps as document goes. The first thing the program do is determining whether the analyzing is needed or not. The PreAnalyzerConditions class is used to create such control. The inheritance and other checkers category directly jumps to the analyzing logic. However, the name checkers need to check the white list that is added by the user. These white listed words will be ignored in the analyzing logic.
+
 ## Checking Preanalyze Conditions Before Creating any Diagnostics
+The PreAnalyzerConditions class is used to create such checks. The analyzing is not needed if the project is blacklisted, the context has related disabling comment on the code, or the severity of related diagnostic is adjusted as none. 
+
 ### Blacklist Feature
+The user can add the project to the local blacklist to ignore it. The user needs to press right mouse click on the project then an option appears as Add to the BlackList. User can press this.
+
 ### WhiteList Feature
+The user can add some words to the white list. Whitelist control can be done via controller window. Also name checkers has codefixes about adding to the white list. White listed words will be ignored in the name checkers. There are 2 white list which are local and shared. Local is stored in appdata of the computer, while the shared one is stored in the project path. 
+
 ### Analyzer Disabling by Comments Feature
+The user can write disabling and enabling comments. "//TWCodeAnalysis disable {Insert Diagnostic ID Here}" disables the written diagnostic until it is enabled again by writing "//TWCodeAnalysis enable {Insert Diagnostic ID Here}". similarly all diagnostics can be disabled by writing "//TWCodeAnalysis disable all", and can be enabled by writing "//TWCodeAnalysis disable all".  In addition to that, the user can disable the diagnostic for only one line by using  "//TWCodeAnalysis disable next line all" and  "//TWCodeAnalysis disable next line {Insert Diagnostic ID Here}"
+
 ### Custom Severity Feature
+The user can set custom severity for each diagnostic by using the controller window. These settings can be found in the solution path. 
+
 ## Code Fixers
+There are two code fixer provider in the project.
+
+### Comment Disable Fix Provider
+In this fix provider, the user can add disabling comments without writing them directly. However, The enable command should be written directly. 
+
+### Name Checker Fix Provider
+In this fix provider, the user can add forbidden part of the declaration to the local or shared white list. 
+
 ## Editor Commands
+There are 2 editor commands, one of them already stated in the black list feature. The second one is for openning controller window. The controller can be found in the View -> Other Windows -> Taleworlds Code Analysis.
+
 ## Controller Window
+The controller has several functionality to create ease of use for the extension. There is a refresh button which refreshes the analyzers and settings. Next, there are presets for all analyzers, but if the user wants, he/she can set different severity for each analyzer. After adjusting the severities, the user should press save button to apply them. Furthermore, there is a white list panel to control white listed items. White listed words can be controlled from here.
+
 ## Building the Extension
+The extension has several different components. The first two component is controller window and blacklist command. These two component is connected to the main analyzer vsix file. Therefore you need to build them all to create up to date vsix file.
+
 ## Installing the Extension 
+After building the project, there will be one extension called TaleworldsCodeAnalysis.vsix. This the only vsix file to install it directly to the visual studio. 
+
 ## Contributors
+Berkay Karakaya - Arınç Demir with supervises of Oğuzhan Şirin
